@@ -1,6 +1,8 @@
 import { SafeAreaView, ScrollView, Text, View, TouchableOpacity,Image } from 'react-native';
-
+import { useRouter } from "expo-router";
+import NavBar from "./NavBar";
 export default function Home() {
+  const router = useRouter();
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -43,7 +45,7 @@ export default function Home() {
           <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg">
             <Text className="text-white text-center font-semibold">Savings</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg">
+          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg" onPress={() => router.push("/NavBar")}>
             <Text className="text-white text-center font-semibold">Loans</Text>
           </TouchableOpacity>
         </View>
@@ -80,6 +82,10 @@ export default function Home() {
 
         
       </ScrollView>
+      {/* Navigation Bar */}
+      <View>
+        <NavBar />
+      </View>
     </SafeAreaView>
   );
 }
