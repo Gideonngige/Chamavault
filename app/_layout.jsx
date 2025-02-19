@@ -7,6 +7,9 @@ export default function RootLayout() {
       <Stack screenOptions={{headerShown:true}}>
         <Stack.Screen name="index"options={{title:"Login"}}  />
         <Stack.Screen name="home"options={{title:"ChamaVault"}}  />
+        <Stack.Screen name="verify"options={{title:"Verify"}}  />
+        <Stack.Screen name="register"options={{title:"Register"}}  />
+        <Stack.Screen name="saving"options={{title:"Saving"}}  />
       </Stack>
     </SafeAreaProvider>
   )

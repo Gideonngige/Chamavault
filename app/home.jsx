@@ -9,10 +9,14 @@ export default function Home() {
         {/* Header Section */}
         <View className="flex-row justify-between items-start mb-6 ">
           <View>
+            <TouchableOpacity onPress={() => alert("This is your profile")}>
             <Image source={require('../assets/images2/profile.png')} style={{width:100, height:100, borderRadius:50}} />
+            </TouchableOpacity>
           </View>
-          <Text className="text-sm text-gray-500">{"\n"}Welcome {"\n"} Gideon Ushindi</Text>
+          <Text className="text-sm text-gray-900 font-bold">{"\n"}Welcome {"\n"} Gideon Ushindi</Text>
+          <TouchableOpacity onPress={() => alert("All set!. No notifications")}>
           <Image source={require('../assets/images2/notification1.png')} style={{width:100, height:100, borderRadius:50}} />
+          </TouchableOpacity>
         </View>
 
         {/* Stats Section */}
@@ -24,7 +28,7 @@ export default function Home() {
           className=""
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
-        <Text className="text-gray-900 text-sm">Members</Text>
+        <Text className="text-gray-900 text-sm font-bold">Members</Text>
         <Text className="text-2xl font-bold text-gray-900">143</Text>
       </View>
 
@@ -35,14 +39,14 @@ export default function Home() {
           className=""
           style={{ width: 100, height: 100, borderRadius: 50 }}
         />
-        <Text className="text-gray-900 text-sm">Chama Saving</Text>
+        <Text className="text-gray-900 text-sm font-bold">Chama Saving</Text>
         <Text className="text-2xl font-bold text-gray-900">Ksh.200,000</Text>
       </View>
     </View>
 
         {/* Action Buttons */}
         <View className="flex-row mb-6 space-x-4">
-          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg">
+          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg" onPress={() => router.push("/saving")}>
             <Text className="text-white text-center font-semibold">Savings</Text>
           </TouchableOpacity>
           <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg" onPress={() => router.push("/NavBar")}>
