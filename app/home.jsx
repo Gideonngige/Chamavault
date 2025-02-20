@@ -1,95 +1,116 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity,Image } from 'react-native';
-import { useRouter } from "expo-router";
-import NavBar from "./NavBar";
-export default function Home() {
-  const router = useRouter();
+import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Entypo from '@expo/vector-icons/Entypo';
+import DropDownPicker from 'react-native-dropdown-picker';
+import "../global.css";
+import { useState } from 'react';
+const InfoCard = ({ title, kes, intrest, date, dateLabel }) => (
+  <View className="bg-yellow-600 p-4 rounded-lg mb-4">
+    <Text className="text-lg font-bold mb-2">{title}</Text>
+    <View className="flex-row justify-between mb-1">
+      <Text className="text-gray-600">Saving</Text>
+      <Text className="text-gray-800">{kes}</Text>
+    </View>
+    <View className="flex-row justify-between mb-1">
+      <Text className="text-gray-600">Internet:</Text>
+      <Text className="text-gray-800">{intrest}%</Text>
+    </View>
+    <View className="flex-row justify-between">
+      <Text className="text-gray-600">{dateLabel}:</Text>
+      <Text className="text-gray-800">{date}</Text>
+    </View>
+  </View>
+);
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+  ]);
   return (
+    
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4">
-        {/* Header Section */}
-        <View className="flex-row justify-between items-start mb-6 ">
-          <View>
-            <TouchableOpacity onPress={() => alert("This is your profile")}>
-            <Image source={require('../assets/images2/profile.png')} style={{width:100, height:100, borderRadius:50}} />
-            </TouchableOpacity>
-          </View>
-          <Text className="text-sm text-gray-900 font-bold">{"\n"}Welcome {"\n"} Gideon Ushindi</Text>
-          <TouchableOpacity onPress={() => alert("All set!. No notifications")}>
-          <Image source={require('../assets/images2/notification1.png')} style={{width:100, height:100, borderRadius:50}} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Stats Section */}
-        <View className="flex-row justify-center mb-6">  {/* Center items in a row */}
-      {/* First Card */}
-      <View className="bg-yellow-600 p-4 rounded-lg flex-1 mr-2 items-center justify-center">  {/* Center content */}
-        <Image
-          source={require('../assets/images2/members.png')}
-          className=""
-          style={{ width: 100, height: 100, borderRadius: 50 }}
-        />
-        <Text className="text-gray-900 text-sm font-bold">Members</Text>
-        <Text className="text-2xl font-bold text-gray-900">143</Text>
+    <ScrollView className="p-4">
+    <View className="flex-1 bg-white p-4">
+      {/* Header */}
+      <View className="items-center mb-8">
+      <Image 
+        source={require('../assets/images2/profile.png')}
+        style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
+        }}
+      />
+        <Text className="text-lg font-bold text-gray-800 mb-1">Gideon Ushindi</Text>
+        <Text className="text-gray-800">ushindigideon01@gmail.com</Text>
+        <TouchableOpacity className="bg-yellow-600 rounded-lg w-80 h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
+        <Text className="text-white font-bold">Update Profile</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Second Card */}
-      <View className="bg-yellow-600 p-4 rounded-lg flex-1 ml-2 items-center justify-center">  {/* Center content */}
-      <Image
-          source={require('../assets/images2/saving.png')}
-          className=""
-          style={{ width: 100, height: 100, borderRadius: 50 }}
-        />
-        <Text className="text-gray-900 text-sm font-bold">Chama Saving</Text>
-        <Text className="text-2xl font-bold text-gray-900">Ksh.200,000</Text>
-      </View>
+      <Text className="text-lg font-bold">Select Chama</Text>
+      <View style={{padding:5}}>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="Select a chama"
+        style={{borderColor: '#ca8a04',borderWidth: 2,  
+        }}
+      />
     </View>
 
-        {/* Action Buttons */}
-        <View className="flex-row mb-6 space-x-4">
-          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg" onPress={() => router.push("/saving")}>
-            <Text className="text-white text-center font-semibold">Savings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-1 bg-yellow-600 py-3 rounded-lg" onPress={() => router.push("/NavBar")}>
-            <Text className="text-white text-center font-semibold">Loans</Text>
-          </TouchableOpacity>
-        </View>
+      {/* Main Content */}
+      <View className="space-y-4">
+        <TouchableOpacity
+        onPress={() => {alert("Pressed Savings")}}
+        >
+        <InfoCard
+          title="Savings"
+          kes="10,0000"
+          intrest="75"
+          date="10/02/2023"
+          dateLabel="Last saving"
+        />
+        </TouchableOpacity>
 
-        {/* Recent Activities */}
-        <Text className="text-lg font-bold mb-4">Recent activities</Text>
-        
-        <View className="bg-yellow-200 rounded-lg p-4">
-          {/* Activity Item */}
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-200">
-            <View>
-              <Text className="font-semibold text-gray-900">Paid Ksh.500</Text>
-              <Text className="text-gray-500 text-sm">ChamaVault</Text>
-            </View>
-            <Text className="text-gray-500 text-sm">3:15 pm</Text>
-          </View>
-
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-200">
-            <View>
-              <Text className="font-semibold text-gray-900">Paid Ksh.500</Text>
-              <Text className="text-gray-500 text-sm">ChamaVault</Text>
-            </View>
-            <Text className="text-gray-500 text-sm">3:15 pm</Text>
-          </View>
-
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-200">
-            <View>
-              <Text className="font-semibold text-gray-900">Paid Ksh.500</Text>
-              <Text className="text-gray-500 text-sm">ChamaVault</Text>
-            </View>
-            <Text className="text-gray-500 text-sm">3:15 pm</Text>
-          </View>
-        </View>
-
-        
-      </ScrollView>
-      {/* Navigation Bar */}
-      <View>
-        <NavBar />
+        <TouchableOpacity
+        onPress={() => {alert("Pressed Loans")}}
+        >
+        <InfoCard
+          title="Loans"
+          kes="10,0001"
+          intrest="95"
+          date="11/02/2023"
+          dateLabel="Database"
+        />
+        </TouchableOpacity>
       </View>
+      {/* Chamas Section */}
+      <View className="items-center mb-2">
+          <Text className="bg-yellow-600 mb-5 font-bold rounded-lg w-80 h-10 flex items-center justify-center">Member in 4 Chamas</Text>
+          <View className="grid grid-flow-col grid-rows-3 gap-4">
+          <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
+          onPress={() => {alert("Create chama clicked")}}
+          >
+          <Ionicons name="create" size={24} color="black" />
+            <Text className="text-white font-medium">Create Chama</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
+          onPress={() => {alert("Invite member clicked")}}
+          >
+          <Entypo name="add-user" size={24} color="black" />
+            <Text className="text-white font-medium">Invite</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+    </View>
+    
+    </ScrollView>
     </SafeAreaView>
   );
 }
