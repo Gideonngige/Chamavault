@@ -31,11 +31,11 @@ export default function Index() {
         }
         return message;
       } else {
-        console.error("Login Failed:", response.data);
+        alert("Login Failed:", response.data);
         return null;
       }
     } catch (error) {
-      console.error("Error logging in:", error);
+      alert("Error logging in:", error);
       return null;
     }
   };

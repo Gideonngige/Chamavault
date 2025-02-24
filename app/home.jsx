@@ -15,11 +15,11 @@ const InfoCard = ({ title, kes, intrest, date, dateLabel }) => (
       <Text className="text-gray-800">{kes}</Text>
     </View>
     <View className="flex-row justify-between mb-1">
-      <Text className="text-gray-600">Internet:</Text>
+      <Text className="text-gray-600">Internet</Text>
       <Text className="text-gray-800">{intrest}%</Text>
     </View>
     <View className="flex-row justify-between">
-      <Text className="text-gray-600">{dateLabel}:</Text>
+      <Text className="text-gray-600">{dateLabel}</Text>
       <Text className="text-gray-800">{date}</Text>
     </View>
   </View>
@@ -29,9 +29,9 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
-    { label: 'Orange', value: 'orange' },
+    { label: 'Chama1', value: 'Chama1' },
+    { label: 'Chama2', value: 'Chama2' },
+    { label: 'Chama3', value: 'Chama3' },
   ]);
   const route = useRoute();
   const router = useRouter();
@@ -51,15 +51,15 @@ export default function App() {
       return null;
     }
   }
-  alert(route.params.email);
-  useEffect(() => {
-    fetchData();
-  },[]);
+  // alert(route.params.email);
+  // useEffect(() => {
+  //   fetchData();
+  // },[]);
 
   return (
     
     <SafeAreaView className="flex-1 bg-white">
-    <ScrollView className="p-4">
+    <ScrollView nestedScrollEnabled={true} className="p-4">
     <View className="flex-1 bg-white p-4">
       {/* Header */}
       <View className="items-center mb-8">
@@ -70,7 +70,7 @@ export default function App() {
       />
         <Text className="text-lg font-bold text-gray-800 mb-1">Gideon Ushindi</Text>
         <Text className="text-gray-800">{route.params.email}</Text>
-        <TouchableOpacity className="bg-yellow-600 rounded-lg w-80 h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
+        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
         <Text className="text-white font-bold">Update Profile</Text>
         </TouchableOpacity>
       </View>
@@ -86,6 +86,7 @@ export default function App() {
         placeholder="Select a chama"
         style={{borderColor: '#ca8a04',borderWidth: 2,  
         }}
+        listMode="SCROLLVIEW"
       />
     </View>
 
@@ -104,23 +105,26 @@ export default function App() {
         </TouchableOpacity>
 
         <TouchableOpacity
-        onPress={() => {alert("Pressed Loans")}}
+        onPress={() => router.push('loan/')}
         >
         <InfoCard
           title="Loans"
           kes="10,0001"
           intrest="95"
           date="11/02/2023"
-          dateLabel="Database"
+          dateLabel="Last loan"
         />
         </TouchableOpacity>
       </View>
       {/* Chamas Section */}
       <View className="items-center mb-2">
-          <Text className="bg-yellow-600 mb-5 font-bold rounded-lg w-80 h-10 flex items-center justify-center">Member in 4 Chamas</Text>
-          <View className="grid grid-flow-col grid-rows-3 gap-4">
+        <View className="bg-yellow-600 mb-5 font-bold rounded-lg w-full h-10 flex items-center justify-center">
+        <Text className='font-bold'>Member in 4 Chamas</Text>
+        </View>
+
+          <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
           <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
-          onPress={() => {alert("Create chama clicked")}}
+          onPress={() => router.push('createchama/')}
           >
           <Ionicons name="create" size={24} color="black" />
             <Text className="text-white font-medium">Create Chama</Text>

@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-export default function Saving() {
+export default function Loans() {
   const router = useRouter();
   const data = [
     { id: "1", name: "John Doe", age: 28, city: "New York" },
@@ -20,16 +20,16 @@ export default function Saving() {
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
           <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,John</Text>
-          <Text className='text-lg font-bold text-gray-800 mt-0'>Time to save your money</Text>
+          <Text className='text-lg font-bold text-gray-800 mt-0'>Time to borrow money</Text>
           <View className="p-4">
             {/* loan image part */}
       <ImageBackground
-        source={require('../assets/images2/invest.png')}
+        source={require('../assets/images2/loan.png')}
         className="w-full h-48 rounded-lg overflow-hidden justify-center"
         style={{ resizeMode: 'contain', width: '100%', height: 200 }}
       >
         <View className="p-5">
-          <Text className="text-xl font-bold text-gray-900">Your Savings</Text>
+          <Text className="text-xl font-bold text-gray-900">Your Loans</Text>
           <Text className="text-2xl font-bold text-gray-800">KES. 5,000</Text>
         </View>
       </ImageBackground>
@@ -38,18 +38,18 @@ export default function Saving() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => alert('Top up to save more')}
+          onPress={() => alert('Take loan')}
         >
           <FontAwesome6 name="add" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Top up</Text>
+          <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => alert('Withdraw your savings')}
+          onPress={() => alert('Pay your loans')}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Withdraw</Text>
+          <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
         </TouchableOpacity>
       </View>
 
@@ -97,7 +97,7 @@ export default function Saving() {
         <Text className='ml-1 font-bold mt-5'>Your activity</Text>
         <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
           <View>
-            <Text>Paid</Text>
+            <Text>Borrowed</Text>
             <Text>Chamavault</Text>
           </View>
           <View>
@@ -107,7 +107,7 @@ export default function Saving() {
         </View>
         <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
           <View>
-            <Text>Paid</Text>
+            <Text>Borrowed</Text>
             <Text>Chamavault</Text>
           </View>
           <View>
@@ -117,7 +117,7 @@ export default function Saving() {
         </View>
         <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
           <View>
-            <Text>Paid</Text>
+            <Text>Borrowed</Text>
             <Text>Chamavault</Text>
           </View>
           <View>
