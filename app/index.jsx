@@ -3,12 +3,15 @@ import "../global.css";
 import { useRouter } from "expo-router";
 import axios from 'axios';
 import { useState } from "react";
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Index() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("Hello message");
+  const navigation = useNavigation();
   const handleLogin = async () => {
     try {
       const url = `https://backend1-1cc6.onrender.com/postsignIn/${email}/${password}/`;
@@ -17,7 +20,11 @@ export default function Index() {
       if (response.status === 200) {
         const message = response.data.message; 
         if(message == "Successfully logged in"){
-          router.push("/home");
+          // router.push("/home");
+          navigation.navigate('home', {
+            email,
+          });
+      
         }
         else{
           alert(message);

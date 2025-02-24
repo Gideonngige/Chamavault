@@ -24,31 +24,44 @@ export default function Register(){
         // alert("passwords match");
         try {
           const url = "https://backend1-1cc6.onrender.com/postsignUp/";
-          alert("Hello");
           const data = {
-            chama: value, // Selected chama from DropDownPicker
-            name: fullname,
-            email: email,
-            phone_number: phonenumber,
-            password: password,
+              chama: value,
+              name: fullname,
+              email: email,
+              phone_number: phonenumber,
+              password: password,
           };
-          alert("Heell")
+  
+          console.log("Sending data:", data);  // Log request data
+  
           const response = await axios.post(url, data, {
-            headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json" },
           });
-      
-          
-          alert(response.data.message);
-        } catch (error) {
-          console.error("Error:", error.response?.data || error.message);
-          alert("Registration failed.");
-        }
+  
+          console.log("Response received:", response.data);  // Log response
+          alert(response.data.message || "Registration successful!");
+          if(response.data.message == "Successfully registered"){
+            router.push("/");
+          }
+          else{
+            alert(response.data.message);
+          }
+  
+      } catch (error) {
+          console.error("Error during registration:", error);
+  
+          if (error.response) {
+              console.error("Server Error:", error.response.data);
+              alert("Server Error: " + JSON.stringify(error.response.data));
+          } else {
+              console.error("Network Error:", error.message);
+              alert("Network Error: " + error.message);
+          }
       }
-      else{
-        alert("passwords do not match");
-      }
+        
       
     }
+  }
 
 
     return(

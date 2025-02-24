@@ -4,7 +4,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import DropDownPicker from 'react-native-dropdown-picker';
 import "../global.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { useRouter } from "expo-router";
 const InfoCard = ({ title, kes, intrest, date, dateLabel }) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
     <Text className="text-lg font-bold mb-2">{title}</Text>
@@ -31,6 +33,29 @@ export default function App() {
     { label: 'Banana', value: 'banana' },
     { label: 'Orange', value: 'orange' },
   ]);
+  const route = useRoute();
+  const router = useRouter();
+
+  const fetchData = async () => {
+    try {
+      
+      const url = `https://backend1-1cc6.onrender.com/members/${route.params.email}/@peter2025/`;
+      alert("Goood");
+      const response = await axios.get(url);
+      if(response.status === 200){
+        alert("Goood");
+      }
+    } 
+    catch (error) {
+      console.error("Error logging in:", error);
+      return null;
+    }
+  }
+  alert(route.params.email);
+  useEffect(() => {
+    fetchData();
+  },[]);
+
   return (
     
     <SafeAreaView className="flex-1 bg-white">
@@ -44,7 +69,7 @@ export default function App() {
         }}
       />
         <Text className="text-lg font-bold text-gray-800 mb-1">Gideon Ushindi</Text>
-        <Text className="text-gray-800">ushindigideon01@gmail.com</Text>
+        <Text className="text-gray-800">{route.params.email}</Text>
         <TouchableOpacity className="bg-yellow-600 rounded-lg w-80 h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
         <Text className="text-white font-bold">Update Profile</Text>
         </TouchableOpacity>
@@ -67,7 +92,7 @@ export default function App() {
       {/* Main Content */}
       <View className="space-y-4">
         <TouchableOpacity
-        onPress={() => {alert("Pressed Savings")}}
+        onPress={() => router.push('saving/')}
         >
         <InfoCard
           title="Savings"
