@@ -13,6 +13,8 @@ export default function RootLayout() {
         <Stack.Screen name="loan"options={{title:"Loans"}}  />
         <Stack.Screen name="createchama"options={{title:"Create Chama"}}  />
         <Stack.Screen name="chamacreated"options={{title:"Chama Created"}}  />
+        <Stack.Screen name="chama"options={{title:"Chama"}}  />
+        <Stack.Screen name="members"options={{title:"Members"}}  />
       </Stack>
     </SafeAreaProvider>
   )

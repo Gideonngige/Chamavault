@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import {View, Text, TouchableOpacity, Image, TextInput, StatusBar} from 'react-native';
-
+import { useRouter } from "expo-router";
 export default function Createchama(){
     const [chama, setChama] = useState("");
     const [description, setDescription] = useState("");
+    const router = useRouter();
 
     const handleInviteMembers = async() => {
-        alert("Invite members clicked");
+        // alert("Invite members clicked");
+        router.push("chama/");
     }
     return(
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
