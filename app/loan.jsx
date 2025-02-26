@@ -38,7 +38,7 @@ export default function Loans() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => alert('Take loan')}
+          onPress={() => router.push("appliedloans/")}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>

@@ -1,18 +1,30 @@
-import {Text, View, StatusBar, TextInput, TouchableOpacity, Image } from "react-native";
+import {Text, View, StatusBar, TextInput, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import "../global.css";
 import { useRouter } from "expo-router";
 import axios from 'axios';
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import Toast from "react-native-toast-message";
 
 
 export default function Index() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("Hello message");
   const navigation = useNavigation();
   const handleLogin = async () => {
+    if(email == "" || password == ""){
+      Toast.show({
+        type: "error", // Can be "success", "error", "info"
+        text1: "Empty fields",
+        text2: "Please fill in all fields",
+      });
+      return;
+    }
+    else{
+    setIsLoading(true);
     try {
       const url = `https://backend1-1cc6.onrender.com/postsignIn/${email}/${password}/`;
       const response = await axios.get(url);
@@ -27,26 +39,54 @@ export default function Index() {
       
         }
         else{
-          alert(message);
+          Toast.show({
+            type: "error",
+            text1: "Login Failed",
+            text2: message,
+          });
+          // alert(message);
         }
         return message;
       } else {
-        alert("Login Failed:", response.data);
+        Toast.show({
+          type: "error", // Can be "success", "error", "info"
+          text1: "Login failed",
+          text2: response.data,
+        });
+        // alert("Login Failed:", response.data);
         return null;
       }
     } catch (error) {
-      alert("Error logging in:", error);
+      Toast.show({
+        type: "error", // Can be "success", "error", "info"
+        text1: "Login failed",
+        text2: error,
+      });
       return null;
     }
+    finally{
+      setIsLoading(false);
+    }
+  }
   };
 
   const handleForgotPassword = async() => {
     try {
       const url = `https://backend1-1cc6.onrender.com/postReset/${email}/`;
       const response = await axios.get(url);
-      alert(response.data.message);
+      Toast.show({
+        type: "success", // Can be "success", "error", "info"
+        text1: "Password reset",
+        text2: response.data.message,
+      });
+      // alert(response.data.message);
     } catch (error) {
-      console.error("Error logging in:", error);
+      Toast.show({
+        type: "error", // Can be "success", "error", "info"
+        text1: "Error logging in",
+        text2: error,
+      });
+      // console.error("Error logging in:", error);
       return null;
     }
 
@@ -77,9 +117,11 @@ export default function Index() {
       <Text className="text-lg">Forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleLogin}>
-        <Text className="text-white text-center font-semibold text-lg">Login</Text>
+        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Login</Text> }
+        
       </TouchableOpacity>
       <Text className="text-lg">Do not have an account? <TouchableOpacity onPress={() => router.push("/register")}><Text className="text-yellow-600">Register</Text></TouchableOpacity></Text>
+      <Toast/>
       <StatusBar/>
     </View>
   );

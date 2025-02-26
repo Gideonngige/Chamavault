@@ -1,9 +1,10 @@
-import {Text, View, StatusBar, TextInput, TouchableOpacity, Image,SafeAreaView, ScrollView } from "react-native";
+import {Text, View, StatusBar, TextInput, TouchableOpacity, Image,SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState } from "react";
 import "../global.css";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 export default function Register(){
     const router = useRouter();
@@ -12,6 +13,7 @@ export default function Register(){
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
@@ -20,8 +22,18 @@ export default function Register(){
       { label: 'Chama3', value: 'Chama3' },
     ]);
     const handleRegister = async() => {
+      if(fullname == "" || phonenumber == "" || email == "" || password == "" || confirmPassword == ""){
+        Toast.show({
+              type: "error", // Can be "success", "error", "info"
+              text1: "Empty fields",
+              text2: "Please fill in all fields",
+              position:"center",
+            });
+        return;
+      }
+      else{
       if(password == confirmPassword){
-        // alert("passwords match");
+        setIsLoading(true);
         try {
           const url = "https://backend1-1cc6.onrender.com/postsignUp/";
           const data = {
@@ -44,23 +56,53 @@ export default function Register(){
             router.push("/");
           }
           else{
-            alert(response.data.message);
+            Toast.show({
+              type: "error", // Can be "success", "error", "info"
+              text1: "Failed registration",
+              text2: response.data.message,
+              position:"center",
+            });
+            // alert(response.data.message);
           }
   
-      } catch (error) {
-          console.error("Error during registration:", error);
+      } 
+      catch (error) {
+          // console.error("Error during registration:", error);
   
           if (error.response) {
-              console.error("Server Error:", error.response.data);
-              alert("Server Error: " + JSON.stringify(error.response.data));
+              // console.error("Server Error:", error.response.data);
+              Toast.show({
+                type: "error", // Can be "success", "error", "info"
+                text1: "Error",
+                text2: error.response.data.message,
+                position:"center",
+              });
+              // alert("Server Error: " + JSON.stringify(error.response.data));
           } else {
               console.error("Network Error:", error.message);
-              alert("Network Error: " + error.message);
+              Toast.show({
+                type: "error", // Can be "success", "error", "info"
+                text1: "Network Error",
+                text2: error.message,
+                position:"center",
+              });
+              // alert("Network Error: " + error.message);
           }
       }
-        
-      
+      finally{
+        setIsLoading(false);
+      }
     }
+    else{
+      Toast.show({
+        type: "error", // Can be "success", "error", "info"
+        text1: "Password mismatch",
+        text2: "Password do not match",
+        position:"center",
+      });
+      // alert("Passwords do not match");
+    }
+  }
   }
 
 
@@ -132,9 +174,10 @@ export default function Register(){
       <TouchableOpacity className="w-full flex-row justify-end m-5" onPress={() => alert("Got to forgot password page")}>
       </TouchableOpacity>
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleRegister}>
-        <Text className="text-white text-center font-semibold text-lg">Register</Text>
+        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Register</Text>}
       </TouchableOpacity>
       <Text className="text-lg">Already have an account? <TouchableOpacity onPress={() => router.push("/")}><Text className="text-yellow-600">Login</Text></TouchableOpacity></Text>
+      <Toast/>
       <StatusBar/>
       </View>
       </ScrollView>
