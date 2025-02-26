@@ -8,7 +8,6 @@ export default function Createchama(){
     const router = useRouter();
 
     const handleCreateChama = async() => {
-        // alert("Createchama clicked");
         router.push("chamacreated/");
     }
     return(
