@@ -38,7 +38,7 @@ export default function Loans() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("appliedloans/")}
+          onPress={() => router.push("applyloan/")}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
@@ -46,7 +46,7 @@ export default function Loans() {
 
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => alert('Pay your loans')}
+          onPress={() => router.push("appliedloans/")}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
