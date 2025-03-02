@@ -39,6 +39,7 @@ export default function Chama(){
                 keyExtractor={(item) => item.id.toString()} // Unique key for each item
                 renderItem={({ item }) => <AppliedLoans name={item.name} loan={item.loan} date={item.date} creditScore={item.creditScore} loanType={item.loanType} />} // How each item is displayed
                 showsVerticalScrollIndicator={false} // Hides the scrollbar
+                listMode="SCROLLVIEW"
             />
 
         <StatusBar/>

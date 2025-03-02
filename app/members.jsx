@@ -64,7 +64,7 @@ export default function Members(){
         <SafeAreaView className="flex-1 bg-white">
           {/* search bar */}
           <View className="flex-1 bg-white justify-center items-center mt-10 w-full p-5 font-sans">
-        <View className="flex-row items-center bg-gray-300 rounded-lg p-2 w-full mb-2">
+        <View className="flex-row items-center bg-gray-300 rounded-lg h-10 p-2 w-full mb-2">
         <Ionicons name="search" size={20} color="gray" />
             <TextInput 
             value={search}
@@ -85,6 +85,7 @@ export default function Members(){
         keyExtractor={(item) => item.member_id.toString()} // Unique key for each item
         renderItem={({ item }) => <Member name={item.name} email={item.email} joined_date={item.joined_date} />} // How each item is displayed
         showsVerticalScrollIndicator={false} // Hides the scrollbar
+        listMode="SCROLLVIEW"
       />
         {/* end of members part */}
             

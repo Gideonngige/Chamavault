@@ -8,7 +8,7 @@ export default function Createchama(){
 
     const handleInviteMembers = async() => {
         // alert("Invite members clicked");
-        router.push("chama/");
+        router.push("invitation/");
     }
     return(
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">

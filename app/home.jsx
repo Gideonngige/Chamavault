@@ -4,9 +4,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import DropDownPicker from 'react-native-dropdown-picker';
 import "../global.css";
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 const InfoCard = ({ title, kes, intrest, date, dateLabel }) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
     <Text className="text-lg font-bold mb-2">{title}</Text>
@@ -33,28 +35,35 @@ export default function App() {
     { label: 'Chama2', value: 'Chama2' },
     { label: 'Chama3', value: 'Chama3' },
   ]);
+  const [name, setName]  = useState("");
   const route = useRoute();
   const router = useRouter();
 
-  const fetchData = async () => {
-    try {
-      
-      const url = `https://backend1-1cc6.onrender.com/members/${route.params.email}/@peter2025/`;
-      alert("Goood");
-      const response = await axios.get(url);
-      if(response.status === 200){
-        alert("Goood");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const url = `https://backend1-1cc6.onrender.com/getMember/${route.params.email}/`;
+        const response = await axios.get(url);
+        
+        if(response.status === 200){
+          Toast.show({
+            type: "success", // Can be "success", "error", "info"
+            text1: "Successfully Login",
+            text2: "You have successfully logged in",
+          });
+          setName(response.data.name);
+        }
+      } 
+      catch (error) {
+        console.error("Error:", error);
+        return null;
       }
-    } 
-    catch (error) {
-      console.error("Error logging in:", error);
-      return null;
     }
-  }
-  // alert(route.params.email);
-  // useEffect(() => {
-  //   fetchData();
-  // },[]);
+    fetchData();
+
+  },[route.params.email]);
 
   return (
     
@@ -68,11 +77,12 @@ export default function App() {
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-        <Text className="text-lg font-bold text-gray-800 mb-1">Gideon Ushindi</Text>
+        <Text className="text-lg font-bold text-gray-800 mb-1">{name}</Text>
         <Text className="text-gray-800">{route.params.email}</Text>
         <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
         <Text className="text-white font-bold">Update Profile</Text>
         </TouchableOpacity>
+        <Toast/>
       </View>
       <Text className="text-lg font-bold">Select Chama</Text>
       <View style={{padding:5}}>
@@ -130,7 +140,7 @@ export default function App() {
             <Text className="text-white font-medium">Create Chama</Text>
           </TouchableOpacity>
           <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
-          onPress={() => {alert("Invite member clicked")}}
+          onPress={() => router.push('invitation/')}
           >
           <Entypo name="add-user" size={24} color="black" />
             <Text className="text-white font-medium">Invite</Text>

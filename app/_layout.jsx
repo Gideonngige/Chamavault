@@ -17,6 +17,10 @@ export default function RootLayout() {
         <Stack.Screen name="members"options={{title:"Members"}}  />
         <Stack.Screen name="appliedloans"options={{title:"Applied Loans"}}  />
         <Stack.Screen name="applyloan"options={{title:"Apply Loan"}}  />
+        <Stack.Screen name="contributions"options={{title:"Contributions"}}  />
+        <Stack.Screen name="successfully"options={{title:"Successfully"}}  />
+        <Stack.Screen name="invitation"options={{title:"Invitation"}}  />
+        
       </Stack>
     </SafeAreaProvider>
   )
