@@ -79,7 +79,7 @@ export default function App() {
       />
         <Text className="text-lg font-bold text-gray-800 mb-1">{name}</Text>
         <Text className="text-gray-800">{route.params.email}</Text>
-        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={() => {alert("Update profile")}}>
+        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={() => router.push('invest/')}>
         <Text className="text-white font-bold">Update Profile</Text>
         </TouchableOpacity>
         <Toast/>

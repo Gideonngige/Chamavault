@@ -20,6 +20,12 @@ export default function RootLayout() {
         <Stack.Screen name="contributions"options={{title:"Contributions"}}  />
         <Stack.Screen name="successfully"options={{title:"Successfully"}}  />
         <Stack.Screen name="invitation"options={{title:"Invitation"}}  />
+        <Stack.Screen name="creditscore"options={{title:"Credit Score"}}  />
+        <Stack.Screen name="chamaexpenses"options={{title:"Chama Expenses"}}  />
+        <Stack.Screen name="invest"options={{title:"Invest"}}  />
+        <Stack.Screen name="activity"options={{title:"Activity"}}  />
+        <Stack.Screen name="poll"options={{title:"Poll"}}  />
+        <Stack.Screen name="activepolls"options={{title:"Active Polls"}}  />
         
       </Stack>
     </SafeAreaProvider>

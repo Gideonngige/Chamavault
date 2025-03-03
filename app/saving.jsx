@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
+
 export default function Saving() {
   const router = useRouter();
   const data = [
@@ -46,7 +47,7 @@ export default function Saving() {
 
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => alert('Withdraw your savings')}
+          onPress={() => router.push('/chama')}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Withdraw</Text>
