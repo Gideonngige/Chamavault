@@ -23,7 +23,7 @@ export default function Invitation(){
         setIsLoading(true);
        try{
         
-        const url = `http://10.122.254.196:8000/sendEmail/${email}/${applink}/`;
+        const url = `https://backend1-1cc6.onrender.com/sendEmail/${email}/${applink}/`;
         const response = await axios.get(url);
         if(response.data.message === "ok"){
             Toast.show({

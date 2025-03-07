@@ -5,10 +5,12 @@ import NavBar from "./NavBar";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-
+import { useRoute } from '@react-navigation/native';
 
 export default function Saving() {
   const router = useRouter();
+  const route = useRoute();
+  const { username, email, chama, savingAmount, interest, penalty } = route.params;
   const data = [
     { id: "1", name: "John Doe", age: 28, city: "New York" },
     { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
@@ -20,7 +22,7 @@ export default function Saving() {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,John</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{username}</Text>
           <Text className='text-lg font-bold text-gray-800 mt-0'>Time to save your money</Text>
           <View className="p-4">
             {/* loan image part */}
@@ -31,7 +33,7 @@ export default function Saving() {
       >
         <View className="p-5">
           <Text className="text-xl font-bold text-gray-900">Your Savings</Text>
-          <Text className="text-2xl font-bold text-gray-800">KES. 5,000</Text>
+          <Text className="text-2xl font-bold text-gray-800">KES. {savingAmount}</Text>
         </View>
       </ImageBackground>
 
@@ -67,13 +69,13 @@ export default function Saving() {
             <Text>saving for future</Text>
           </View>
         </View>
-        <Text className='ml-5 font-bold'>John Doe</Text>
+        <Text className='ml-5 font-bold'>{username}</Text>
         <View className='p-2 mt-0 flex flex-row justify-around'>
           <View>
             <Text>Your savings</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.80000</Text>
+            <Text className='font-bold'>KES.{savingAmount}</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>
@@ -81,7 +83,7 @@ export default function Saving() {
             <Text>Annual rate</Text>
           </View>
           <View>
-            <Text className='font-bold'>15%</Text>
+            <Text className='font-bold'>{interest}%</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>
@@ -89,7 +91,7 @@ export default function Saving() {
             <Text>Penality</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.0.00</Text>
+            <Text className='font-bold'>KES.{penalty}</Text>
           </View>
         </View>
         </View>

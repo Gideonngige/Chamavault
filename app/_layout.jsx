@@ -26,6 +26,8 @@ export default function RootLayout() {
         <Stack.Screen name="activity"options={{title:"Activity"}}  />
         <Stack.Screen name="poll"options={{title:"Poll"}}  />
         <Stack.Screen name="activepolls"options={{title:"Active Polls"}}  />
+        <Stack.Screen name="schedule"options={{title:"Schedule"}}  />
+        <Stack.Screen name="topupinvestment"options={{title:"Top Up Investment"}}  />
         
       </Stack>
     </SafeAreaProvider>

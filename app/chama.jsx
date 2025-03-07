@@ -101,7 +101,7 @@ export default function Chama(){
                 }}
                 listMode="SCROLLVIEW"
                 />
-                <TouchableOpacity className='bg-gray-950 w-full mt-5 h-10 justify-center items-center px-4 rounded-lg'>
+                <TouchableOpacity className='bg-gray-950 w-full mt-5 h-10 justify-center items-center px-4 rounded-lg' onPress={() => router.push('/schedule')}>
                 <Text className='font-bold text-white'>Change roles</Text>
               </TouchableOpacity>
               </View>
