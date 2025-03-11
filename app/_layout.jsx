@@ -1,12 +1,13 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import NotificationIcon from './NotificationIcon';
 
 export default function RootLayout() {
   return(
     <SafeAreaProvider>
       <Stack screenOptions={{headerShown:true}}>
         <Stack.Screen name="index"options={{title:"Login"}}  />
-        <Stack.Screen name="home"options={{title:"ChamaVault"}}  />
+        <Stack.Screen name="home"options={{title:"ChamaVault",  headerRight: () => <NotificationIcon/>}}  />
         <Stack.Screen name="verify"options={{title:"Verify"}}  />
         <Stack.Screen name="register"options={{title:"Register"}}  />
         <Stack.Screen name="saving"options={{title:"Saving"}}  />
@@ -17,7 +18,7 @@ export default function RootLayout() {
         <Stack.Screen name="members"options={{title:"Members"}}  />
         <Stack.Screen name="appliedloans"options={{title:"Applied Loans"}}  />
         <Stack.Screen name="applyloan"options={{title:"Apply Loan"}}  />
-        <Stack.Screen name="contributions"options={{title:"Contributions"}}  />
+        <Stack.Screen name="contribution"options={{title:"Contribution"}}  />
         <Stack.Screen name="successfully"options={{title:"Successfully"}}  />
         <Stack.Screen name="invitation"options={{title:"Invitation"}}  />
         <Stack.Screen name="creditscore"options={{title:"Credit Score"}}  />
@@ -28,6 +29,10 @@ export default function RootLayout() {
         <Stack.Screen name="activepolls"options={{title:"Active Polls"}}  />
         <Stack.Screen name="schedule"options={{title:"Schedule"}}  />
         <Stack.Screen name="topupinvestment"options={{title:"Top Up Investment"}}  />
+        <Stack.Screen name="notifications"options={{title:"Notifications"}}  />
+        <Stack.Screen name="profile"options={{title:"Profile"}}  />
+        <Stack.Screen name="help"options={{title:"Help"}}  />
+        
         
       </Stack>
     </SafeAreaProvider>

@@ -1,9 +1,25 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function BottomNavBar() {
   const [activeRoute, setActiveRoute] = useState('home');
+  const navigation = useNavigation();
+
+  const handleNotifications = () => {
+    navigation.navigate('notifications', {
+      
+    });
+
+  }
+
+  const handleProfile =() =>{
+    navigation.navigate('profile', {
+      
+    });
+  }
 
   return (
     <View className="absolute bottom-0 left-0 right-0 bg-gray-900 pt-2 border-t border-gray-200">
@@ -22,24 +38,27 @@ export default function BottomNavBar() {
             <Text className="text-yellow-600 text-xs mt-1">Home</Text>
           )}
         </TouchableOpacity>
-
-        {/* Center Floating Button */}
-        <TouchableOpacity 
-          className="items-center justify-center bg-yellow-600 rounded-full w-16 h-16 -top-8 absolute"
-          style={{ elevation: 5, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 5 }}
-          onPress={() => alert('Center button pressed')}
-        >
-          <MaterialCommunityIcons 
-            name="plus" 
-            size={32} 
-            color="black" 
-          />
-        </TouchableOpacity>
+       {/* notfication button */}
+       <TouchableOpacity 
+        className="items-center"
+       onPress={handleNotifications}
+      >
+      <MaterialCommunityIcons 
+      name={activeRoute === 'notifications' ? 'bell' : 'bell-outline'} 
+      size={24} 
+      color={activeRoute === 'notifications' ? 'yellow' : '#64748b'} 
+      />
+      {activeRoute === 'notifications' && (
+      <Text className="text-yellow-600 text-xs mt-1">Notifications</Text>
+      )}
+      </TouchableOpacity>
+       {/* end of notification button */}
+        
 
         {/* Right Tab */}
         <TouchableOpacity 
           className="items-center"
-          onPress={() => {setActiveRoute('profile');alert("Profile page!")}}
+          onPress={handleProfile}
         >
           <MaterialCommunityIcons 
             name={activeRoute === 'profile' ? 'account' : 'account-outline'} 

@@ -10,6 +10,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
+import NavBar from './NavBar';
+import BottomTabs from './BottomTabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const InfoCard = ({ title, kes, interest, date, dateLabel }) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
     <Text className="text-lg font-bold mb-2">{title}</Text>
@@ -45,6 +48,7 @@ export default function App() {
   const [loanInterest, setLoanInterest] = useState(0);
   const [penalty, setPenalty] = useState(0);
   const [name, setName]  = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
   const route = useRoute();
   const router = useRouter();
 
@@ -55,6 +59,7 @@ export default function App() {
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${route.params.email}/`;
         const response = await axios.get(url);
+        await AsyncStorage.setItem('email', route.params.email);
         
         if(response.status === 200){
           Toast.show({
@@ -65,6 +70,8 @@ export default function App() {
           setName(response.data.name);
           setItems([response.data.chama]);
           setnumberOfChama(items.length);
+          setPhonenumber(response.data.phone_number);
+          setChama(response.data.chama)
         }
       } 
       catch (error) {
@@ -130,6 +137,8 @@ const goToSavings = () =>{
     savingAmount: saving,
     interest: interest,
     penalty: penalty,
+    chama: chama,
+    phonenumber: phonenumber,
   });
 }
 //end of goto savings
@@ -141,6 +150,8 @@ const goToLoans = () =>{
     email: route.params.email,
     loan: loan,
     loanInterest: interest,
+    chama: chama,
+    phonenumber: phonenumber,
   });
 }
 //end of goto loans
@@ -148,7 +159,7 @@ const goToLoans = () =>{
   return (
     
     <SafeAreaView className="flex-1 bg-white">
-    <ScrollView nestedScrollEnabled={true} className="p-4">
+    <ScrollView nestedScrollEnabled={true} className="p-4 mb-20">
     <View className="flex-1 bg-white p-4">
       {/* Header */}
       <View className="items-center mb-8">
@@ -227,9 +238,14 @@ const goToLoans = () =>{
           </TouchableOpacity>
           </View>
         </View>
+        
     </View>
+   
     
     </ScrollView>
+    <NavBar/>
+    
     </SafeAreaView>
+    
   );
 }

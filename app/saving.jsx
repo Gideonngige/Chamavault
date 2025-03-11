@@ -6,16 +6,26 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Saving() {
   const router = useRouter();
   const route = useRoute();
-  const { username, email, chama, savingAmount, interest, penalty } = route.params;
+  const navigation = useNavigation();
+  const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
   const data = [
     { id: "1", name: "John Doe", age: 28, city: "New York" },
     { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
     { id: "3", name: "Michael Johnson", age: 24, city: "Chicago" },
   ];
+
+  // handle top up 
+  const handleTopUp = () => {
+    navigation.navigate('contribution', {
+      phonenumber: phonenumber,
+    });
+  };
+  //end of handle top up
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -41,7 +51,7 @@ export default function Saving() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("contribution/")}
+          onPress={handleTopUp}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Top up</Text>

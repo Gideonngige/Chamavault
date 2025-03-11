@@ -72,6 +72,14 @@ export default function Index() {
 
   const handleForgotPassword = async() => {
     try {
+      if(email === ""){
+        Toast.show({
+          type: "error", // Can be "success", "error", "info"
+          text1: "Empty field",
+          text2: "Please provide an email",
+        });
+      }
+      else{
       const url = `https://backend1-1cc6.onrender.com/postReset/${email}/`;
       const response = await axios.get(url);
       Toast.show({
@@ -79,6 +87,8 @@ export default function Index() {
         text1: "Password reset",
         text2: response.data.message,
       });
+      }
+      
       // alert(response.data.message);
     } catch (error) {
       Toast.show({
@@ -96,7 +106,7 @@ export default function Index() {
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
       <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
       <Text className="text-3xl font-bold text-gray-800 mb-6">ChamaVault</Text>
-      <Text className="text-lg font-bold">Enter your email</Text>
+      <Text className="w-full text-lg font-bold">Enter your email</Text>
       <TextInput 
       placeholder="Enter your email"
       keyboardType="email-address"
@@ -104,7 +114,7 @@ export default function Index() {
       onChangeText={setEmail}
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
       />
-      <Text className="text-lg font-bold">Enter your password</Text>
+      <Text className="w-full text-lg font-bold">Enter your password</Text>
       <TextInput 
       placeholder="Enter your password"
       secureTextEntry

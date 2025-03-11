@@ -1,37 +1,61 @@
 import { useState, useEffect } from 'react';
-import {View, Text, TouchableOpacity, Image, TextInput, StatusBar, SafeAreaView, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, ActivityIndicator, TextInput, StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import { router, useRouter } from "expo-router";
 import axios from 'axios';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { useRoute } from '@react-navigation/native';
+import Toast from "react-native-toast-message";
+
 
 export default function Contributions(){
+    const route = useRoute();
+    const phonenumber = route.params?.phonenumber || "0797655727";
+
     const [isLoading, setIsLoading] = useState(false);
     const [amount, setAmount] = useState("");
-    const [display, setDisplay] = useState(200);
+    const [display, setDisplay] = useState(0);
     const router = useRouter();
     const handleContribution = async () => {
+        if(amount === ""){
+            Toast.show({
+                type: "error", // Can be "success", "error", "info"
+                text1: "Empty fields",
+                text2: "Please fill amount field",
+                });
+        }
+        else{
+         setIsLoading(true);
         try{
-            const url = "https://backend1-1cc6.onrender.com/contributions/";
-            const data = {
-                phonenumber:"0797655727",
-                email:"gtechcompany01@gmail.com",
-                amount: amount,
-            };
-            const response = await axios.post(url, data, {
-                headers: { "Content-Type": "application/json" },
-            });
-            alert("Hello")
-            if(response.data.status == 200){
-                router.push("successfully/");
+            const url = `https://backend1-1cc6.onrender.com/stk_push/${phonenumber}/${amount}/`;
+            const response = await axios.get(url);
+
+            if(response.data.message === "ok"){
+                Toast.show({
+                    type: "success", // Can be "success", "error", "info"
+                    text1: "Sent sucessfully",
+                    text2: `Ksh. ${amount} sent successfully`,
+                    });
             }
             else{
-                alert("Failed to make contribution");
+                alert(response.data.message);
+                Toast.show({
+                    type: "info", // Can be "success", "error", "info"
+                    text1: "Unsuccessful",
+                    text2: response.data.message,
+                    });
             }
         }
         catch(error){
-            alert("Error:" + error.message);
+            Toast.show({
+                type: "error", // Can be "success", "error", "info"
+                text1: "Error occurred",
+                text2: error.message,
+                });
+        }
+        finally{
+        setIsLoading(false);
         }
     }
+}
 
     useEffect(() => {
         setDisplay(amount)
@@ -54,6 +78,7 @@ export default function Contributions(){
             <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleContribution}>
             {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Proceed Payment</Text> }
             </TouchableOpacity>
+            <Toast/>
        
         <StatusBar/>
         </View>

@@ -5,8 +5,10 @@ import NavBar from "./NavBar";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Loans() {
+  const navigation = useNavigation();
   const router = useRouter();
   const route = useRoute();
   const { username, email, loan, loanInterest} = route.params;
@@ -15,6 +17,12 @@ export default function Loans() {
     { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
     { id: "3", name: "Michael Johnson", age: 24, city: "Chicago" },
   ];
+
+  const handleApplyLoan =()=>{
+    navigation.navigate('applyloan', {
+      email:email,
+    });
+  }
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -40,7 +48,7 @@ export default function Loans() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("applyloan/")}
+          onPress={handleApplyLoan}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
@@ -65,13 +73,13 @@ export default function Loans() {
           </View>
           <View>
             <Text className='text-2xl font-bold'>Chamavault</Text>
-            <Text>saving for future</Text>
+            <Text>borrowing to grow</Text>
           </View>
         </View>
         <Text className='ml-5 font-bold'>{username}</Text>
         <View className='p-2 mt-0 flex flex-row justify-around'>
           <View>
-            <Text>Your savings</Text>
+            <Text>Your loans</Text>
           </View>
           <View>
             <Text className='font-bold'>KES.{loan}</Text>
