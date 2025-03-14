@@ -4,6 +4,7 @@ import { router, useRouter } from "expo-router";
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Contributions(){
@@ -15,6 +16,9 @@ export default function Contributions(){
     const [display, setDisplay] = useState(0);
     const router = useRouter();
     const handleContribution = async () => {
+        const email = await AsyncStorage.getItem('email');
+        const phonenumber = await AsyncStorage.getItem('phonenumber');
+        const chama = await AsyncStorage.getItem('chama');
         if(amount === ""){
             Toast.show({
                 type: "error", // Can be "success", "error", "info"
@@ -25,15 +29,24 @@ export default function Contributions(){
         else{
          setIsLoading(true);
         try{
-            const url = `https://backend1-1cc6.onrender.com/stk_push/${phonenumber}/${amount}/`;
-            const response = await axios.get(url);
+            const url = "https://backend1-1cc6.onrender.com/contributions/";
+            const data = {
+                email: email,
+                amount: amount,
+                phonenumber:phonenumber,
+                chama: chama,
+            };
+            const response = await axios.post(url, data, {
+                headers: { "Content-Type": "application/json" },
+            });
 
-            if(response.data.message === "ok"){
+            if(response.data.status === 200){
                 Toast.show({
                     type: "success", // Can be "success", "error", "info"
                     text1: "Sent sucessfully",
-                    text2: `Ksh. ${amount} sent successfully`,
+                    text2: response.data.message,
                     });
+                    setAmount("");
             }
             else{
                 alert(response.data.message);

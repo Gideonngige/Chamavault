@@ -83,7 +83,7 @@ export default function Members(){
       <FlatList
         data={filteredMembers} // Array of data
         keyExtractor={(item) => item.member_id.toString()} // Unique key for each item
-        renderItem={({ item }) => <Member name={item.name} email={item.email} joined_date={item.joined_date} />} // How each item is displayed
+        renderItem={({ item }) => <Member name={item.name} email={item.email} joined_date={item.joined_date.split("T")[0]} />} // How each item is displayed
         showsVerticalScrollIndicator={false} // Hides the scrollbar
         listMode="SCROLLVIEW"
       />

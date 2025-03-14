@@ -1,18 +1,33 @@
 import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity,Image, ImageBackground, StatusBar } from 'react-native';
 import { useRouter } from "expo-router";
 import { push } from 'expo-router/build/global-state/routing';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 export default function Profile() {
+  
    const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const[email, setEmail] = useState("");
+  const [name, setName] = useState("");
+
+  useEffect(() =>{
+    const handleGetDaya = async() =>{
+      const email = await AsyncStorage.getItem('email');
+      const name = await AsyncStorage.getItem('name');
+      setEmail(email);
+      setName(name);
+
+    }
+    handleGetDaya();
+  },[])
 
   const handleLogOut = () => {
     navigation.navigate('index', {
@@ -44,8 +59,8 @@ export default function Profile() {
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-    <Text className="text-lg font-bold text-gray-800 mb-1">Jane Doe</Text>
-    <Text className="text-gray-800">janedoe@gmail.com</Text>
+    <Text className="text-lg font-bold text-gray-800 mb-1">{name}</Text>
+    <Text className="text-gray-800 font-bold">{email}</Text>
     </View>
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
         <TouchableOpacity className='flex-row items-center justify-between w-full p-1'>

@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity,Image, ImageBackground } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, ActivityIndicator, TouchableOpacity,Image, ImageBackground, FlatList } from 'react-native';
 import { useRouter } from "expo-router";
 // import { DataTable } from "react-native-paper";
 import NavBar from "./NavBar";
@@ -7,17 +7,33 @@ import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function Saving() {
   const router = useRouter();
   const route = useRoute();
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(true);
   const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
-  const data = [
-    { id: "1", name: "John Doe", age: 28, city: "New York" },
-    { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
-    { id: "3", name: "Michael Johnson", age: 24, city: "Chicago" },
-  ];
+  const [transactions, setTransactions] = useState([]);
+
+  // fetch transactions data
+  useEffect(() => {
+    const fetchTransactions = async() => {
+      axios.get('https://backend1-1cc6.onrender.com/transactions/Other/gtechcompany01@gmail.com/')
+          .then((response) => {
+            setTransactions(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+    }
+    fetchTransactions();
+  }, []);
+  // end of fetch transactions
 
   // handle top up 
   const handleTopUp = () => {
@@ -26,6 +42,27 @@ export default function Saving() {
     });
   };
   //end of handle top up
+
+  // start of activity
+  const Activity = ({transactionType, chama, amount, transactionTime}) => {
+    return(
+      <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
+          <View>
+            <Text>{transactionType}</Text>
+            <Text>Chama{chama}</Text>
+          </View>
+          <View>
+            <Text className='font-bold'>KES.{amount}</Text>
+            <Text className='font-bold'>{transactionTime}</Text>
+          </View>
+        </View>
+    );
+  }
+  // end of activity
+
+  if (isLoading) {
+          return <ActivityIndicator size="large" color="#FFA500" />;
+  }
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -108,36 +145,14 @@ export default function Saving() {
 
         {/* your activity part  */}
         <Text className='ml-1 font-bold mt-5'>Your activity</Text>
-        <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
-          <View>
-            <Text>Paid</Text>
-            <Text>Chamavault</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>KES.80000</Text>
-            <Text className='font-bold'>3:15 pm</Text>
-          </View>
-        </View>
-        <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
-          <View>
-            <Text>Paid</Text>
-            <Text>Chamavault</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>KES.80000</Text>
-            <Text className='font-bold'>3:15 pm</Text>
-          </View>
-        </View>
-        <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
-          <View>
-            <Text>Paid</Text>
-            <Text>Chamavault</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>KES.80000</Text>
-            <Text className='font-bold'>3:15 pm</Text>
-          </View>
-        </View>
+
+        <FlatList
+                data={transactions} // Array of data
+                keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
+                renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
+                showsVerticalScrollIndicator={false} // Hides the scrollbar
+                listMode="SCROLLVIEW"
+            />
         
       </View>
 

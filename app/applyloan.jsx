@@ -5,6 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from "react-native-toast-message";
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ApplyLoan(){
   const route = useRoute();
@@ -48,8 +49,9 @@ export default function ApplyLoan(){
       else{
         setIsLoading(true);
         try{
+           const chama = await AsyncStorage.getItem('chama');
           const period = repaymentPeriod * 30;
-          const url = `https://backend1-1cc6.onrender.com/loans/${email}/${loanAmount}/${value}/${period}`;
+          const url = `https://backend1-1cc6.onrender.com/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
           const response = await axios.get(url);
           if(response.data.status === 200) {
             Toast.show({

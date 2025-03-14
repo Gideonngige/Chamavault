@@ -3,8 +3,10 @@ import {View, Text, TouchableOpacity, Image, TextInput, StatusBar, ActivityIndic
 import { useRouter } from "expo-router";
 import axios from 'axios';
 import Toast from "react-native-toast-message";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Createchama(){
+    const navigation = useNavigation();
     const [chama, setChama] = useState("");
     const [description, setDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +39,10 @@ export default function Createchama(){
         });
        
         if(response.data.message == "Chama created successfully"){
-          router.push("chamacreated/");
+          navigation.navigate('chamacreated', {
+            chama:chama,
+      
+          });
         }
         else{
           Toast.show({

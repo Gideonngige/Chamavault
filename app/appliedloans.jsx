@@ -52,11 +52,6 @@ export default function Chama(){
 
 
 
-    const data = [
-        {id:1, name:"John Doe", loan:90000, date:"12/12/2024",creditScore:90,loanType:"LTS"},
-        {id:2, name:"John Doe", loan:90000, date:"12/12/2024",creditScore:90,loanType:"LTS"},
-        {id:3, name:"John Doe", loan:90000, date:"12/12/2024",creditScore:90,loanType:"LTS"},
-    ]
     const AppliedLoans = ({name, loan, date,  creditScore, loanType}) => {
         return(
             
