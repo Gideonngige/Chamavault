@@ -49,7 +49,7 @@ export default function ApplyLoan(){
       else{
         setIsLoading(true);
         try{
-           const chama = await AsyncStorage.getItem('chama');
+          const chama = await AsyncStorage.getItem('chama');
           const period = repaymentPeriod * 30;
           const url = `https://backend1-1cc6.onrender.com/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
           const response = await axios.get(url);

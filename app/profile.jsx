@@ -55,7 +55,7 @@ export default function Profile() {
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
         <View className="items-center mb-8">
         <Image 
-        source={require('../assets/images2/profile.png')}
+        source={require('../assets/images2/profile3.png')}
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />

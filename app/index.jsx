@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Index() {
@@ -29,9 +30,11 @@ export default function Index() {
       const url = `https://backend1-1cc6.onrender.com/postsignIn/${email}/${password}/`;
       const response = await axios.get(url);
       
+      
       if (response.status === 200) {
         const message = response.data.message; 
         if(message == "Successfully logged in"){
+          await AsyncStorage.setItem('email', email);
           // router.push("/home");
           navigation.navigate('home', {
             email,

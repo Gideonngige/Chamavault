@@ -3,11 +3,11 @@ import {View, Text, TouchableOpacity, ActivityIndicator, Image, TextInput, Statu
 import { useRouter } from "expo-router";
 import axios from 'axios';
 import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Chama(){
     const [appliedLoans, setAppliedLoans] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [approverEmail, setApproverEmail] = useState("ushindigideon01@gmail.com");
 
     useEffect(() => {
         // Fetch data from the API
@@ -23,7 +23,9 @@ export default function Chama(){
 
     const handleConfirm = async(name) =>{
         try{
+            const approverEmail = await AsyncStorage.getItem('email');
             const url = `https://backend1-1cc6.onrender.com/confirm_loan/${name}/${approverEmail}/`;
+            alert(approverEmail);
             const response = await axios.get(url);
             if(response.status === 200){
                 Toast.show({

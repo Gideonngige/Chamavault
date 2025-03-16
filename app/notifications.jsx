@@ -1,15 +1,22 @@
-import { SafeAreaView, ScrollView, Text, View, FlatList, ActivityIndicator, TextInput, TouchableOpacity,Image, ImageBackground, StatusBar } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, FlatList, ActivityIndicator, StatusBar } from 'react-native';
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function Notifications() {
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
-  
-  
+
+  // Alert component
+  const Alert = () => {
+    return (
+      <View className="flex flex-row items-center justify-center w-full h-full bg-yellow-600 p-3 rounded-lg">
+        <Text className="text-white font-bold">You have 0 notifications</Text>
+      </View>
+    );
+  };
+
   useEffect(() => {
     const fetchNotifications = async () => {
       const email = await AsyncStorage.getItem('email');
@@ -21,51 +28,56 @@ export default function Notifications() {
         console.error(error);
       }
     };
-  
+
     fetchNotifications();
   }, []);
-  
 
-  const Notifications = ({date, type, message}) => {
+  const NotificationItem = ({ date, type, message }) => {
     return (
-      
       <View className="w-full bg-yellow-600 p-3 rounded-lg mb-5">
-            {/* Date and Event Title */}
-            <View className="flex-row justify-between bg-yellow-600 p-3 rounded-lg">
-                <Text className="font-bold text-white">{date}</Text>
-                <Text className="font-bold text-white">{type}</Text>
-            </View>
+        {/* Date and Event Title */}
+        <View className="flex-row justify-between bg-yellow-600 p-3 rounded-lg">
+          <Text className="font-bold text-white">{date}</Text>
+          <Text className="font-bold text-white">{type}</Text>
+        </View>
 
-            {/* Divider */}
-            <View className="border-b border-gray-300 my-2"></View>
+        {/* Divider */}
+        <View className="border-b border-gray-300 my-2"></View>
 
-            {/* Description */}
-            <Text className="text-white">{message}</Text>
+        {/* Description */}
+        <Text className="text-white">{message}</Text>
       </View>
     );
-
-  }
+  };
 
   if (loading) {
     return <ActivityIndicator size="large" color="#FFA500" />;
   }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4">
+      
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-
-        <FlatList
-          data={notifications} // Array of data
-          keyExtractor={(item) => item.notification_id.toString()} // Unique key for each item
-          renderItem={({ item }) => <Notifications date={item.notification_date.split("T")[0]} type={item.notification_type} message={item.notification} />} // How each item is displayed
-          showsVerticalScrollIndicator={false} // Hides the scrollbar
-          listMode="SCROLLVIEW"
-          />
-
-
-        <StatusBar/>
+          {notifications.length === 0 ? (
+            <Alert />
+          ) : (
+            <FlatList
+              data={notifications} // Array of data
+              keyExtractor={(item) => item.notification_id.toString()} // Unique key for each item
+              renderItem={({ item }) => (
+                <NotificationItem
+                  date={item.notification_date.split("T")[0]}
+                  type={item.notification_type}
+                  message={item.notification}
+                />
+              )}
+              showsVerticalScrollIndicator={false} // Hides the scrollbar
+              listMode="SCROLLVIEW"
+            />
+          )}
+          <StatusBar />
         </View>
-      </ScrollView>
+     
     </SafeAreaView>
   );
 }

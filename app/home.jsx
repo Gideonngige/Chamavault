@@ -41,14 +41,17 @@ export default function App() {
     { label: 'Chama3', value: 'Chama3' },
   ]);
   const [numberOfChama, setnumberOfChama] = useState(0);
-  const [chama, setChama] = useState("Chama1");
+  const [chama, setChama] = useState("Chama2");
   const [saving, setSaving] = useState(0);
   const [interest, setInterest] = useState(0);
   const [loan, setLoan] = useState(0);
   const [loanInterest, setLoanInterest] = useState(0);
   const [penalty, setPenalty] = useState(0);
   const [name, setName]  = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
+  const [phonenumber, setPhonenumber] = useState("0797655727");
+  const [email, setEmail] =  useState("");
+  const [savingDate, setSavingDate] = useState("N/A");
+  const [loanDate, setLoanDate] = useState("N/A");
   const route = useRoute();
   const router = useRouter();
 
@@ -56,10 +59,11 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const email = await AsyncStorage.getItem('email');
         
-        const url = `https://backend1-1cc6.onrender.com/getMember/${route.params.email}/`;
+        const url = `https://backend1-1cc6.onrender.com/getMember/${email}/`;
         const response = await axios.get(url);
-        await AsyncStorage.setItem('email', route.params.email);
+        await AsyncStorage.setItem('email',email);
         
         if(response.status === 200){
           Toast.show({
@@ -72,6 +76,7 @@ export default function App() {
           setnumberOfChama(items.length);
           setPhonenumber(response.data.phone_number);
           setChama(response.data.chama)
+          setEmail(email);
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phonenumber);
           await AsyncStorage.setItem('chama', response.data.chama);
@@ -84,19 +89,22 @@ export default function App() {
     }
     fetchData();
 
-  },[route.params.email]);
+  },[email]);
 
 //  start get savings function
 useEffect(() => {
   const getSavings = async () => {
     try {
-      const url = `https://backend1-1cc6.onrender.com/getContributions/${chama}/${route.params.email}/`;
+      const url = `https://backend1-1cc6.onrender.com/getContributions/Chama${chama}/${email}/`;
+
       const response = await axios.get(url);
       
       if(response.status === 200){
         setSaving(response.data.total_contributions);
         setInterest(response.data.interest);
         setPenalty(response.data.penalty);
+        if(response.data.saving_date.length == 0){ setSavingDate("N/A"); }
+        else{setSavingDate(response.data.saving_date[0].contribution_date);}
       }
     } 
     catch (error) {
@@ -106,7 +114,7 @@ useEffect(() => {
   }
   getSavings();
 
-},[route.params.email]);
+},[email]);
 // end of get savings function
 
 
@@ -114,12 +122,15 @@ useEffect(() => {
 useEffect(() => {
   const getLoans = async () => {
     try {
-      const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${route.params.email}/`;
+      const url = `https://backend1-1cc6.onrender.com/getLoans/Chama${chama}/${email}/`;
       const response = await axios.get(url);
       
       if(response.status === 200){
         setLoan(response.data.total_loan);
         setLoanInterest(response.data.interest);
+        if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
+        else{setLoanDate(response.data.loan_date[0].loan_date);}
+        
       }
     } 
     catch (error) {
@@ -129,14 +140,14 @@ useEffect(() => {
   }
   getLoans();
 
-},[route.params.email]);
+},[email]);
 // end of get savings function
 
 //go to saviings
 const goToSavings = () =>{
   navigation.navigate('saving', {
     username: name,
-    email: route.params.email,
+    email: email,
     savingAmount: saving,
     interest: interest,
     penalty: penalty,
@@ -150,7 +161,7 @@ const goToSavings = () =>{
 const goToLoans = () =>{
   navigation.navigate('loan', {
     username: name,
-    email: route.params.email,
+    email: email,
     loan: loan,
     loanInterest: interest,
     chama: chama,
@@ -158,6 +169,14 @@ const goToLoans = () =>{
   });
 }
 //end of goto loans
+
+// got to invest 
+const handleProfile = () =>{
+  navigation.navigate('profile', {
+    
+  });
+}
+// end of go to invest
 
   return (
     
@@ -167,15 +186,17 @@ const goToLoans = () =>{
       {/* Header */}
       <View className="items-center mb-8">
       <Image 
-        source={require('../assets/images2/profile.png')}
+        source={require('../assets/images2/profile3.png')}
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
         <Text className="text-lg font-bold text-gray-800 mb-1">{name}</Text>
-        <Text className="text-gray-800">{route.params.email}</Text>
-        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={() => router.push('invest/')}>
+        <Text className="text-gray-800">{email}</Text>
+        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={handleProfile}>
         <Text className="text-white font-bold">Update Profile</Text>
         </TouchableOpacity>
+
+
         <Toast/>
       </View>
       <Text className="text-lg font-bold">Select Chama</Text>
@@ -203,7 +224,7 @@ const goToLoans = () =>{
           title="Savings"
           kes={saving}
           interest={interest}
-          date="10/02/2023"
+          date={savingDate}
           dateLabel="Last saving"
         />
         </TouchableOpacity>
@@ -215,7 +236,7 @@ const goToLoans = () =>{
           title="Loans"
           kes={loan}
           interest={loanInterest}
-          date="11/02/2023"
+          date={loanDate}
           dateLabel="Last loan"
         />
         </TouchableOpacity>
@@ -240,6 +261,8 @@ const goToLoans = () =>{
             <Text className="text-white font-medium">Invite</Text>
           </TouchableOpacity>
           </View>
+
+          
         </View>
         
     </View>

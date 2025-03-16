@@ -8,6 +8,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Loans() {
   const navigation = useNavigation();
@@ -26,7 +27,8 @@ export default function Loans() {
     // fetch loan transactions data
     useEffect(() => {
       const fetchTransactions = async() => {
-        axios.get('https://backend1-1cc6.onrender.com/transactions/Loan/gtechcompany01@gmail.com/')
+        const email = await AsyncStorage.getItem('email');
+        axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/`)
             .then((response) => {
               setTransactions(response.data);
               setIsLoading(false);

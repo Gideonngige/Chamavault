@@ -9,6 +9,7 @@ import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Saving() {
   const router = useRouter();
@@ -20,8 +21,10 @@ export default function Saving() {
 
   // fetch transactions data
   useEffect(() => {
+   
     const fetchTransactions = async() => {
-      axios.get('https://backend1-1cc6.onrender.com/transactions/Other/gtechcompany01@gmail.com/')
+       const email = await AsyncStorage.getItem('email');
+      axios.get('https://backend1-1cc6.onrender.com/transactions/Contribution/gtechcompany01@gmail.com/')
           .then((response) => {
             setTransactions(response.data);
             setIsLoading(false);
@@ -64,8 +67,8 @@ export default function Saving() {
           return <ActivityIndicator size="large" color="#FFA500" />;
   }
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4">
+    <SafeAreaView  className="flex-1 bg-white">
+      <ScrollView  className="p-4">
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
@@ -104,6 +107,12 @@ export default function Saving() {
       </View>
 
       {/* saving part */}
+
+      {/* go to invest */}
+      <TouchableOpacity className="bg-yellow-600 rounded-lg w-full mt-5 h-10 flex items-center justify-center" onPress={() => router.push('invest/')}>
+      <Text className="text-white font-bold">Invest</Text>
+      </TouchableOpacity>
+      {/* end of go to invest */}
       <View>
         <Text className='font-bold mt-5'>My savings</Text>
         <View className='bg-yellow-600 rounded-lg'>

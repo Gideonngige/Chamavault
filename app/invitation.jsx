@@ -7,7 +7,7 @@ import Toast from "react-native-toast-message";
 export default function Invitation(){ 
     const [isLoading, setIsLoading] = useState(false); 
     const [email, setEmail] = useState("");
-    const [applink, setAppLink] = useState('www.google.com'); 
+    const [applink, setAppLink] = useState('www.chamavault.com'); 
     
     const handleInvite = async(email, applink) => {
         if(email == ""){

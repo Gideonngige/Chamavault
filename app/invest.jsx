@@ -40,7 +40,7 @@ export default function Invest() {
       <View className="bg-yellow-600 p-4 m-2 w-full rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("poll/")}
+          onPress={() => router.push("topupinvestment/")}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Top up</Text>
