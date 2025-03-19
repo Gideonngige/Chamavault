@@ -80,7 +80,9 @@ export default function App() {
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phonenumber);
           await AsyncStorage.setItem('chama', response.data.chama);
+          
         }
+        
       } 
       catch (error) {
         console.error("Error:", error);

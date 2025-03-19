@@ -14,7 +14,7 @@ export default function Members(){
 
       useEffect(() => {
         // Fetch data from the API using Axios
-        axios.get('https://backend1-1cc6.onrender.com/members/gideonushindi94@gmail.com/@gideon/')
+        axios.get('https://backend1-1cc6.onrender.com/members/gtechcompany01@gmail.com/@testuser/')
           .then((response) => {
             setMembers(response.data);
             setFilteredMembers(response.data);
