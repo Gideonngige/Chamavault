@@ -18,8 +18,7 @@ export default function Contributions(){
     const handleContribution = async () => {
         const email = await AsyncStorage.getItem('email');
         const phonenumber = await AsyncStorage.getItem('phonenumber');
-        const chama = await AsyncStorage.getItem('chama');
-        alert(chama);
+        const chama = JSON.parse(await AsyncStorage.getItem('chama'));
         if(amount === ""){
             Toast.show({
                 type: "error", // Can be "success", "error", "info"
@@ -30,7 +29,6 @@ export default function Contributions(){
         else{
          setIsLoading(true);
         try{
-           
             const url = "https://backend1-1cc6.onrender.com/contributions/";
             const data = {
                 email: email,
@@ -51,7 +49,7 @@ export default function Contributions(){
                     setAmount("");
             }
             else{
-                alert(response.data.message);
+                
                 Toast.show({
                     type: "info", // Can be "success", "error", "info"
                     text1: "Unsuccessful",

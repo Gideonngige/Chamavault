@@ -41,7 +41,7 @@ export default function App() {
     { label: 'Chama3', value: 'Chama3' },
   ]);
   const [numberOfChama, setnumberOfChama] = useState(0);
-  const [chama, setChama] = useState("Chama2");
+  const [chama, setChama] = useState("0");
   const [saving, setSaving] = useState(0);
   const [interest, setInterest] = useState(0);
   const [loan, setLoan] = useState(0);
@@ -78,8 +78,8 @@ export default function App() {
           setChama(response.data.chama)
           setEmail(email);
           await AsyncStorage.setItem('name', response.data.name);
-          await AsyncStorage.setItem('phonenumber', response.data.phonenumber);
-          await AsyncStorage.setItem('chama', response.data.chama);
+          await AsyncStorage.setItem('phonenumber', response.data.phone_number);
+          await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
           
         }
         

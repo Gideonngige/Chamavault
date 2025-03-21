@@ -57,7 +57,7 @@ export default function Notifications() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
+        <View className="bg-white  p-5 font-sans">
           {notifications.length === 0 ? (
             <Alert />
           ) : (
