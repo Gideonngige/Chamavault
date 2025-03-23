@@ -6,15 +6,47 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { push } from 'expo-router/build/global-state/routing';
+import { useState, useEffect } from 'react';
 
 
 export default function Invest() {
   const router = useRouter();
-  const data = [
-    { id: "1", name: "John Doe", age: 28, city: "New York" },
-    { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
-    { id: "3", name: "Michael Johnson", age: 24, city: "Chicago" },
-  ];
+  const[userName, setUserName] =  useState("");
+  const[email, setEmail] = useState("");
+  
+
+// fettch investment data
+useEffect(() => {
+  
+    const fetchInvestmentData = async () => {
+      try {
+        const email = await AsyncStorage.getItem('email');
+        const name = await AsyncStorage.getItem('name');
+        alert("Hello");
+        
+        const url = "http://https://backend1-1cc6.onrender.com/getInvestment/gtechcompany01@gmail.com/";
+        const response = await axios.get(url);
+        // await AsyncStorage.setItem('email',email);
+        alert(response.status)
+        
+        if(response.status === 200){
+          setUserName(name);
+          setEmail(email);
+          alert(name);
+          
+        }
+        
+      } 
+      catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+    fetchInvestmentData();
+
+  },[email]);
+// end pf fetching investment data 
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -57,7 +89,7 @@ export default function Invest() {
       {/* real estate investment */}
       <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
                 <View className="flex-row justify-between bg-white p-3 rounded-lg">
-                    <Text className='font-bold'>John Does</Text>
+                    <Text className='font-bold'>{userName}</Text>
                     <Text className='font-bold'>12/02/2024</Text>
                 </View>
                 <Text className='font-bold'>Real Estate</Text>
