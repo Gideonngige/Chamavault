@@ -24,7 +24,7 @@ export default function Saving() {
    
     const fetchTransactions = async() => {
        const email = await AsyncStorage.getItem('email');
-      axios.get('https://backend1-1cc6.onrender.com/transactions/Contribution/gtechcompany01@gmail.com/')
+      axios.get(`https://backend1-1cc6.onrender.com/transactions/Contribution/${email}/`)
           .then((response) => {
             setTransactions(response.data);
             setIsLoading(false);

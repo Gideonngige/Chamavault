@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity,Image, ImageBackground } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
 import { useRouter } from "expo-router";
 // import { DataTable } from "react-native-paper";
 import NavBar from "./NavBar";
@@ -7,45 +7,92 @@ import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { push } from 'expo-router/build/global-state/routing';
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import Toast from "react-native-toast-message";
 
 
 export default function Invest() {
   const router = useRouter();
   const[userName, setUserName] =  useState("");
-  const[email, setEmail] = useState("");
+  const[userEmail, setUserEmail] = useState("");
+  const [investmentAmount, setInvestmentAmount] = useState(0);
+  const [investmentType, setInvestmentType] = useState("");
+  const [profitAmount, setprofitAmount] = useState(0);
+  const [investments, setInvestments] = useState([]);
+  const [total_investments, setTotalInvestments] = useState(0);
   
 
 // fettch investment data
 useEffect(() => {
-  
-    const fetchInvestmentData = async () => {
-      try {
-        const email = await AsyncStorage.getItem('email');
-        const name = await AsyncStorage.getItem('name');
-        alert("Hello");
+  const fetchData = async () => {
+    try {
+      const email = await AsyncStorage.getItem('email');
+      const name = await AsyncStorage.getItem('name');
+      setUserName(name);
+      
+      const url = `https://backend1-1cc6.onrender.com/getInvestment/${email}/`;
+      const response = await axios.get(url);
+      
+      if(response.status === 200){
+        // setInvestmentAmount(response.data.investment[0].investment_amount);
+        // setInvestmentType(response.data.investment_type);
+        // setprofitAmount(response.data.profit_amount);
+        // setInvestments(response.data)
+        // alert(response.data)
+        setInvestments(response.data.investments);
         
-        const url = "http://https://backend1-1cc6.onrender.com/getInvestment/gtechcompany01@gmail.com/";
-        const response = await axios.get(url);
-        // await AsyncStorage.setItem('email',email);
-        alert(response.status)
-        
-        if(response.status === 200){
-          setUserName(name);
-          setEmail(email);
-          alert(name);
-          
-        }
-        
-      } 
-      catch (error) {
-        console.error("Error:", error);
-        return null;
       }
+      
+    } 
+    catch (error) {
+      console.error("Error:", error);
+      return null;
     }
-    fetchInvestmentData();
+  }
+  fetchData();
 
-  },[email]);
+},[userEmail]);
 // end pf fetching investment data 
+
+// get total invstment
+useEffect(() => {
+  const getTotalInvestment = async () => {
+    const member_id = await AsyncStorage.getItem('member_id');
+    try{
+      const url = `http://127.0.0.1:8000/calculate_investment/${member_id}/`;
+      const response = await axios.get(url);
+      if(response.status === 200){
+        setTotalInvestments(response.data.total);
+      }
+
+    }
+    catch(error){
+      console.log(error);
+    }
+
+  }
+  getTotalInvestment();
+},[])
+// end of get total investment
+
+
+
+const InvestmentCard = ({ userName, investment, amount, interest_earned }) => (
+  <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
+      <View className="flex-row justify-between bg-white p-3 rounded-lg">
+          <Text className='font-bold'>{userName}</Text>
+          <Text className='font-bold'>12/02/2024</Text>
+      </View>
+          <Text className='font-bold'>{investment}</Text>
+          <Text className='m-3'>Amount: {amount}</Text>
+          <Text className='m-3'>Intrest rate: 5%</Text>
+          <Text className='m-3'>Intrest earned: {interest_earned}</Text>
+  </View>
+);
+// show investment component 
+
+// end 
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -53,7 +100,7 @@ useEffect(() => {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,John</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back, {userName}</Text>
           <Text className='text-lg font-bold text-gray-800 mt-0'>Time to invest your money</Text>
           <View className="p-0">
             {/* loan image part */}
@@ -64,7 +111,7 @@ useEffect(() => {
       >
         <View className="p-5">
           <Text className="text-xl font-bold text-gray-900">Your Investment</Text>
-          <Text className="text-2xl font-bold text-gray-800">KES. 5,000</Text>
+          <Text className="text-2xl font-bold text-gray-800">KES. {total_investments}</Text>
         </View>
       </ImageBackground>
 
@@ -86,31 +133,14 @@ useEffect(() => {
           <Text className="text-gray-900 font-medium mt-1">Withdraw</Text>
         </TouchableOpacity>
       </View>
-      {/* real estate investment */}
-      <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
-                <View className="flex-row justify-between bg-white p-3 rounded-lg">
-                    <Text className='font-bold'>{userName}</Text>
-                    <Text className='font-bold'>12/02/2024</Text>
-                </View>
-                <Text className='font-bold'>Real Estate</Text>
-                <Text className='m-3'>Amount: KES.5000</Text>
-                <Text className='m-3'>Intrest rate: 5%</Text>
-                <Text className='m-3'>Intrest earned: KES.400</Text>
-       </View>
-       {/* end of real estate investment */}
 
-       {/* stocks investment */}
-      <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
-                <View className="flex-row justify-between bg-white p-3 rounded-lg">
-                    <Text className='font-bold'>John Does</Text>
-                    <Text className='font-bold'>12/03/2024</Text>
-                </View>
-                <Text className='font-bold'>Stocks</Text>
-                <Text className='m-3'>Amount: KES.5000</Text>
-                <Text className='m-3'>Intrest rate: 5%</Text>
-                <Text className='m-3'>Intrest earned: KES.400</Text>
-       </View>
-       {/* end of stocks investment */}
+       <FlatList
+          data={investments} // Array of data
+          keyExtractor={(item, index) => index.toString()} // Unique key for each item
+          renderItem={({ item }) => <InvestmentCard userName={userName} investment={item.investment_type} amount={item.investment_amount} interest_earned={item.profit_amount} />} // How each item is displayed
+          showsVerticalScrollIndicator={false} // Hides the scrollbar
+          listMode="SCROLLVIEW"
+        />
 
 
        {/* activity part */}
@@ -130,12 +160,10 @@ useEffect(() => {
                     <Text className='font-bold'>+0.55</Text>
                 </View>
                 <Text className='font-bold mb-5'>12/08/2024</Text>
+  
        </View>
        {/* activity part */}
-
-      
-
-
+       <Toast/>
       </View>
         </View>
           

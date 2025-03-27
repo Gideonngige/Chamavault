@@ -106,6 +106,8 @@ export default function Index() {
   }
     
   return (
+    <SafeAreaView className="flex-1 bg-white">
+    <ScrollView nestedScrollEnabled={true} className="p-4">
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
       <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
       <Text className="text-3xl font-bold text-gray-800 mb-6">ChamaVault</Text>
@@ -137,5 +139,8 @@ export default function Index() {
       <Toast/>
       <StatusBar/>
     </View>
+    </ScrollView>
+    </SafeAreaView>
+    
   );
 }
