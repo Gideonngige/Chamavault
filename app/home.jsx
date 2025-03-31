@@ -35,11 +35,7 @@ export default function App() {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Chama1', value: 'Chama1' },
-    { label: 'Chama2', value: 'Chama2' },
-    { label: 'Chama3', value: 'Chama3' },
-  ]);
+  const [items, setItems] = useState([]);
   const [numberOfChama, setnumberOfChama] = useState(0);
   const [chama, setChama] = useState("0");
   const [saving, setSaving] = useState(0);
@@ -52,16 +48,44 @@ export default function App() {
   const [email, setEmail] =  useState("");
   const [savingDate, setSavingDate] = useState("N/A");
   const [loanDate, setLoanDate] = useState("N/A");
+  const [chamaName, setChamaName] = useState("Chama Name");
   const route = useRoute();
   const router = useRouter();
 
+   // fetch member chamas
+   useEffect(() => {
+    const fetchMemberChamas = async () => {
+      try{
+        const email = await AsyncStorage.getItem('email');
+        const url = `https://backend1-1cc6.onrender.com/getChama/${email}`;
+        const response = await axios.get(url);
+        if(response.status === 200){
+          const formattedItems = response.data.chamas.map(chama => ({
+            label: chama,  // Display Name
+            value: chama   // Value to store
+          }));
+          setItems(formattedItems);
+        }
+        
+
+      }
+      catch(error){
+        console.error("Error fetching chamas:", error);
+      }
+
+    }
+    fetchMemberChamas();
+  },[]);
+  // end of fetch member chamas
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
+        const selected_chama = await AsyncStorage.getItem('selected_chama');
+        setChamaName(selected_chama);
         
-        const url = `https://backend1-1cc6.onrender.com/getMember/${email}/`;
+        const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
         await AsyncStorage.setItem('email',email);
         
@@ -72,7 +96,7 @@ export default function App() {
             text2: "You have successfully logged in",
           });
           setName(response.data.name);
-          setItems([response.data.chama]);
+          // setItems([response.data.chama]);
           setnumberOfChama(items.length);
           setPhonenumber(response.data.phone_number);
           setChama(response.data.chama)
@@ -202,22 +226,7 @@ const handleProfile = () =>{
 
         <Toast/>
       </View>
-      <Text className="text-lg font-bold">Select Chama</Text>
-      <View style={{padding:5}}>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select a chama"
-        style={{borderColor: '#ca8a04',borderWidth: 2,  
-        }}
-        listMode="SCROLLVIEW"
-      />
-    </View>
-
+      <Text className="text-lg align-middle font-bold">{chamaName}</Text>
       {/* Main Content */}
       <View className="space-y-4">
         <TouchableOpacity
@@ -246,24 +255,40 @@ const handleProfile = () =>{
       </View>
       {/* Chamas Section */}
       <View className="items-center mb-2">
-        <View className="bg-yellow-600 mb-5 font-bold rounded-lg w-full h-10 flex items-center justify-center">
-        <Text className='font-bold'>Member in {numberOfChama} Chamas</Text>
-        </View>
+        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+        <Text className='font-bold'>Go To {chamaName} Profile</Text>
+        <Ionicons name="chevron-forward" size={24} color="black" />
+        </TouchableOpacity>
 
-          <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
-          <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
-          onPress={() => router.push('createchama/')}
-          >
-          <Ionicons name="create" size={24} color="black" />
-            <Text className="text-white font-medium">Create Chama</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="bg-yellow-600 py-3 rounded-lg items-center row-span-2 row-start-2 w-40" 
-          onPress={() => router.push('invitation/')}
-          >
-          <Entypo name="add-user" size={24} color="black" />
-            <Text className="text-white font-medium">Invite</Text>
-          </TouchableOpacity>
-          </View>
+  <View className="w-full bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-between">
+  {/* Create Chama Button */}
+  <TouchableOpacity 
+    className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
+    onPress={() => router.push('createchama/')}
+  >
+    <Ionicons name="create" size={24} color="black" />
+    <Text className="text-white font-medium">Create Chama</Text>
+  </TouchableOpacity>
+
+  {/* Join Chama Button */}
+  <TouchableOpacity 
+    className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
+    onPress={() => router.push('createchama/')}
+  >
+    <Ionicons name="enter" size={24} color="black" />
+    <Text className="text-white font-medium">Join Chama</Text>
+  </TouchableOpacity>
+
+  {/* Invite Button */}
+  <TouchableOpacity 
+    className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
+    onPress={() => router.push('invitation/')}
+  >
+    <Entypo name="add-user" size={24} color="black" />
+    <Text className="text-white font-medium">Invite</Text>
+  </TouchableOpacity>
+</View>
+
 
           
         </View>

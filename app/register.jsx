@@ -1,6 +1,6 @@
 import {Text, View, StatusBar, TextInput, TouchableOpacity, Image,SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../global.css";
 import { useRouter } from "expo-router";
 import axios from "axios";
@@ -16,11 +16,31 @@ export default function Register(){
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: 'Chama1', value: 'Chama1' },
-      { label: 'Chama2', value: 'Chama2' },
-      { label: 'Chama3', value: 'Chama3' },
-    ]);
+    const [items, setItems] = useState([]);
+
+    // fetch chamas
+    useEffect(() => {
+      const fetchChamas = async () => {
+        try{
+          const url = `https://backend1-1cc6.onrender.com/allchamas/`;
+          const response = await axios.get(url);
+          if(response.status === 200){
+            const formattedItems = response.data.Chamas.map((chama) => ({
+              label: chama.name,
+              value: chama.name, // Use an ID if available
+            }));
+            setItems(formattedItems);
+          }
+
+        }
+        catch(error){
+          console.error("Error fetching chamas:", error);
+        }
+
+      }
+      fetchChamas();
+    },[]);
+    // end of fetch chamas
     const handleRegister = async() => {
       if(fullname == "" || phonenumber == "" || email == "" || password == "" || confirmPassword == ""){
         Toast.show({
@@ -51,7 +71,12 @@ export default function Register(){
           });
   
           console.log("Response received:", response.data);  // Log response
-          alert(response.data.message || "Registration successful!");
+          Toast.show({
+            type: "success", // Can be "success", "error", "info"
+            text1: "Successfully",
+            text2: "Registration successful!",
+            position:"center",
+          });
           if(response.data.message == "Successfully registered"){
             router.push("/");
           }
@@ -126,6 +151,12 @@ export default function Register(){
         setValue={setValue}
         setItems={setItems}
         placeholder="Select a chama"
+        searchable={true} // Enable searching
+        searchPlaceholder="Search for a chama..."
+        searchTextInputProps={{
+        autoCorrect: false,
+        autoCapitalize: "none",
+        }}
         style={{borderColor: '#ca8a04',borderWidth: 2,  
         }}
         listMode="SCROLLVIEW"
@@ -170,13 +201,10 @@ export default function Register(){
       onChangeText={setConfirmPassword}
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
       />
-      
-      <TouchableOpacity className="w-full flex-row justify-end m-5" onPress={() => alert("Got to forgot password page")}>
-      </TouchableOpacity>
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleRegister}>
         {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Register</Text>}
       </TouchableOpacity>
-      <Text className="text-lg">Already have an account? <TouchableOpacity onPress={() => router.push("/")}><Text className="text-yellow-600">Login</Text></TouchableOpacity></Text>
+      <Text className="text-lg">Already have an account? {" "} <TouchableOpacity onPress={() => router.push("/")}><Text className="text-yellow-600">Login</Text></TouchableOpacity></Text>
       <Toast/>
       <StatusBar/>
       </View>

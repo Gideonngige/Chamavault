@@ -14,7 +14,7 @@ export default function Members(){
 
       useEffect(() => {
         // Fetch data from the API using Axios
-        axios.get('https://backend1-1cc6.onrender.com/members/gtechcompany01@gmail.com/@testuser/')
+        axios.get('https://backend1-1cc6.onrender.com/members/ushindigideon01@gmail.com/@ushindi2025/')
           .then((response) => {
             setMembers(response.data);
             setFilteredMembers(response.data);
@@ -27,31 +27,36 @@ export default function Members(){
 
        // for searching
        useEffect(() => {
-        setFilteredMembers(
-          members.filter((member) =>
-            member.name.toLowerCase().includes(search.toLowerCase())
-          )
-        );
+        if (Array.isArray(members)) { // Ensure members is an array
+          setFilteredMembers(
+            members.filter((member) =>
+              member.name?.toLowerCase().includes(search.toLowerCase()) // Safe check for name
+            )
+          );
+        } else {
+          setFilteredMembers([]); // Set an empty array if members is not valid
+        }
       }, [search, members]);
+      ;
       // end of searching
 
-
-
-      const Member = ({name, email, joined_date}) => (
-        <View className='bg-yellow-600 p-0 w-full rounded-lg mt-5 flex flex-row justify-around'>
-                <View className='w-1/8 m-2'>
-                    <Image source={require('../assets/images2/profile.png')} style={{width:50, height:50}} className='rounded-full'/>
-                </View>
-                <View>
-                    <Text className='mt-5 mr-2 font-bold text-lg'>{name}</Text>
-                    <Text className='mt-2 mr-2 font-bold'>Email: {email}</Text>
-                    <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300'>Joined: {joined_date}</Text>
-                </View>
-                <MaterialIcons name="verified" size={24} color="black" />
-                
+      const ProfileCard = ({ name, email, joined_date }) => {
+        return (
+          <View className="bg-yellow-600 mb-6 p-4 rounded-2xl shadow-lg w-80 mx-auto">
+            {/* Profile Image */}
+            <View className="items-center">
+            <Image source={require('../assets/images2/profile3.png')} style={{width:50, height:50}} className='rounded-full'/>
             </View>
-
-      );
+      
+            {/* User Info */}
+            <View className="mt-4 items-center">
+              <Text className="text-xl font-bold text-gray-900">{name}</Text>
+              <Text className="text-gray-500">{email}</Text>
+              <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300'>Joined: {joined_date}</Text>
+            </View>
+          </View>
+        );
+      };
 
       if (loading) {
         return <ActivityIndicator size="large" color="#FFA500" />;
@@ -83,7 +88,7 @@ export default function Members(){
       <FlatList
         data={filteredMembers} // Array of data
         keyExtractor={(item) => item.member_id.toString()} // Unique key for each item
-        renderItem={({ item }) => <Member name={item.name} email={item.email} joined_date={item.joined_date.split("T")[0]} />} // How each item is displayed
+        renderItem={({ item }) => <ProfileCard name={item.name} email={item.email} joined_date={item.joined_date.split("T")[0]} />} // How each item is displayed
         showsVerticalScrollIndicator={false} // Hides the scrollbar
         listMode="SCROLLVIEW"
       />

@@ -15,7 +15,7 @@ export default function Saving() {
   const router = useRouter();
   const route = useRoute();
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
   const [transactions, setTransactions] = useState([]);
 

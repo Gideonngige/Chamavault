@@ -14,7 +14,7 @@ export default function Loans() {
   const navigation = useNavigation();
   const router = useRouter();
   const route = useRoute();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { username, email, loan, loanInterest} = route.params;
   const data = [
     { id: "1", name: "John Doe", age: 28, city: "New York" },
@@ -26,16 +26,17 @@ export default function Loans() {
 
     // fetch loan transactions data
     useEffect(() => {
+      setIsLoading(true); 
       const fetchTransactions = async() => {
         const email = await AsyncStorage.getItem('email');
-        axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/`)
+        axios.get(`http://127.0.0.1:8000/transactions/Loan/${email}/`)
             .then((response) => {
               setTransactions(response.data);
               setIsLoading(false);
             })
             .catch((error) => {
               console.error(error);
-            });
+            }).finally(() => {setIsLoading(false);});
   
       }
       fetchTransactions();

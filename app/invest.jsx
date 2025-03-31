@@ -60,7 +60,7 @@ useEffect(() => {
   const getTotalInvestment = async () => {
     const member_id = await AsyncStorage.getItem('member_id');
     try{
-      const url = `http://127.0.0.1:8000/calculate_investment/${member_id}/`;
+      const url = `https://backend1-1cc6.onrender.com/calculate_investment/${member_id}/`;
       const response = await axios.get(url);
       if(response.status === 200){
         setTotalInvestments(response.data.total);
