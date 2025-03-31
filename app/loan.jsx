@@ -29,7 +29,7 @@ export default function Loans() {
       setIsLoading(true); 
       const fetchTransactions = async() => {
         const email = await AsyncStorage.getItem('email');
-        axios.get(`http://127.0.0.1:8000/transactions/Loan/${email}/`)
+        axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/`)
             .then((response) => {
               setTransactions(response.data);
               setIsLoading(false);
