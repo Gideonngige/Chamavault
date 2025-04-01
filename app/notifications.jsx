@@ -11,7 +11,7 @@ export default function Notifications() {
   // Alert component
   const Alert = () => {
     return (
-      <View className="flex flex-row items-center justify-center w-full h-full bg-yellow-600 p-3 rounded-lg">
+      <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
         <Text className="text-white font-bold">You have 0 notifications</Text>
       </View>
     );
