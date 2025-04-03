@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useEffect } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Members(){  
     
@@ -14,7 +15,10 @@ export default function Members(){
 
       useEffect(() => {
         // Fetch data from the API using Axios
-        axios.get('https://backend1-1cc6.onrender.com/members/ushindigideon01@gmail.com/@ushindi2025/')
+        const getdata = async() => {
+          const email = await AsyncStorage.getItem('email');
+          const chama_id = await AsyncStorage.getItem('chama');
+          axios.get(`https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`)
           .then((response) => {
             setMembers(response.data);
             setFilteredMembers(response.data);
@@ -23,6 +27,8 @@ export default function Members(){
           .catch((error) => {
             console.error(error);
           });
+        }
+        getdata();
       }, []);
 
        // for searching
