@@ -16,7 +16,7 @@ export default function Activepolls() {
    
     <View className="flex-1 bg-white r p-5 font-sans">
     <View className="flex-row justify-between bg-white rounded-lg">
-      <View className="bg-gray-800 w-40 justify-center rounded-lg">
+      <View className="bg-yellow-600 w-40 justify-center rounded-lg">
         <Text className="text-white p-4 text-lg align-middle">When do you want us to have the meeting?</Text>
       </View>
        
@@ -33,55 +33,55 @@ export default function Activepolls() {
       <Text className="font-bold mt-5">Results</Text>
       <View className="flex-row w-full justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       <View className="flex-row justify-between bg-white rounded-lg">
         <Text className="m-2">John Doe</Text>
-        <Text className="m-2">voted: <Text className="text-gray-500">Monday 2:00pm</Text></Text>
+        <Text className="m-2">voted: <Text className="text-yellow-600">Monday 2:00pm</Text></Text>
       </View>
       
       {/* end of polls voted */}

@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import NotificationIcon from './NotificationIcon';
+import AdminNotification from "./AdminNotification";
 
 export default function RootLayout() {
   return(
@@ -32,6 +33,10 @@ export default function RootLayout() {
         <Stack.Screen name="notifications"options={{title:"Notifications"}}  />
         <Stack.Screen name="profile"options={{title:"Profile"}}  />
         <Stack.Screen name="help"options={{title:"Help"}}  />
+        <Stack.Screen name="admin"options={{title:"Admin", headerRight: () => <AdminNotification/>}}  />
+        <Stack.Screen name="chat"options={{title:"Chat"}}  />
+        <Stack.Screen name="manageroles"options={{title:"Manage Roles"}}  />
+        <Stack.Screen name="managemembers"options={{title:"Manage Members"}}  />
         
         
       </Stack>

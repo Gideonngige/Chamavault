@@ -255,7 +255,7 @@ const handleProfile = () =>{
       </View>
       {/* Chamas Section */}
       <View className="items-center mb-2">
-        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("chama/")}>
         <Text className='font-bold'>Go To {chamaName} Profile</Text>
         <Ionicons name="chevron-forward" size={24} color="black" />
         </TouchableOpacity>
@@ -273,7 +273,7 @@ const handleProfile = () =>{
   {/* Join Chama Button */}
   <TouchableOpacity 
     className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('createchama/')}
+    onPress={() => router.push('admin/')}
   >
     <Ionicons name="enter" size={24} color="black" />
     <Text className="text-white font-medium">Join Chama</Text>
