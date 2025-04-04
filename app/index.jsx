@@ -42,6 +42,7 @@ export default function Index() {
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value);
           await AsyncStorage.setItem('role', response2.data.role);
+          await AsyncStorage.setItem('name', response2.data.name);
           router.push('/admin');
 
         }

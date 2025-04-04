@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Chama(){
     const [appliedLoans, setAppliedLoans] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Fetch data from the API
@@ -27,9 +28,9 @@ export default function Chama(){
 
     const handleConfirm = async(loan_id, loonee_id, approval) =>{
         try{
+            setIsLoading(true);
             const approverEmail = await AsyncStorage.getItem('email');
             const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loonee_id}/${approverEmail}/${approval}/`;
-            alert(approverEmail);
             const response = await axios.get(url);
             if(response.status === 200){
                 Toast.show({
@@ -53,6 +54,9 @@ export default function Chama(){
                 text2: error.message,
             });
         }
+        finally{
+            setIsLoading(false);
+        }
 
     }
 
@@ -61,7 +65,7 @@ export default function Chama(){
     const AppliedLoans = ({loan_id, loonee_id, loan, date,  creditScore, loanType}) => {
         return(
             
-            <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
+            <View className='w-80 p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
                 <View className="flex-row justify-between bg-white p-3 rounded-lg">
                     <Text className='font-bold'>{loonee_id}</Text>
                     <Text className='font-bold'>KES.{loan}</Text>
@@ -71,10 +75,10 @@ export default function Chama(){
                 <Text className='m-3'>Type: {loanType}</Text>
                 <View className="flex-row justify-between bg-gray-950 p-3 rounded-lg">
                     <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"approved")}>
-                        <Text className='text-white'>Confirm</Text>
+                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className='text-white'>Confirm</Text> }
                     </TouchableOpacity >
                     <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"declined")}>
-                        <Text className='text-white'>Decline</Text>
+                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className='text-white'>Decline</Text> }
                     </TouchableOpacity>
                 </View>
             </View>
