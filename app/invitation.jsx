@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, Image, TextInput, ActivityIndicator, Statu
 import { router, useRouter } from "expo-router";
 import axios from 'axios';
 import Toast from "react-native-toast-message";
+// import Share from 'react-native-share';
 
 export default function Invitation(){ 
     const [isLoading, setIsLoading] = useState(false); 
@@ -56,6 +57,18 @@ export default function Invitation(){
        }
     }
     }
+
+    const handleShare = () => {
+        alert("Share");
+        // const options = {
+        //     message:"Hello there share this"
+
+        // }
+        // Share.open(options)
+        // .then(res => console.log(res))
+        // .catch(err => console.log(err));
+
+    }
     return(
         <SafeAreaView className="flex-1 bg-white">
         <ScrollView className="p-4">
@@ -74,6 +87,9 @@ export default function Invitation(){
             className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
             />
             <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={() => handleInvite(email, applink)}>
+            {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Send Link</Text> }
+            </TouchableOpacity>
+            <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleShare}>
             {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Send Link</Text> }
             </TouchableOpacity>
             <Toast/>

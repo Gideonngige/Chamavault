@@ -34,8 +34,18 @@ export default function Index() {
     try {
       const url = `https://backend1-1cc6.onrender.com/postsignIn/${email}/${password}/${value}/`;
       const response = await axios.get(url);
+      const url2 = `https://backend1-1cc6.onrender.com/getMember/${email}/${value}/`;
+      const response2 = await axios.get(url2);
       
-      if (response.status === 200) {
+      if (response.status === 200 && response2.status === 200) {
+        if(response2.data.role == "chairperson"){
+          await AsyncStorage.setItem('email', email);
+          await AsyncStorage.setItem('selected_chama', value);
+          await AsyncStorage.setItem('role', response2.data.role);
+          router.push('/admin');
+
+        }
+      else{
         const message = response.data.message; 
         if(message == "Successfully logged in"){
           await AsyncStorage.setItem('email', email);
@@ -54,6 +64,7 @@ export default function Index() {
           });
           // alert(message);
         }
+      }
         return message;
       } else {
         Toast.show({
