@@ -139,7 +139,13 @@ useEffect(() => {
       return null;
     }
   }
-  getSavings();
+  
+  const interval = setInterval(() => {
+    getSavings();
+  }, 10000); // 10 seconds
+
+  // Clear interval when component unmounts
+  return () => clearInterval(interval);
 
 },[email]);
 // end of get savings function
@@ -165,7 +171,12 @@ useEffect(() => {
       return null;
     }
   }
-  getLoans();
+  const interval = setInterval(() => {
+    getLoans();
+  }, 10000); // 10 seconds
+
+  // Clear interval when component unmounts
+  return () => clearInterval(interval);
 
 },[email]);
 // end of get savings function

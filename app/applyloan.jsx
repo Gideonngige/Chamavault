@@ -51,7 +51,7 @@ export default function ApplyLoan(){
         try{
           const chama = JSON.parse(await AsyncStorage.getItem('chama'));
           const period = repaymentPeriod * 30;
-          const url = `http://127.0.0.1:8000/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
+          const url = `https://backend1-1cc6.onrender.com/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
           const response = await axios.get(url);
           if(response.data.status === 200) {
             Toast.show({
