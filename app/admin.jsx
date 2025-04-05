@@ -75,7 +75,7 @@ export default function Admin() {
   
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 justify-center items-center p-5">
           
@@ -85,7 +85,7 @@ export default function Admin() {
           {/* Statistics Section */}
           <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-gray-900 font-bold">{chama}</Text>
+              <Text className="text-gray-900 text-lg font-bold">{chama}</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <Text className="text-gray-500">Total Members</Text>

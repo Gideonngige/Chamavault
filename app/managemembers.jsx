@@ -27,7 +27,7 @@ import {
     };
   
     return (
-      <SafeAreaView className="flex-1 bg-gray-100">
+      <SafeAreaView className="flex-1 bg-white">
         <ScrollView className="p-4">
           <View className="flex-1 justify-center items-center p-5">
             

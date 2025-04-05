@@ -38,7 +38,7 @@ export default function Index() {
       const response2 = await axios.get(url2);
       
       if (response.status === 200 && response2.status === 200) {
-        if(response2.data.role == "chairperson"){
+        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary"){
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value);
           await AsyncStorage.setItem('role', response2.data.role);

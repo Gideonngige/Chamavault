@@ -14,6 +14,7 @@ export default function Chama(){
         // Fetch data from the API
         const fetchLoans = async () => {
             const role = await AsyncStorage.getItem('role');
+            // alert(role)
             axios.get(`https://backend1-1cc6.onrender.com/getAllLoans/${role}/`)
           .then((response) => {
             setAppliedLoans(response.data);
@@ -26,11 +27,11 @@ export default function Chama(){
         fetchLoans();
     })
 
-    const handleConfirm = async(loan_id, loonee_id, approval) =>{
+    const handleConfirm = async(loan_id, loonee_id, approval, chama_id) =>{
         try{
             setIsLoading(true);
             const approverEmail = await AsyncStorage.getItem('email');
-            const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loonee_id}/${approverEmail}/${approval}/`;
+            const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loonee_id}/${approverEmail}/${approval}/${chama_id}/`;
             const response = await axios.get(url);
             if(response.status === 200){
                 Toast.show({
@@ -62,7 +63,7 @@ export default function Chama(){
 
 
 
-    const AppliedLoans = ({loan_id, loonee_id, loan, date,  creditScore, loanType}) => {
+    const AppliedLoans = ({loan_id, loonee_id, loan, date, chama_id,  creditScore, loanType}) => {
         return(
             
             <View className='w-80 p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
@@ -74,7 +75,7 @@ export default function Chama(){
                 <Text className='m-3'>Credit Score: 90</Text>
                 <Text className='m-3'>Type: {loanType}</Text>
                 <View className="flex-row justify-between bg-gray-950 p-3 rounded-lg">
-                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"approved")}>
+                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"approved", chama_id)}>
                         {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className='text-white'>Confirm</Text> }
                     </TouchableOpacity >
                     <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"declined")}>
@@ -107,7 +108,7 @@ export default function Chama(){
             <FlatList
                 data={appliedLoans} // Array of data
                 keyExtractor={(item) => item.loan_id.toString()} // Unique key for each item
-                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loonee_id={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} loanType={item.loan_type} />} // How each item is displayed
+                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loonee_id={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} chama_id={item.chama} loanType={item.loan_type} />} // How each item is displayed
                 showsVerticalScrollIndicator={false} // Hides the scrollbar
                 listMode="SCROLLVIEW"
             />)}

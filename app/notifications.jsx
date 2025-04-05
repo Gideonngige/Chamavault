@@ -57,6 +57,7 @@ export default function Notifications() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      <ScrollView nestedScrollEnabled={true} className="p-4">
       
         <View className="bg-white  p-5 font-sans">
           {notifications.length === 0 ? (
@@ -78,7 +79,7 @@ export default function Notifications() {
           )}
           <StatusBar />
         </View>
-     
+        </ScrollView>
     </SafeAreaView>
   );
 }

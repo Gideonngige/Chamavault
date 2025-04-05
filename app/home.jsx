@@ -284,7 +284,7 @@ const handleProfile = () =>{
   {/* Join Chama Button */}
   <TouchableOpacity 
     className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('admin/')}
+    onPress={() => router.push('register/')}
   >
     <Ionicons name="enter" size={24} color="black" />
     <Text className="text-white font-medium">Join Chama</Text>
