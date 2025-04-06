@@ -199,7 +199,12 @@ export default function Index() {
         {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Login</Text> }
         
       </TouchableOpacity>
-      <Text className="text-lg">Do not have an account? {" "} <TouchableOpacity onPress={() => router.push("/register")}><Text className="text-yellow-600">Register</Text></TouchableOpacity></Text>
+      <View className="flex-row justify-center mt-4">
+      <Text className="text-lg">Do not have an account? </Text>
+      <TouchableOpacity onPress={() => router.push("/register")}>
+      <Text className="text-lg text-yellow-600">Register</Text>
+      </TouchableOpacity>
+      </View>
       <Toast/>
       <StatusBar/>
     </View>

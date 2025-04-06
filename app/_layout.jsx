@@ -37,6 +37,7 @@ export default function RootLayout() {
         <Stack.Screen name="chat"options={{title:"Chat"}}  />
         <Stack.Screen name="manageroles"options={{title:"Manage Roles"}}  />
         <Stack.Screen name="managemembers"options={{title:"Manage Members"}}  />
+        <Stack.Screen name="payloan"options={{title:"Pay Loan"}}  />
         
         
       </Stack>

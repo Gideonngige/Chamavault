@@ -57,7 +57,7 @@ export default function Members(){
             {/* User Info */}
             <View className="mt-4 items-center">
               <Text className="text-xl font-bold text-gray-900">{name}</Text>
-              <Text className="text-gray-500">{email}</Text>
+              <Text className="text-gray-900">{email}</Text>
               <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300'>Joined: {joined_date}</Text>
             </View>
           </View>

@@ -30,6 +30,7 @@ export default function Loans() {
       const fetchTransactions = async() => {
         const email = await AsyncStorage.getItem('email');
         const chama_id = await AsyncStorage.getItem('chama');
+        await AsyncStorage.setItem('loan', loan);
         axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
             .then((response) => {
               setTransactions(response.data);
@@ -109,7 +110,7 @@ export default function Loans() {
 
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("appliedloans/")}
+          onPress={() => router.push("payloan/")}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>

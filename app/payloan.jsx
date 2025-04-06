@@ -6,13 +6,14 @@ import Toast from "react-native-toast-message";
 import { Paystack } from "react-native-paystack-webview";
 import axios from "axios";
 
-export default function Contributions() {
+export default function PayLoan() {
   const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState(0);
   const [showPaystack, setShowPaystack] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card"); // Default payment method
+  const [loan, setLoan] = useState(0);
 
   const publicKey = "pk_test_6633ec1991d6ba92490835f6cbc1b7934876a55f";
   const [email, setEmail] = useState("");
@@ -26,6 +27,9 @@ export default function Contributions() {
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
       const storedChama_id = await AsyncStorage.getItem("chama");
+      const loan = await AsyncStorage.getItem('loan');
+      setLoan(loan);
+      alert(loan);
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
@@ -79,7 +83,8 @@ const saveTransaction = async (transactionRef, amount, email) => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className="text-gray-950">Contribution amount</Text>
+        <Text className="w-full text-gray-950 font-bold text-lg">You Loan KES.</Text>
+          <Text className="text-gray-950">Repayment amount</Text>
           <Text className="text-yellow-600 font-bold text-xl">KES.{display}</Text>
 
           <TextInput
