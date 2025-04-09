@@ -11,7 +11,7 @@ export default function Createchama(){
     const [description, setDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [created_by, setCreated_by] = useState("Chamavault user");
-    const router = useRouter();
+
     // Function to handle creating a chama
     const handleCreateChama = async() => {
       if(chama == "" || description == ""){
@@ -96,9 +96,11 @@ export default function Createchama(){
               />
               <Text className="text-lg font-bold">Enter chama description</Text>
               <TextInput 
-              placeholder="chama description"
+              placeholder="chama description..."
               value={description}
               onChangeText={setDescription} 
+              multiline
+              numberOfLines={4}
               className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
               />
               

@@ -20,6 +20,7 @@ export default function Activepolls() {
       try{
         const response2 = await axios.get(`https://backend1-1cc6.onrender.com/checkmembervoted/${member_id}/${chama_id}/`);
         if(response2.status === 200){
+          alert(response2.data.message);
           if(response2.data.message == "true"){
             setHasVoted(true);
           }
@@ -42,26 +43,32 @@ export default function Activepolls() {
   // Check if the user has voted when the component mounts
 
   useEffect(() => {
-    // Fetch active polls from the Django backend
     const fetchPolls = async () => {
       setIsLoading(true);
       try {
         const chama_id = await AsyncStorage.getItem("chama");
-        const response = await axios.get(`https://backend1-1cc6.onrender.com/activepolls/${chama_id}/`);
-        if (response.data.polls) {
-          setPolls(response.data.polls);
+        const member_id = await AsyncStorage.getItem("member_id");
+        const response = await axios.get(`http://127.0.0.1:8000/activepolls/${chama_id}/`);
+        const pollsData = response.data.polls;
+  
+        // Filter out polls that the user has already voted on
+        const filteredPolls = [];
+        for (const poll of pollsData) {
+          const voteCheck = await axios.get(`http://127.0.0.1:8000/checkmembervoted/${member_id}/${chama_id}/${poll.id}/`);
+          if (!voteCheck.data.message) {
+            filteredPolls.push(poll);  // Only include polls the user hasn't voted on
+          }
         }
-       
+  
+        setPolls(filteredPolls);
       } catch (error) {
         console.error("Error fetching polls:", error);
-      }
-      finally {
+      } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchPolls();
-   
   }, []);
   // end of function to fetch polls
 

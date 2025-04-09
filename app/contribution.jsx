@@ -91,21 +91,39 @@ const saveTransaction = async (transactionRef, amount, email) => {
           />
 
           {/* Payment Method Selection */}
-          <View className="w-full flex-row justify-center mb-4">
-            <TouchableOpacity
-              onPress={() => setSelectedPaymentMethod("card")}
-              className={`p-3 mx-2 rounded-lg ${selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-300"}`}
-            >
-              <Text className="text-white text-center">Pay with Card</Text>
-            </TouchableOpacity>
+          {/* Payment Method Selection */}
+<View className="w-full flex-row justify-center mb-4">
+  <TouchableOpacity
+    onPress={() => setSelectedPaymentMethod("card")}
+    className={`p-3 mx-2 rounded-xl shadow-md w-40 ${
+      selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-200"
+    }`}
+  >
+    <Text
+      className={`text-center font-medium ${
+        selectedPaymentMethod === "card" ? "text-white" : "text-gray-800"
+      }`}
+    >
+      Pay with Card
+    </Text>
+  </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => setSelectedPaymentMethod("mobile_money")}
-              className={`p-3 mx-2 rounded-lg ${selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-300"}`}
-            >
-              <Text className="text-white text-center">Pay with M-Pesa</Text>
-            </TouchableOpacity>
-          </View>
+  <TouchableOpacity
+    onPress={() => setSelectedPaymentMethod("mobile_money")}
+    className={`p-3 mx-2 rounded-xl shadow-md w-40 ${
+      selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-200"
+    }`}
+  >
+    <Text
+      className={`text-center font-medium ${
+        selectedPaymentMethod === "mobile_money" ? "text-white" : "text-gray-800"
+      }`}
+    >
+      Pay with M-Pesa
+    </Text>
+  </TouchableOpacity>
+</View>
+
 
           <TouchableOpacity
             className="w-full bg-yellow-600 p-4 rounded-lg"

@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, TextInput, StatusBar, SafeAreaView, ScrollView, ActivityIndicator, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StatusBar,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+  Modal,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
@@ -12,7 +22,7 @@ export default function PayLoan() {
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState(0);
   const [showPaystack, setShowPaystack] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card"); // Default payment method
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
   const [loan, setLoan] = useState(0);
 
   const publicKey = "pk_test_6633ec1991d6ba92490835f6cbc1b7934876a55f";
@@ -27,9 +37,8 @@ export default function PayLoan() {
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
       const storedChama_id = await AsyncStorage.getItem("chama");
-      const loan = await AsyncStorage.getItem('loan');
+      const loan = await AsyncStorage.getItem("loan");
       setLoan(loan);
-      alert(loan);
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
@@ -46,26 +55,22 @@ export default function PayLoan() {
     setDisplay(amount);
   }, [amount]);
 
-
-//   function to save transactions
-const saveTransaction = async (transactionRef, amount, email) => {
+  const saveTransaction = async (transactionRef, amount, email) => {
     try {
+      const url = "https://backend1-1cc6.onrender.com/payloan/";
+      const data = {
+        email: email,
+        amount: amount,
+        phonenumber: phonenumber,
+        chama_id: chama_id,
+        transactionRef: transactionRef,
+      };
 
-      const url = "https://backend1-1cc6.onrender.com/contributions/";
-          const data = {
-            email: email,
-            amount: amount, // Convert back to KES
-            phonenumber: phonenumber,
-            chama_id: chama_id,
-            transactionRef: transactionRef,
-          };
-  
-          console.log("Sending data:", data);  // Log request data
-  
-          const response = await axios.post(url, data, {
-              headers: { "Content-Type": "application/json" },
-          });
+      console.log("Sending data:", data);
 
+      const response = await axios.post(url, data, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (response.status === 200) {
         console.log("Transaction saved successfully:", data);
@@ -76,54 +81,59 @@ const saveTransaction = async (transactionRef, amount, email) => {
       console.error("Error saving transaction:", error);
     }
   };
-  
-// end of function to save transaction 
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-        <Text className="w-full text-gray-950 font-bold text-lg">You Loan KES.</Text>
-          <Text className="text-gray-950">Repayment amount</Text>
-          <Text className="text-yellow-600 font-bold text-xl">KES.{display}</Text>
+        <View className="flex-1 justify-center items-center space-y-6">
+          <Text className="text-lg font-bold text-gray-800 w-full">
+            Your Loan: <Text className="text-yellow-600">KES.{loan}</Text>
+          </Text>
+
+          <View className="w-full space-y-1">
+            <Text className="text-gray-700 text-base">Repayment Amount</Text>
+            <Text className="text-yellow-600 font-bold text-2xl">KES.{display}</Text>
+          </View>
 
           <TextInput
-            placeholder="Enter contribution amount"
+            placeholder="Enter repayment amount"
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
+            className="w-full p-4 rounded-xl bg-white border border-yellow-500 text-gray-800 text-lg shadow-md"
           />
 
-          {/* Payment Method Selection */}
-          <View className="w-full flex-row justify-center mb-4">
+          <View className="w-full flex-row justify-between mt-2">
             <TouchableOpacity
               onPress={() => setSelectedPaymentMethod("card")}
-              className={`p-3 mx-2 rounded-lg ${selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-300"}`}
+              className={`flex-1 mr-1 p-3 rounded-xl ${
+                selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-300"
+              }`}
             >
-              <Text className="text-white text-center">Pay with Card</Text>
+              <Text className="text-white text-center font-semibold">Pay with Card</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setSelectedPaymentMethod("mobile_money")}
-              className={`p-3 mx-2 rounded-lg ${selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-300"}`}
+              className={`flex-1 ml-1 p-3 rounded-xl ${
+                selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-300"
+              }`}
             >
-              <Text className="text-white text-center">Pay with M-Pesa</Text>
+              <Text className="text-white text-center font-semibold">Pay with M-Pesa</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            className="w-full bg-yellow-600 p-4 rounded-lg"
+            className="w-full bg-yellow-600 p-4 rounded-xl mt-4 shadow-md"
             onPress={() => setShowPaystack(true)}
           >
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg">Proceed to Payment</Text>
+              <Text className="text-white text-center font-bold text-lg">Proceed to Payment</Text>
             )}
           </TouchableOpacity>
 
-          {/* Paystack WebView Modal */}
           <Modal visible={showPaystack} animationType="slide" transparent={false}>
             <Paystack
               paystackKey={publicKey}
@@ -132,7 +142,9 @@ const saveTransaction = async (transactionRef, amount, email) => {
               billingName={name}
               billingMobile={phonenumber}
               currency="KES"
-              channels={selectedPaymentMethod === "mobile_money" ? ["mobile_money"] : ["card"]}
+              channels={
+                selectedPaymentMethod === "mobile_money" ? ["mobile_money"] : ["card"]
+              }
               onSuccess={(res) => {
                 const transactionRef = res.transactionRef.reference;
                 saveTransaction(transactionRef, amountValue, email);

@@ -142,7 +142,7 @@ useEffect(() => {
   
   const interval = setInterval(() => {
     getSavings();
-  }, 10000); // 10 seconds
+  }, 5000); // 5 seconds
 
   // Clear interval when component unmounts
   return () => clearInterval(interval);
@@ -173,7 +173,7 @@ useEffect(() => {
   }
   const interval = setInterval(() => {
     getLoans();
-  }, 10000); // 10 seconds
+  }, 5000); // 5 seconds
 
   // Clear interval when component unmounts
   return () => clearInterval(interval);
@@ -247,7 +247,7 @@ const handleProfile = () =>{
           title="Savings"
           kes={saving}
           interest={interest}
-          date={savingDate}
+          date={savingDate.split("T")[0]}
           dateLabel="Last saving"
         />
         </TouchableOpacity>
@@ -259,7 +259,7 @@ const handleProfile = () =>{
           title="Loans"
           kes={loan}
           interest={loanInterest}
-          date={loanDate}
+          date={loanDate.split("T")[0]}
           dateLabel="Last loan"
         />
         </TouchableOpacity>

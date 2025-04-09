@@ -7,21 +7,21 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-  Platform,
 } from "react-native";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Poll() {
   const [question, setQuestion] = useState("");
   const [choices, setChoices] = useState(["", ""]); // start with 2 choices
-  const [stopTime, setStopTime] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   const handleChoiceChange = (text, index) => {
     const updated = [...choices];
@@ -45,62 +45,72 @@ export default function Poll() {
     }
   };
 
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || stopTime;
-    setShowPicker(Platform.OS === "ios");
-    setStopTime(currentDate);
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
   };
 
-  // function to handle submit poll
-  const handleSubmitPoll = async () => {
-    const chama_id = await AsyncStorage.getItem("chama");
-    const formattedDate = new Date(stopTime).toISOString();
-    if(choices === "" || question === "" || stopTime === ""){
-      Toast.show({
-        type: "error",
-        text1: "All fields are required",
-        text2: "Please fill in all fields before submitting.",
-      });
-      return;
-    }
-    else{
-    setIsLoading(true);
-    try {
-      const response = await fetch("https://backend1-1cc6.onrender.com/createpoll/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question,
-          choices,
-          stop_time: formattedDate,
-          chama_id: chama_id, // Replace with actual chama_id
-        }),
-      });
+  const showDatePicker = () => {
+    setShow(true);
+  };
 
-      if (response.ok) {
+// start of handle submit poll function
+    const handleSubmitPoll = async() =>{
+     
+      const formattedDate = new Date(date).toISOString();
+      alert(formattedDate);
+      const chama_id = await AsyncStorage.getItem("chama_id");
+      alert(chama_id);
+      if(choices === "" || question === "" || date === ""){
         Toast.show({
-          type: "success",
-          text1: "Poll created successfully!",
+          type: "error",
+          text1: "All fields are required",
+          text2: "Please fill in all fields before submitting.",
         });
-        setTimeout(() => {
-          router.push("/activepolls");
-        }, 2000); // Redirect after 2 seconds
-      } else {
-        throw new Error("Failed to create poll");
+        return;
       }
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: error.message,
-      });
-    } finally {
-      setIsLoading(false);
+      
+      else{
+        setIsLoading(true);
+        try {
+          const response = await fetch("https://backend1-1cc6.onrender.com/createpoll/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              question,
+              choices,
+              stop_time: formattedDate,
+              chama_id: chama_id, // Replace with actual chama_id
+            }),
+          });
+           alert(response.status);
+          if (response.status === 200) {
+            Toast.show({
+              type: "success",
+              text1: "Poll created successfully!",
+            });
+            setTimeout(() => {
+              router.push("/activepolls");
+            }, 2000); // Redirect after 2 seconds
+          } else {
+            throw new Error("Failed to create poll");
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            text1: error.message,
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }
     }
-  }
-  };
-    // end of function to handle submit poll
+  // end of handle submit poll function
+    
+  
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -141,25 +151,22 @@ export default function Poll() {
             </Text>
           </TouchableOpacity>
 
-          <Text className="text-lg font-bold mb-2">Stop Date & Time</Text>
-          <TouchableOpacity
-            onPress={() => setShowPicker(true)}
-            className="p-4 bg-white rounded-lg border border-yellow-600 mb-4"
-          >
-            <Text className="text-gray-700 text-base">
-              {stopTime.toLocaleString()}
-            </Text>
-          </TouchableOpacity>
+    <View>
+    <Text className="w-full text-lg font-bold">Select stop date</Text>
+      <TouchableOpacity onPress={showDatePicker} className="bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
+      <Text className="w-full text-lg font-bold">Stop Date: {date.toLocaleDateString()}</Text>
+      </TouchableOpacity>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </View>
 
-          {showPicker && (
-            <DateTimePicker
-              value={stopTime}
-              mode="datetime"
-              display="default"
-              onChange={handleDateChange}
-              minimumDate={new Date()}
-            />
-          )}
 
           <TouchableOpacity
             className="bg-yellow-600 p-4 rounded-lg mt-4"

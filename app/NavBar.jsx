@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 export default function BottomNavBar() {
@@ -17,6 +18,12 @@ export default function BottomNavBar() {
 
   const handleProfile =() =>{
     navigation.navigate('profile', {
+      
+    });
+  }
+
+  const handleChat =() =>{
+    navigation.navigate('chat', {
       
     });
   }
@@ -38,6 +45,20 @@ export default function BottomNavBar() {
             <Text className="text-yellow-600 text-xs mt-1">Home</Text>
           )}
         </TouchableOpacity>
+
+         {/* chat button */}
+       <TouchableOpacity 
+        className="items-center"
+       onPress={handleChat}
+      >
+      <Ionicons name="chatbubble-ellipses-sharp" size={24} color="white" />
+      {activeRoute === 'notifications' && (
+      <Text className="text-yellow-600 text-xs mt-1">chat</Text>
+      )}
+      </TouchableOpacity>
+       {/* end of chat button */}
+
+
        {/* notfication button */}
        <TouchableOpacity 
         className="items-center"

@@ -12,16 +12,19 @@ export default function Schedule() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [message, setMessage] = useState("");
-  const [meetingDate, setMeetingDate] = useState(new Date());
   const [stopTime, setStopTime] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-  
-  const handleDateChange = (event, selectedDate) => {
-      const currentDate = selectedDate || stopTime;
-      setShowPicker(Platform.OS === "ios");
-      setStopTime(currentDate);
-    };
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showDatePicker = () => {
+    setShow(true);
+  };
     // function to handle schedule
     const handleSchedule = async () => {
       if (message === "" || stopTime === "") {
@@ -34,7 +37,7 @@ export default function Schedule() {
       } else {
         setIsLoading(true);
         try {
-          const formattedDate = new Date(stopTime).toISOString();
+          const formattedDate = new Date(date).toISOString();
           const chama_id = await AsyncStorage.getItem("chama");
           const member_id = await AsyncStorage.getItem("member_id");
           alert(member_id);
@@ -54,7 +57,7 @@ export default function Schedule() {
               text1: "Scheduled successfully",
               text2: response.data.message,
             });
-            setMeetingDate(new Date());
+            setDate(new Date());
             setMessage("");
           }
         } catch (error) {
@@ -75,24 +78,20 @@ export default function Schedule() {
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
           <Text className="w-full text-lg font-bold">Meeting date</Text>
-          <TouchableOpacity
-            onPress={() => setShowPicker(true)}
-            className="p-4 w-full bg-white rounded-lg border border-yellow-600 mb-4"
-          >
-            <Text className="text-gray-700 text-base">
-              {stopTime.toLocaleString()}
-            </Text>
-          </TouchableOpacity>
-
-          {showPicker && (
-            <DateTimePicker
-              value={stopTime}
-              mode="datetime"
-              display="default"
-              onChange={handleDateChange}
-              minimumDate={new Date()}
-            />
-          )}
+      <View className='w-full'>
+      <TouchableOpacity onPress={showDatePicker} className=" bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
+      <Text className="w-full text-lg font-bold">Meeting Date: {date.toLocaleDateString()}</Text>
+      </TouchableOpacity>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </View>
                 {/* Message Input Field */}
             <View className="w-full mb-4">
               <Text className="text-lg font-semibold mb-2">Write a Message</Text>

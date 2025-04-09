@@ -44,7 +44,7 @@ export default function Loans() {
       fetchTransactions();
       const interval = setInterval(() => {
         fetchTransactions();
-      }, 10000); // 10 seconds
+      }, 5000); // 5 seconds
     
       // Clear interval when component unmounts
       return () => clearInterval(interval);
