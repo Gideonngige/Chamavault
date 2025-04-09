@@ -46,7 +46,6 @@ export default function Index() {
           await AsyncStorage.setItem('name', response2.data.name);
           await AsyncStorage.setItem('member_id', String(response2.data.member_id));
           await AsyncStorage.setItem('chama_id', String(response2.data.chama));
-          alert(response2.data.chama)
           router.push('/admin');
 
         }

@@ -59,9 +59,7 @@ export default function Poll() {
     const handleSubmitPoll = async() =>{
      
       const formattedDate = new Date(date).toISOString();
-      alert(formattedDate);
       const chama_id = await AsyncStorage.getItem("chama_id");
-      alert(chama_id);
       if(choices === "" || question === "" || date === ""){
         Toast.show({
           type: "error",
