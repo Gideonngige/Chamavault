@@ -1,9 +1,6 @@
 import { SafeAreaView, ScrollView, Text, View,FlatList, ActivityIndicator, TouchableOpacity,Image, ImageBackground } from 'react-native';
 import { useRouter } from "expo-router";
 import { useRoute } from '@react-navigation/native';
-import NavBar from "./NavBar";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
@@ -16,11 +13,6 @@ export default function Loans() {
   const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const { username, email, loan, loanInterest} = route.params;
-  const data = [
-    { id: "1", name: "John Doe", age: 28, city: "New York" },
-    { id: "2", name: "Jane Smith", age: 32, city: "Los Angeles" },
-    { id: "3", name: "Michael Johnson", age: 24, city: "Chicago" },
-  ];
   const [transactions, setTransactions] = useState([]);
 
 

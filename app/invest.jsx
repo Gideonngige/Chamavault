@@ -1,11 +1,6 @@
 import { SafeAreaView, ScrollView, Text, View, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
 import { useRouter } from "expo-router";
-// import { DataTable } from "react-native-paper";
-import NavBar from "./NavBar";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { push } from 'expo-router/build/global-state/routing';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -29,9 +24,10 @@ useEffect(() => {
     try {
       const email = await AsyncStorage.getItem('email');
       const name = await AsyncStorage.getItem('name');
+      const chama_id = await AsyncStorage.getItem('chama');
       setUserName(name);
       
-      const url = `https://backend1-1cc6.onrender.com/getInvestment/${email}/`;
+      const url = `https://backend1-1cc6.onrender.com/getInvestment/${email}/${chama_id}/`;
       const response = await axios.get(url);
       
       if(response.status === 200){

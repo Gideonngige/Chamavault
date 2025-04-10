@@ -154,12 +154,17 @@ useEffect(() => {
 //  start get savings function
 useEffect(() => {
   const getLoans = async () => {
+    const member_id = await AsyncStorage.getItem('member_id');
+    const selected_chama = await AsyncStorage.getItem('selected_chama');
     try {
       const url = `https://backend1-1cc6.onrender.com/getLoans/Chama${chama}/${email}/`;
       const response = await axios.get(url);
+      const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
+      const response2 = await axios.get(url2);
       
-      if(response.status === 200){
-        setLoan(response.data.total_loan);
+      if(response.status === 200 && response2.status === 200){
+        const loan = response.data.total_loan - response2.data.total_repayment;
+        setLoan(loan);
         setLoanInterest(response.data.interest);
         if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
         else{setLoanDate(response.data.loan_date[0].loan_date);}
@@ -200,7 +205,7 @@ const goToLoans = () =>{
   navigation.navigate('loan', {
     username: name,
     email: email,
-    loan: loan,
+    loan: String(loan),
     loanInterest: interest,
     chama: chama,
     phonenumber: phonenumber,

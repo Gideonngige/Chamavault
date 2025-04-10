@@ -34,7 +34,7 @@ export default function Schedule() {
     else{
     setIsLoading(true);
     try{
-      const url = "https://backend1-1cc6.onrender.com/investment/";
+      const url = "http://127.0.0.1:8000/investment/";
       const data = {
           member_id: member_id,
           chama: chama,

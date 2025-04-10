@@ -7,6 +7,7 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Entypo from '@expo/vector-icons/Entypo';
 
 export default function Chama(){
     const [chama, setChama] = useState("");
@@ -137,6 +138,24 @@ const Contribution = ({name, contribution_date, amount}) => {
                 <Text className='font-bold text-lg'>Members contribution</Text>
               </View>
               {/* end of roles part */}
+
+              {/* part to print transactions */}
+              <View className="w-full flex flex-row justify-between mb-4">
+            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+                <Text className='font-bold'>Print Saving History</Text>
+                <Entypo name="print" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+                <Text className='font-bold'>Print Loan History</Text>
+                <Entypo name="print" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            
+          </View>
+          {/* end of part to print transaction */}
 
               {/* member and their contribution view */}
                <View className='w-full'>
