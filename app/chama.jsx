@@ -142,13 +142,13 @@ const Contribution = ({name, contribution_date, amount}) => {
               {/* part to print transactions */}
               <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
                 <Text className='font-bold'>Print Saving History</Text>
                 <Entypo name="print" size={24} color="black" />
               </TouchableOpacity>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
                 <Text className='font-bold'>Print Loan History</Text>
                 <Entypo name="print" size={24} color="black" />
               </TouchableOpacity>
@@ -169,9 +169,13 @@ const Contribution = ({name, contribution_date, amount}) => {
                 </View>
               {/* end */}
 
-              <StatusBar/>
             </View>
             </ScrollView>
+            <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
             </SafeAreaView>
     );
 }

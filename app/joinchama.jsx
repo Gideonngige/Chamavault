@@ -201,17 +201,11 @@ export default function Register(){
       onChangeText={setConfirmPassword}
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
       />
-      <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleRegister}>
-        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Register</Text>}
+      <TouchableOpacity className="w-full bg-yellow-600 p-4 mb-6 rounded-lg" onPress={handleRegister}>
+        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Join Chama</Text>}
       </TouchableOpacity>
-      <View className="flex-row justify-center mt-4 mb-6">
-      <Text className="text-lg">Already have an account? </Text>
-      <TouchableOpacity onPress={() => router.push("/")}>
-      <Text className="text-lg text-yellow-600">Login</Text>
-      </TouchableOpacity>
-      </View>
+
       <Toast/>
-      <StatusBar/>
       </View>
       </ScrollView>
       <StatusBar

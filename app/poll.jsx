@@ -84,7 +84,6 @@ export default function Poll() {
               chama_id: chama_id, // Replace with actual chama_id
             }),
           });
-           alert(response.status);
           if (response.status === 200) {
             Toast.show({
               type: "success",
@@ -179,10 +178,13 @@ export default function Poll() {
             )}
           </TouchableOpacity>
           <Toast/>
-
-          <StatusBar />
         </View>
       </ScrollView>
+      <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

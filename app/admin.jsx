@@ -133,10 +133,13 @@ export default function Admin() {
               {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Go To Profile</Text>}
             </TouchableOpacity>
           </View>
-
-          <StatusBar />
         </View>
       </ScrollView>
+      <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
     </SafeAreaView>
   );
 }

@@ -44,8 +44,8 @@ export default function Index() {
           await AsyncStorage.setItem('selected_chama', value);
           await AsyncStorage.setItem('role', response2.data.role);
           await AsyncStorage.setItem('name', response2.data.name);
-          await AsyncStorage.setItem('member_id', String(response2.data.member_id));
-          await AsyncStorage.setItem('chama_id', String(response2.data.chama));
+          await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
+          await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
           router.push('/admin');
 
         }
@@ -209,9 +209,14 @@ export default function Index() {
       </TouchableOpacity>
       </View>
       <Toast/>
-      <StatusBar/>
+      
     </View>
     </ScrollView>
+    <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
     </SafeAreaView>
     
   );

@@ -79,11 +79,13 @@ export default function Manageroles() {
             <TouchableOpacity className="w-full bg-yellow-600 mt-4 p-4 rounded-lg" onPress={handleSchedule}>
             {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Change roles</Text> }
             </TouchableOpacity>
-       
-      
-      <StatusBar/>
     </View>
     </ScrollView>
+    <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

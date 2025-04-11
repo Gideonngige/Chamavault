@@ -6,6 +6,8 @@ import { useRouter } from "expo-router";
 export default function Verify() {
   const router = useRouter();
   return (
+    <SafeAreaView className="flex-1 bg-white">
+        <ScrollView nestedScrollEnabled={true} className="p-4 mb-20">
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
       <Image source={require('../assets/images2/verify.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:300}}/>
       <Text className="text-3xl font-bold text-gray-800 mb-6">Enter OTP</Text>
@@ -35,8 +37,15 @@ export default function Verify() {
 <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg mt-10" onPress={() => router.push("/home")}>
         <Text className="text-white text-center font-semibold text-lg">Verify</Text>
       </TouchableOpacity>
-      
-      <StatusBar/>
     </View>
+    </ScrollView>
+        <NavBar/>
+        <StatusBar
+          barStyle="dark-content" // or "light-content" depending on your background
+          backgroundColor="transparent"
+          translucent={true}
+          />
+        
+        </SafeAreaView>
   );
 }

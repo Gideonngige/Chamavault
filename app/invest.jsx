@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TouchableOpacity, FlatList, ImageBackground, StatusBar } from 'react-native';
 import { useRouter } from "expo-router";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useState, useEffect } from 'react';
@@ -11,9 +11,6 @@ export default function Invest() {
   const router = useRouter();
   const[userName, setUserName] =  useState("");
   const[userEmail, setUserEmail] = useState("");
-  const [investmentAmount, setInvestmentAmount] = useState(0);
-  const [investmentType, setInvestmentType] = useState("");
-  const [profitAmount, setprofitAmount] = useState(0);
   const [investments, setInvestments] = useState([]);
   const [total_investments, setTotalInvestments] = useState(0);
   
@@ -31,11 +28,6 @@ useEffect(() => {
       const response = await axios.get(url);
       
       if(response.status === 200){
-        // setInvestmentAmount(response.data.investment[0].investment_amount);
-        // setInvestmentType(response.data.investment_type);
-        // setprofitAmount(response.data.profit_amount);
-        // setInvestments(response.data)
-        // alert(response.data)
         setInvestments(response.data.investments);
         
       }
@@ -47,6 +39,12 @@ useEffect(() => {
     }
   }
   fetchData();
+  const interval = setInterval(() => {
+    fetchData();
+  }, 5000); // 5 seconds
+
+  // Clear interval when component unmounts
+  return () => clearInterval(interval);
 
 },[userEmail]);
 // end pf fetching investment data 
@@ -78,7 +76,7 @@ const InvestmentCard = ({ userName, investment, amount, interest_earned }) => (
   <View className='w-full p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
       <View className="flex-row justify-between bg-white p-3 rounded-lg">
           <Text className='font-bold'>{userName}</Text>
-          <Text className='font-bold'>12/02/2024</Text>
+          <Text className='font-bold'>Investment</Text>
       </View>
           <Text className='font-bold'>{investment}</Text>
           <Text className='m-3'>Amount: {amount}</Text>
@@ -165,6 +163,11 @@ const InvestmentCard = ({ userName, investment, amount, interest_earned }) => (
           
         </View>
       </ScrollView>
+      <StatusBar
+          barStyle="dark-content" // or "light-content" depending on your background
+          backgroundColor="transparent"
+          translucent={true}
+          />
     </SafeAreaView>
   );
 }

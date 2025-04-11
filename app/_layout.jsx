@@ -38,6 +38,8 @@ export default function RootLayout() {
         <Stack.Screen name="manageroles"options={{title:"Manage Roles"}}  />
         <Stack.Screen name="managemembers"options={{title:"Manage Members"}}  />
         <Stack.Screen name="payloan"options={{title:"Pay Loan"}}  />
+        <Stack.Screen name="updateprofile"options={{title:"Update Profile"}}  />
+        <Stack.Screen name="joinchama"options={{title:"Join Chama"}}  />
         
         
       </Stack>

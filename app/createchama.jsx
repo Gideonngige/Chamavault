@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {View, Text, TouchableOpacity, Image, TextInput, StatusBar, ActivityIndicator} from 'react-native';
+import {View, Text, TouchableOpacity, Image, TextInput, StatusBar, ActivityIndicator,SafeAreaView, ScrollView,} from 'react-native';
 import { useRouter } from "expo-router";
 import axios from 'axios';
 import Toast from "react-native-toast-message";
@@ -84,6 +84,8 @@ export default function Createchama(){
     }
     // end of create chama function
     return(
+      <SafeAreaView className="flex-1 bg-white">
+          <ScrollView nestedScrollEnabled={true} className="p-4 mb-20">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
               <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
               <Text className="text-3xl font-bold text-gray-800 mb-6">ChamaVault</Text>
@@ -108,7 +110,15 @@ export default function Createchama(){
                 {isLoading ? <ActivityIndicator size="large" color="#fff"/> : <Text className="text-white text-center font-semibold text-lg">Create Chama</Text>}
               </TouchableOpacity>
               <Toast/>
-              <StatusBar/>
+              
             </View>
+             </ScrollView>
+                <StatusBar
+                  barStyle="dark-content" // or "light-content" depending on your background
+                  backgroundColor="transparent"
+                  translucent={true}
+                  />
+                
+                </SafeAreaView>
     );
 }

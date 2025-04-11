@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, StatusBar } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -104,7 +104,7 @@ export default function App() {
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phone_number);
           await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
-          await AsyncStorage.setItem('member_id', response.data.member_id);
+          await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
           
         }
         
@@ -122,8 +122,7 @@ export default function App() {
 useEffect(() => {
   const getSavings = async () => {
     try {
-      const url = `https://backend1-1cc6.onrender.com/getContributions/Chama${chama}/${email}/`;
-
+      const url = `https://backend1-1cc6.onrender.com/getContributions/${chama}/${email}/`;
       const response = await axios.get(url);
       
       if(response.status === 200){
@@ -157,13 +156,15 @@ useEffect(() => {
     const member_id = await AsyncStorage.getItem('member_id');
     const selected_chama = await AsyncStorage.getItem('selected_chama');
     try {
-      const url = `https://backend1-1cc6.onrender.com/getLoans/Chama${chama}/${email}/`;
+      const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
+      
       const response = await axios.get(url);
       const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
       const response2 = await axios.get(url2);
       
       if(response.status === 200 && response2.status === 200){
         const loan = response.data.total_loan - response2.data.total_repayment;
+        // alert(response.data.total_loan)
         setLoan(loan);
         setLoanInterest(response.data.interest);
         if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
@@ -289,7 +290,7 @@ const handleProfile = () =>{
   {/* Join Chama Button */}
   <TouchableOpacity 
     className="bg-yellow-600 py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('register/')}
+    onPress={() => router.push('joinchama/')}
   >
     <Ionicons name="enter" size={24} color="black" />
     <Text className="text-white font-medium">Join Chama</Text>
@@ -314,6 +315,11 @@ const handleProfile = () =>{
     
     </ScrollView>
     <NavBar/>
+    <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
     
     </SafeAreaView>
     

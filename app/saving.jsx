@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View, ActivityIndicator, TouchableOpacity,Image, ImageBackground, FlatList } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, ActivityIndicator, TouchableOpacity,Image, ImageBackground, FlatList, StatusBar } from 'react-native';
 import { useRouter } from "expo-router";
 // import { DataTable } from "react-native-paper";
 import NavBar from "./NavBar";
@@ -105,7 +105,7 @@ export default function Saving() {
 
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push('/chama')}
+          onPress={() => alert("Coming soon!")}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Withdraw</Text>
@@ -178,6 +178,11 @@ export default function Saving() {
           
         </View>
       </ScrollView>
+      <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

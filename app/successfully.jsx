@@ -25,10 +25,14 @@ export default function Successfully(){
             <TouchableOpacity className="w-full bg-yellow-600 mt-10 p-4 rounded-lg" onPress={handleContribution}>
             {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Back to home</Text> }
             </TouchableOpacity>
-       
-        <StatusBar/>
+
         </View>
         </ScrollView>
+        <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
         </SafeAreaView>
     );
 }

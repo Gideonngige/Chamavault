@@ -21,7 +21,11 @@ export default function Createchama(){
               <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleInviteMembers}>
                 <Text className="text-white text-center font-semibold text-lg">Invite members</Text>
               </TouchableOpacity>
-              <StatusBar/>
+              <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
             </View>
     );
 }

@@ -77,9 +77,13 @@ export default function Notifications() {
               listMode="SCROLLVIEW"
             />
           )}
-          <StatusBar />
         </View>
         </ScrollView>
+        <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

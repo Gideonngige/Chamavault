@@ -48,6 +48,14 @@ export default function Profile() {
     });
    }
 
+  //  function to go to update profile
+  const handleUpdateProfile = () => {
+    navigation.navigate('updateprofile', {
+      
+    });
+   }
+  // end of dunction to update profile
+
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -63,9 +71,9 @@ export default function Profile() {
     <Text className="text-gray-800 font-bold">{email}</Text>
     </View>
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
-        <TouchableOpacity className='flex-row items-center justify-between w-full p-1'>
+        <TouchableOpacity className='flex-row items-center justify-between w-full p-1' onPress={handleUpdateProfile}>
             <MaterialIcons name="account-circle" size={30} color="black" className='mr-4' />
-            <Text className="text-base font-bold p-2 text-gray-900">Update Profile </Text>
+            <Text className="text-base font-bold p-2 text-gray-900">Update Profile</Text>
             <Ionicons name="chevron-forward-outline" size={30} color="black" />
         </TouchableOpacity>
     </View>
@@ -93,10 +101,13 @@ export default function Profile() {
             <Ionicons name="chevron-forward-outline" size={30} color="black" />
         </TouchableOpacity>
     </View>
-               
-    <StatusBar/>
         </View>
       </ScrollView>
+      <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

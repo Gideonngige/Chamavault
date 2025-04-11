@@ -40,7 +40,6 @@ export default function Schedule() {
           const formattedDate = new Date(date).toISOString();
           const chama_id = await AsyncStorage.getItem("chama");
           const member_id = await AsyncStorage.getItem("member_id");
-          alert(member_id);
           const url = `https://backend1-1cc6.onrender.com/schedulemeeting/`;
           const data = {
             message: message,
@@ -109,10 +108,14 @@ export default function Schedule() {
                         
                 </TouchableOpacity>
                 <Toast/>
-            <StatusBar/>
           
         </View>
       </ScrollView>
+      <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

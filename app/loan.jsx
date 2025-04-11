@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View,FlatList, ActivityIndicator, TouchableOpacity,Image, ImageBackground } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View,FlatList, ActivityIndicator, TouchableOpacity,Image, ImageBackground, StatusBar } from 'react-native';
 import { useRouter } from "expo-router";
 import { useRoute } from '@react-navigation/native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -165,6 +165,11 @@ export default function Loans() {
         </View>
         </View>
       </ScrollView>
+      <StatusBar
+            barStyle="dark-content" // or "light-content" depending on your background
+            backgroundColor="transparent"
+            translucent={true}
+          />
     </SafeAreaView>
   );
 }

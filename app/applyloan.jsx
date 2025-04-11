@@ -127,16 +127,21 @@ export default function ApplyLoan(){
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleApplyLoan}>
       {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Apply Loan</Text> }      
       </TouchableOpacity>
-      <Text>Read our terms & conditions <TouchableOpacity>
-        <Text className='text-yellow-600 underline'>here</Text>
-        </TouchableOpacity></Text>
-        <Toast/>
-      
-            
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+     <Text>Read our terms & conditions </Text>
+     <TouchableOpacity>
+     <Text style={{ color: '#eab308', textDecorationLine: 'underline' }}>here</Text>
+    </TouchableOpacity>
+    </View>
 
-        <StatusBar/>
+    <Toast/>
         </View>
         </ScrollView>
+        <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
         </SafeAreaView>
     );
 }

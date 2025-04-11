@@ -77,6 +77,11 @@ export default function Invest() {
                 <Text className='font-bold mb-5'>12/08/2024</Text>
        </View>
       </ScrollView>
+      <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
       
     </SafeAreaView>
   );

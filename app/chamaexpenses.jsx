@@ -87,12 +87,13 @@ export default function Chamainvestment(){
                 />
               </View>
               {/* end of graph part */}
-
-              
-
-              <StatusBar/>
             </View>
             </ScrollView>
+            <StatusBar
+      barStyle="dark-content" // or "light-content" depending on your background
+      backgroundColor="transparent"
+      translucent={true}
+      />
             </SafeAreaView>
     );
 }
