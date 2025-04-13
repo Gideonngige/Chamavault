@@ -40,6 +40,7 @@ export default function RootLayout() {
         <Stack.Screen name="payloan"options={{title:"Pay Loan"}}  />
         <Stack.Screen name="updateprofile"options={{title:"Update Profile"}}  />
         <Stack.Screen name="joinchama"options={{title:"Join Chama"}}  />
+        <Stack.Screen name="forgotpassword"options={{title:"Forgot Password"}}  />
         
         
       </Stack>

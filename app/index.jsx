@@ -53,7 +53,7 @@ export default function Index() {
         const message = response.data.message; 
         if(message == "Successfully logged in"){
           await AsyncStorage.setItem('email', email);
-          await AsyncStorage.setItem('selected_chama', value);
+          await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           // router.push("/home");
           navigation.navigate('home', {
             email,
@@ -80,10 +80,11 @@ export default function Index() {
         return null;
       }
     } catch (error) {
+      console.log(error?.message)
       Toast.show({
         type: "error", // Can be "success", "error", "info"
-        text1: "Login failed",
-        text2: error,
+        text1: "Login failed catched",
+        text2: error?.message || "Unknown error",
       });
       return null;
     }
@@ -92,38 +93,6 @@ export default function Index() {
     }
   }
   };
-
-  const handleForgotPassword = async() => {
-    try {
-      if(email === ""){
-        Toast.show({
-          type: "error", // Can be "success", "error", "info"
-          text1: "Empty field",
-          text2: "Please provide an email",
-        });
-      }
-      else{
-      const url = `https://backend1-1cc6.onrender.com/postReset/${email}/`;
-      const response = await axios.get(url);
-      Toast.show({
-        type: "success", // Can be "success", "error", "info"
-        text1: "Password reset",
-        text2: response.data.message,
-      });
-      }
-      
-      // alert(response.data.message);
-    } catch (error) {
-      Toast.show({
-        type: "error", // Can be "success", "error", "info"
-        text1: "Error logging in",
-        text2: error,
-      });
-      // console.error("Error logging in:", error);
-      return null;
-    }
-
-  }
 
   // fetch chamas
   useEffect(() => {
@@ -182,7 +151,7 @@ export default function Index() {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-          placeholder="Select a chama"
+          placeholder="Select a chama(optional)"
           searchable={true} // Enable searching
           searchPlaceholder="Search for a chama..."
           searchTextInputProps={{
@@ -195,7 +164,7 @@ export default function Index() {
          />
       </View>
 
-      <TouchableOpacity className="w-full flex-row justify-end m-4" onPress={handleForgotPassword}>
+      <TouchableOpacity className="w-full flex-row justify-end m-4" onPress={() => router.push("/forgotpassword")}>
       <Text className="text-lg">Forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleLogin}>

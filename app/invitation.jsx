@@ -12,7 +12,7 @@ export default function Invitation(){
         setIsLoading(true);
         try {
           const result = await Share.share({
-            message: 'Check out the ChamaVault app: https://chamavaultApp.com',
+            message: 'Check out the ChamaVault app: https://expo.dev/accounts/gideon_ushindi/projects/Chamavault/builds/96c421c2-f337-433e-867e-18036bb2e8fe',
           });
       
           if (result.action === Share.sharedAction) {

@@ -92,6 +92,16 @@ const Contribution = ({name, contribution_date, amount}) => {
 }
 // end of contribution component
 
+// Alert component
+const Alert = () => {
+  return (
+    <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
+      <Text className="text-white font-bold">No contributions</Text>
+    </View>
+  );
+};
+// end
+
     return(
         <SafeAreaView className="flex-1 bg-white">
         <ScrollView className="p-4">
@@ -159,6 +169,9 @@ const Contribution = ({name, contribution_date, amount}) => {
 
               {/* member and their contribution view */}
                <View className='w-full'>
+               {data.length === 0 ? (
+            <Alert />
+          ) : (
               <FlatList
                 keyExtractor={(item) => item.contribution_id.toString()}
                 data={data}
@@ -166,6 +179,7 @@ const Contribution = ({name, contribution_date, amount}) => {
                 showsVerticalScrollIndicator={false}
                 listMode="SCROLLVIEW"
                 />
+          )}
                 </View>
               {/* end */}
 

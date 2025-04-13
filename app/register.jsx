@@ -14,33 +14,8 @@ export default function Register(){
     const [password,setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([]);
 
-    // fetch chamas
-    useEffect(() => {
-      const fetchChamas = async () => {
-        try{
-          const url = `https://backend1-1cc6.onrender.com/allchamas/`;
-          const response = await axios.get(url);
-          if(response.status === 200){
-            const formattedItems = response.data.Chamas.map((chama) => ({
-              label: chama.name,
-              value: chama.name, // Use an ID if available
-            }));
-            setItems(formattedItems);
-          }
-
-        }
-        catch(error){
-          console.error("Error fetching chamas:", error);
-        }
-
-      }
-      fetchChamas();
-    },[]);
-    // end of fetch chamas
+    //start function to handle registration
     const handleRegister = async() => {
       if(fullname == "" || phonenumber == "" || email == "" || password == "" || confirmPassword == ""){
         Toast.show({
@@ -57,7 +32,6 @@ export default function Register(){
         try {
           const url = "https://backend1-1cc6.onrender.com/postsignUp/";
           const data = {
-              chama: value,
               name: fullname,
               email: email,
               phone_number: phonenumber,
@@ -129,6 +103,7 @@ export default function Register(){
     }
   }
   }
+  // end of function to handle registration
 
 
     return(
@@ -141,45 +116,24 @@ export default function Register(){
         }}
       />
       <Text className="text-xl font-bold">ChamaVault</Text>
-    <View className="w-full">
-    <Text className="text-lg font-bold">Select Chama</Text>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select a chama"
-        searchable={true} // Enable searching
-        searchPlaceholder="Search for a chama..."
-        searchTextInputProps={{
-        autoCorrect: false,
-        autoCapitalize: "none",
-        }}
-        style={{borderColor: '#ca8a04',borderWidth: 2,  
-        }}
-        listMode="SCROLLVIEW"
-      />
-    </View>
         
       <Text className="w-full text-lg font-bold">Enter your fullname</Text>
       <TextInput 
-      placeholder="Enter your fullname"
+      placeholder="e.g John Doe"
       value={fullname}
       onChangeText={setFullname}
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
       />
       <Text className="w-full text-lg font-bold">Enter your phonenumber</Text>
       <TextInput 
-      placeholder="Enter your phonenumber"
+      placeholder="e.g 0712345678"
       value={phonenumber}
       onChangeText={setPhonenumber}
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
       />
       <Text className="w-full text-lg font-bold">Enter your email</Text>
       <TextInput 
-      placeholder="Enter your email"
+      placeholder="e.g johndoe@example.com"
       keyboardType="email-address"
       value={email}
       onChangeText={setEmail}

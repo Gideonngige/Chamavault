@@ -106,6 +106,7 @@ export default function App() {
           await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
           await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
           
+          
         }
         
       } 
