@@ -39,6 +39,8 @@ export default function Register(){
     // start of function to join chama
     const handleJoinChama = async() => {
       const member_id = await AsyncStorage.getItem('member_id');
+      alert(member_id);
+      alert(value)
       setIsLoading(true);
       try{
         if(value == null){
@@ -72,7 +74,7 @@ export default function Register(){
         Toast.show({
           type: "error", // Can be "success", "error", "info"
           text1: "An error occurred",
-          text2: error,
+          text2: error.message,
           });
       }
       finally{

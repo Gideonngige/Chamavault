@@ -104,7 +104,7 @@ export default function App() {
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phone_number);
           await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
-          await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
+          // await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
           
           
         }

@@ -44,6 +44,7 @@ export default function Chama(){
         setRentExpense(response4.data.total_rent);
         setTravelExpense(response4.data.total_travel);
         setBusinessExpense(response4.data.total_business);
+        alert("Total", response.data.total_members);
       }
 
     }

@@ -39,6 +39,8 @@ export default function Createchama(){
         });
        
         if(response.data.message == "Chama created successfully"){
+          setDescription("");
+          setChama("");
           navigation.navigate('chamacreated', {
             chama:chama,
       

@@ -78,7 +78,7 @@ export default function ForgotPassword(){
       <ActivityIndicator size="large" color="#fff" />
     ) : (
       <Text className="text-white text-center font-semibold text-lg">
-        Join Chama
+        Reset Password
       </Text>
     )}
   </TouchableOpacity>

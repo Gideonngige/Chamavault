@@ -38,14 +38,15 @@ export default function Index() {
       const response2 = await axios.get(url2);
       
       if (response.status === 200 && response2.status === 200) {
-        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary"){
+        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary" || response2.data.role == "member" ){
           
           await AsyncStorage.setItem('email', email);
-          await AsyncStorage.setItem('selected_chama', value);
+          await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('role', response2.data.role);
           await AsyncStorage.setItem('name', response2.data.name);
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
           await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
+          alert(response2.data.member_id);
           router.push('/admin');
 
         }
@@ -54,6 +55,8 @@ export default function Index() {
         if(message == "Successfully logged in"){
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
+          await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
+          alert(response2.data.member_id);
           // router.push("/home");
           navigation.navigate('home', {
             email,
@@ -115,7 +118,13 @@ export default function Index() {
       }
 
     }
-    fetchChamas();
+    const interval = setInterval(() => {
+      fetchChamas();
+    }, 5000); // 5 seconds
+  
+    // Clear interval when component unmounts
+    return () => clearInterval(interval);
+    
   },[]);
   // end of fetch chamas
     
