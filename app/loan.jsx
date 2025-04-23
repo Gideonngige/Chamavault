@@ -12,6 +12,7 @@ export default function Loans() {
   const router = useRouter();
   const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
   const { username, email, loan, loanInterest} = route.params;
   const [transactions, setTransactions] = useState([]);
 
@@ -49,6 +50,11 @@ export default function Loans() {
     });
   }
 
+
+  const handleTerms = () => {
+    router.push('terms');
+  }
+
    // start of activity
    const Activity = ({transactionType, chama, amount, transactionTime}) => {
     return(
@@ -66,7 +72,7 @@ export default function Loans() {
   }
   // end of activity
 
-   if (isLoading) {
+   if (isLoading2) {
             return <ActivityIndicator size="large" color="#FFA500" />;
     }
   return (
@@ -94,7 +100,7 @@ export default function Loans() {
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
           className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={handleApplyLoan}
+          onPress={handleTerms}
         >
           <FontAwesome6 name="add" size={24} color="black" />
           <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>

@@ -41,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name="updateprofile"options={{title:"Update Profile"}}  />
         <Stack.Screen name="joinchama"options={{title:"Join Chama"}}  />
         <Stack.Screen name="forgotpassword"options={{title:"Forgot Password"}}  />
+        <Stack.Screen name="terms"options={{title:"Terms & Conditions"}}  />
         
         
       </Stack>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import {View, Text, TouchableOpacity, Image, ActivityIndicator, TextInput, StatusBar, SafeAreaView, ScrollView} from 'react-native';
+import { useEffect, useState, useRef} from 'react';
+import {View, Text, TouchableOpacity, Image, ActivityIndicator, TextInput, StatusBar, SafeAreaView, ScrollView, Animated, StyleSheet} from 'react-native';
 import { useRouter } from "expo-router";
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from "react-native-toast-message";
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ApplyLoan(){
   const route = useRoute();
+  const router = useRouter();
   const {email} = route.params;
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("");
@@ -19,6 +20,30 @@ export default function ApplyLoan(){
     const [loanAmount, setLoanAmount] = useState("");
     const [repaymentPeriod, setRepaymentPeriod] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const bounceValue = useRef(new Animated.Value(0)).current;
+
+    const startBounce = () => {
+      bounceValue.setValue(0); // reset
+      Animated.spring(bounceValue, {
+        toValue: 1,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    };
+  
+    useEffect(() => {
+      startBounce(); // initial bounce
+  
+      const interval = setInterval(() => {
+        startBounce(); // repeat bounce every 3 seconds
+      }, 3000);
+  
+      return () => clearInterval(interval); // cleanup
+    }, []);
+
+
+
 
     useEffect(() => {
       const handleRepaymentPeriod = ()=>{
@@ -50,6 +75,7 @@ export default function ApplyLoan(){
         setIsLoading(true);
         try{
           const chama = JSON.parse(await AsyncStorage.getItem('chama'));
+          const email = await AsyncStorage.getItem('email');
           const period = repaymentPeriod * 30;
           const url = `https://backend1-1cc6.onrender.com/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
           const response = await axios.get(url);
@@ -93,6 +119,20 @@ export default function ApplyLoan(){
         <SafeAreaView className="flex-1 bg-white">
         <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
+        <View style={styles.container}>
+      <Animated.Image
+        source={require('../assets/images2/applyloan.png')}
+        style={[
+          styles.image,
+          {
+            transform: [{ scale: bounceValue }],
+          },
+        ]}
+      />
+    </View>
+
+
+
         <Text className="text-lg w-full font-bold">Type of loan</Text>
        <DropDownPicker
         open={open}
@@ -123,13 +163,13 @@ export default function ApplyLoan(){
       keyboardType="numeric"
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
       />
-      <Text className='text-yellow-600 font-medium'>Our interest rate is 3% - 7% per annum</Text>
+      <Text className='text-yellow-600 font-medium'>Our interest rate is 30% per annum</Text>
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleApplyLoan}>
       {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Apply Loan</Text> }      
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
      <Text>Read our terms & conditions </Text>
-     <TouchableOpacity>
+     <TouchableOpacity className='mb-40' onPress={() => router.push("/terms")}>
      <Text style={{ color: '#eab308', textDecorationLine: 'underline' }}>here</Text>
     </TouchableOpacity>
     </View>
@@ -145,3 +185,19 @@ export default function ApplyLoan(){
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: 300,
+    height: 300,
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: '#fff',
+  },
+});

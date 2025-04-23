@@ -46,7 +46,7 @@ export default function Index() {
           await AsyncStorage.setItem('name', response2.data.name);
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
           await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
-          alert(response2.data.member_id);
+          // alert(response2.data.member_id);
           router.push('/admin');
 
         }
@@ -56,7 +56,7 @@ export default function Index() {
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
-          alert(response2.data.member_id);
+          // alert(response2.data.member_id);
           // router.push("/home");
           navigation.navigate('home', {
             email,
@@ -167,8 +167,7 @@ export default function Index() {
           autoCorrect: false,
           autoCapitalize: "none",
           }}
-          style={{borderColor: '#ca8a04',borderWidth: 2,  
-          }}
+          style={{borderColor: '#ca8a04',borderWidth: 2}}
           listMode="SCROLLVIEW"
          />
       </View>

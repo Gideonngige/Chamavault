@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, StatusBar, Dimensions, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -13,6 +13,7 @@ import Toast from "react-native-toast-message";
 import NavBar from './NavBar';
 import BottomTabs from './BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Carousel from 'react-native-reanimated-carousel';
 const InfoCard = ({ title, kes, interest, date, dateLabel }) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
     <Text className="text-lg font-bold mb-2">{title}</Text>
@@ -30,6 +31,15 @@ const InfoCard = ({ title, kes, interest, date, dateLabel }) => (
     </View>
   </View>
 );
+
+const SLIDER_WIDTH = Dimensions.get('window').width;
+const ITEM_WIDTH = SLIDER_WIDTH * 0.8;
+
+const data = [
+  { title: 'Welcome to chamavault', image: require('../assets/images2/payment.png') },
+  { title: 'Save your money to earn interest', image: require('../assets/images2/invest.png') },
+  { title: 'Borrow money to grow', image: require('../assets/images2/loan.png') },
+];
 
 export default function App() {
   const navigation = useNavigation();
@@ -223,28 +233,59 @@ const handleProfile = () =>{
 }
 // end of go to invest
 
+const handleTerms = () => {
+  router.push('terms/');
+}
+
+
+const renderItem = ({ item }) => (
+  <View style={[styles.itemContainer, { width: ITEM_WIDTH }]}>
+    <Image source={item.image} style={styles.image} />
+    <Text style={styles.title}>{item.title}</Text>
+  </View>
+);
   return (
     
     <SafeAreaView className="flex-1 bg-white">
     <ScrollView nestedScrollEnabled={true} className="p-4 mb-20">
     <View className="flex-1 bg-white p-4">
       {/* Header */}
-      <View className="items-center mb-8">
-      <Image 
-        source={require('../assets/images2/profile3.png')}
-        style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
-        }}
-      />
-        <Text className="text-lg font-bold text-gray-800 mb-1">{name}</Text>
-        <Text className="text-gray-800">{email}</Text>
-        <TouchableOpacity className="bg-yellow-600 rounded-lg w-full h-10 flex items-center justify-center" onPress={handleProfile}>
-        <Text className="text-white font-bold">Update Profile</Text>
-        </TouchableOpacity>
+    <View className="mb-2 w-full">
+  <TouchableOpacity
+    className="bg-slate-500 p-2 rounded-lg flex-row items-center mb-2"
+    onPress={handleProfile}
+  >
+    <Image 
+      source={require('../assets/images2/profile3.png')}
+      style={{
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        borderWidth: 3,
+        borderColor: '#fff',
+        resizeMode: 'cover',
+      }}
+    />
+    <View className="ml-2">
+      <Text className="text-xl font-bold text-white">{name}</Text>
+      <Text className="text-white mt-1">{email}</Text>
+    </View>
+  </TouchableOpacity>
 
-
-        <Toast/>
-      </View>
+  <Toast />
+</View>
       <Text className="text-lg align-middle font-bold">{chamaName}</Text>
+
+      <Carousel
+        data={data}
+        renderItem={renderItem}
+        width={SLIDER_WIDTH}
+        height={250}  // Adjust height as needed
+        loop={true}
+        autoPlay={true}
+        autoPlayInterval={3000}
+      />
+
       {/* Main Content */}
       <View className="space-y-4">
         <TouchableOpacity
@@ -326,3 +367,30 @@ const handleProfile = () =>{
     
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  itemContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+  },
+  title: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+});
