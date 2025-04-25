@@ -11,16 +11,11 @@ export default function ApplyLoan(){
   const route = useRoute();
   const router = useRouter();
   const {email} = route.params;
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
-    const [items, setItems] = useState([
-      { label: 'Long Term Loan', value: 'LTL' },
-      { label: 'Short Term Loan', value: 'STL' },
-    ]);
     const [loanAmount, setLoanAmount] = useState("");
     const [repaymentPeriod, setRepaymentPeriod] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const bounceValue = useRef(new Animated.Value(0)).current;
+    const [loanType, setLoanType] = useState(null);
 
     const startBounce = () => {
       bounceValue.setValue(0); // reset
@@ -42,27 +37,21 @@ export default function ApplyLoan(){
       return () => clearInterval(interval); // cleanup
     }, []);
 
+useEffect(() => {
+  const fetchLoanType = async () => {
+    const loan_type = await AsyncStorage.getItem('loan_type');
+    if (loan_type) {
+      setLoanType(loan_type);
+      // alert(loan_type);
+    }
+  };
+  fetchLoanType();
 
-
-
-    useEffect(() => {
-      const handleRepaymentPeriod = ()=>{
-        if(loanAmount > 0 && loanAmount <= 1000){
-          setRepaymentPeriod(3);
-        }
-        else if(loanAmount > 1000 && loanAmount <= 10000){
-          setRepaymentPeriod(6);
-        }
-        else if(loanAmount > 10000 && loanAmount <= 30000){
-          setRepaymentPeriod(9);
-        }
-      }
-      handleRepaymentPeriod();
-    }, [loanAmount]);
+})
 
 
     const handleApplyLoan = async() => {
-      if(value === "" || loanAmount === "" || repaymentPeriod === 0){
+      if(loanAmount === ""){
         Toast.show({
             type: "error",
             text1: "Empty field",
@@ -76,19 +65,16 @@ export default function ApplyLoan(){
         try{
           const chama = JSON.parse(await AsyncStorage.getItem('chama'));
           const email = await AsyncStorage.getItem('email');
-          const period = repaymentPeriod * 30;
-          const url = `https://backend1-1cc6.onrender.com/loans/${email}/${chama}/${loanAmount}/${value}/${period}`;
+          const url = `http://127.0.0.1:8000/loans/${email}/${chama}/${loanAmount}/${loanType}`;
           const response = await axios.get(url);
           if(response.data.status === 200) {
             Toast.show({
                 type: "success",
                 text1: "Loan application successful",
-                text2: "Your loan application will be reviewed by the Chamavault team",
+                text2: response.data.message,
                 position:"center",
                 });
                 setLoanAmount("");
-                setValue("");
-                setRepaymentPeriod(0);
           }
           else{
             Toast.show({
@@ -131,22 +117,6 @@ export default function ApplyLoan(){
       />
     </View>
 
-
-
-        <Text className="text-lg w-full font-bold">Type of loan</Text>
-       <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select type of loan"
-        style={{borderColor: '#ca8a04',borderWidth: 2,  
-        }}
-        className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
-        listMode="SCROLLVIEW"
-      />
       <Text className="w-full mt-4 text-lg font-bold">Enter loan amount</Text>
       <TextInput 
       placeholder="Enter loan amount"
@@ -155,15 +125,7 @@ export default function ApplyLoan(){
       keyboardType="numeric"
       className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
       />
-      <Text className="w-full text-lg font-bold">Repayment period</Text>
-      <TextInput 
-      placeholder="Repayment period"
-      value={repaymentPeriod}
-      onChangeText={setRepaymentPeriod}
-      keyboardType="numeric"
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
-      />
-      <Text className='text-yellow-600 font-medium'>Our interest rate is 30% per annum</Text>
+
       <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleApplyLoan}>
       {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Apply Loan</Text> }      
       </TouchableOpacity>

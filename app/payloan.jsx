@@ -30,6 +30,7 @@ export default function PayLoan() {
   const [name, setName] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [chama_id, setChama_id] = useState();
+  const [loan_type, setLoanType] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +38,10 @@ export default function PayLoan() {
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
       const storedChama_id = await AsyncStorage.getItem("chama");
-      const loan = await AsyncStorage.getItem("loan");
-      setLoan(loan);
+      const loan2 = await AsyncStorage.getItem("repayment_amount");
+      const loan_type = await AsyncStorage.getItem("loan_type");
+      setLoan(parseFloat(loan2));
+      setLoanType(loan_type);
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
@@ -56,11 +59,20 @@ export default function PayLoan() {
   }, [amount]);
 
   const saveTransaction = async (transactionRef, amount, email) => {
+    if(amountValue > loan) {
+      Toast.show({
+        type: "info",
+        text1: "Invalid Amount",
+        text2: "Repayment amount exceeds loan amount.",
+      });
+      return;
+    }
     try {
       const url = "https://backend1-1cc6.onrender.com/payloan/";
       const data = {
         email: email,
         amount: amount,
+        loan_type: loan_type,
         phonenumber: phonenumber,
         chama_id: chama_id,
         transactionRef: transactionRef,

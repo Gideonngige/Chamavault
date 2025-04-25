@@ -13,8 +13,78 @@ export default function Loans() {
   const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
-  const { username, email, loan, loanInterest} = route.params;
+  // const { username, email, loan, loanInterest} = route.params;
   const [transactions, setTransactions] = useState([]);
+  const [loan, setLoan] = useState(0);
+  const [loanInterest, setLoanInterest] = useState(0);
+  const [loanDate, setLoanDate] = useState("N/A");
+  const [email, setEmail] =  useState("");
+  const [name, setName]  = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);// Initialize isDisabled to false
+  const [totalSTL, setTotalSTL] = useState(0);
+  const [totalLTL, setTotalLTL] = useState(0);
+  const [totalSTLRepayment, setTotalSTLRepayment] = useState(0);
+  const [totalLTLRepayment, setTotalLTLRepayment] = useState(0);
+  const [stlDate, setStlDate] = useState("N/A");
+  const [ltlDate, setLtlDate] = useState("N/A");
+  const [stlDueDate, setStlDueDate] = useState("N/A");
+  const [ltlDueDate, setLtlDueDate] = useState("N/A");
+
+
+
+  //  start get loans function
+useEffect(() => {
+  const getLoans = async () => {
+    const email = await AsyncStorage.getItem('email');
+    const name = await AsyncStorage.getItem('name');
+    const chama = await AsyncStorage.getItem('chama');
+    setName(name);
+    const member_id = await AsyncStorage.getItem('member_id');
+    const selected_chama = await AsyncStorage.getItem('selected_chama');
+    
+    
+    try {
+      const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
+      const response = await axios.get(url);
+
+      const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
+      const response2 = await axios.get(url2);
+      
+      if(response.status === 200 && response2.status === 200){
+        const total_stl_new = response.data.total_stl_loan - response2.data.total_stl_repayment;
+        // alert("Alert" + total_stl_new);
+        const total_ltl_new = response.data.total_ltl_loan - response2.data.total_ltl_repayment;
+        if(total_stl_new > 0){
+          setIsDisabled(true); // Disable the button if loan_new is greater than 0
+        }
+        setLoan(response.data.total_loan);
+        setLoanInterest(response.data.interest);
+        setTotalSTL(total_stl_new);
+        setTotalLTL(total_ltl_new );
+        setTotalSTLRepayment(response.data.total_stl_repayment);
+        setTotalLTLRepayment(response.data.total_ltl_repayment);
+        setStlDate(response.data.stl_loan_date[0].loan_date);
+        setLtlDate(response.data.ltl_loan_date[0].loan_date);
+        setStlDueDate(response.data.stl_loan_deadline[0].loan_deadline);
+        setLtlDueDate(response.data.ltl_loan_deadline[0].loan_deadline);
+        
+      }
+    } 
+    catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  getLoans();
+  const interval = setInterval(() => {
+    getLoans();
+  }, 5000); // 5 seconds
+
+  // Clear interval when component unmounts
+  return () => clearInterval(interval);
+
+},[email]);
+// end of get loans function
 
 
     // fetch loan transactions data
@@ -23,7 +93,7 @@ export default function Loans() {
       const fetchTransactions = async() => {
         const email = await AsyncStorage.getItem('email');
         const chama_id = await AsyncStorage.getItem('chama');
-        await AsyncStorage.setItem('loan', loan);
+        // await AsyncStorage.setItem('loan', loan.toString());
         axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
             .then((response) => {
               setTransactions(response.data);
@@ -37,7 +107,7 @@ export default function Loans() {
       fetchTransactions();
       const interval = setInterval(() => {
         fetchTransactions();
-      }, 5000); // 5 seconds
+      }, 8000); // 5 seconds
     
       // Clear interval when component unmounts
       return () => clearInterval(interval);
@@ -51,8 +121,15 @@ export default function Loans() {
   }
 
 
-  const handleTerms = () => {
+  const handleTerms = async(loan_type) => {
+    await AsyncStorage.setItem('loan_type', loan_type);
     router.push('terms');
+  }
+
+  const handlePayLoan = async(repayment_amount, loan_type) => {
+    await AsyncStorage.setItem('repayment_amount', repayment_amount);
+    await AsyncStorage.setItem('loan_type', loan_type);
+    router.push('payloan');
   }
 
    // start of activity
@@ -81,7 +158,7 @@ export default function Loans() {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{username}</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{name}</Text>
           <Text className='text-lg font-bold text-gray-800 mt-0'>Time to borrow money</Text>
           <View className="p-4">
             {/* loan image part */}
@@ -96,64 +173,98 @@ export default function Loans() {
         </View>
       </ImageBackground>
 
-      {/* top up part */}
-      <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
-        <TouchableOpacity
-          className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={handleTerms}
-        >
-          <FontAwesome6 name="add" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
-        </TouchableOpacity>
+<View className="space-y-6 mt-5">
 
-        <TouchableOpacity
-          className="bg-white py-3 px-5 rounded-xl items-center"
-          onPress={() => router.push("payloan/")}
-        >
-          <FontAwesome6 name="money-bills" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
-        </TouchableOpacity>
-      </View>
+  {/* Short-Term Loan Section */}
+  <View className="bg-yellow-600 p-4 mb-5 rounded-xl shadow-md">
+    <Text className="text-xl font-bold text-white mb-2">Short-Term Loan</Text>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Outstanding Loan</Text>
+      <Text className="text-white font-bold">KES. {totalSTL}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Interest</Text>
+      <Text className="text-white font-bold">30%</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Total Payable</Text>
+      <Text className="text-white font-bold">KES.{totalSTLRepayment}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Date taken</Text>
+      <Text className="text-white font-bold">{stlDate.split("T")[0]}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Due date</Text>
+      <Text className="text-white font-bold">{stlDueDate.split("T")[0]}</Text>
+    </View>
 
-      {/* saving part */}
+    <View className="flex-row justify-around">
+      <TouchableOpacity
+        className="bg-white py-3 px-5 rounded-xl items-center"
+        onPress={()=>handleTerms("STL")}
+        disabled={isDisabled}
+      >
+        <FontAwesome6 name="plus" size={24} color="black" />
+        <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        className="bg-white py-3 px-5 rounded-xl items-center"
+        onPress={() => handlePayLoan(totalSTLRepayment,"STL")}
+      >
+        <FontAwesome6 name="money-bills" size={24} color="black" />
+        <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+
+  {/* Long-Term Loan Section */}
+  <View className="bg-yellow-600 p-4 rounded-xl shadow-md">
+    <Text className="text-xl font-bold text-white mb-2">Long-Term Loan</Text>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Outstanding Loan</Text>
+      <Text className="text-white font-bold">KES. {totalLTL}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Interest</Text>
+      <Text className="text-white font-bold">10%</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Total Payable</Text>
+      <Text className="text-white font-bold">KES.{totalLTLRepayment}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Date taken</Text>
+      <Text className="text-white font-bold">{ltlDate.split("T")[0]}</Text>
+    </View>
+    <View className="flex-row justify-between items-center mb-4">
+      <Text className="text-white">Due data</Text>
+      <Text className="text-white font-bold">{ltlDueDate.split("T")[0]}</Text>
+    </View>
+
+    <View className="flex-row justify-around">
+      <TouchableOpacity
+        className="bg-white py-3 px-5 rounded-xl items-center"
+        onPress={()=>handleTerms("LTL")}
+        disabled={isDisabled} // Disable the button
+      >
+        <FontAwesome6 name="plus" size={24} color="black" />
+        <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        className="bg-white py-3 px-5 rounded-xl items-center"
+        onPress={() => handlePayLoan(totalLTLRepayment,"LTL")}
+      >
+        <FontAwesome6 name="money-bills" size={24} color="black" />
+        <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+
+</View>
       <View>
-        <Text className='font-bold mt-5'>My Loans</Text>
-        <View className='bg-yellow-600 rounded-lg'>
-        <View className='bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around'>
-          <View>
-            <Image source={require('../assets/images2/logo.png')} style={{width:40, height:40}} className='rounded-full'/>
-          </View>
-          <View>
-            <Text className='text-2xl font-bold'>Chamavault</Text>
-            <Text>borrowing to grow</Text>
-          </View>
-        </View>
-        <Text className='ml-5 font-bold'>{username}</Text>
-        <View className='p-2 mt-0 flex flex-row justify-around'>
-          <View>
-            <Text>Your loans</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>KES.{loan}</Text>
-          </View>
-        </View>
-        <View className='p-2 mt-0 flex flex-row justify-around'>
-          <View>
-            <Text>Annual rate</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>{loanInterest}%</Text>
-          </View>
-        </View>
-        <View className='p-2 mt-0 flex flex-row justify-around'>
-          <View>
-            <Text>Penality</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>KES.0.00</Text>
-          </View>
-        </View>
-        </View>
 
         {/* your activity part  */}
         <Text className='ml-1 font-bold mt-5'>Your activity</Text>

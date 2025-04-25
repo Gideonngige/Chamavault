@@ -14,20 +14,15 @@ import NavBar from './NavBar';
 import BottomTabs from './BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Carousel from 'react-native-reanimated-carousel';
-const InfoCard = ({ title, kes, interest, date, dateLabel }) => (
+const InfoCard = ({ title}) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
+    <View className="flex-row justify-between mb-1">
     <Text className="text-lg font-bold mb-2">{title}</Text>
-    <View className="flex-row justify-between mb-1">
-      <Text className="text-gray-950">Amount</Text>
-      <Text className="text-gray-950">{kes}</Text>
+    <Ionicons name="chevron-forward" size={24} color="black" />
     </View>
     <View className="flex-row justify-between mb-1">
-      <Text className="text-gray-950">Interest</Text>
-      <Text className="text-gray-950">{interest}%</Text>
-    </View>
-    <View className="flex-row justify-between">
-      <Text className="text-gray-950">{dateLabel}</Text>
-      <Text className="text-gray-950">{date}</Text>
+      <Text className="text-gray-950">Interest rate p.a</Text>
+      <Text className="text-gray-950">10%-30%</Text>
     </View>
   </View>
 );
@@ -161,42 +156,42 @@ useEffect(() => {
 // end of get savings function
 
 
-//  start get savings function
-useEffect(() => {
-  const getLoans = async () => {
-    const member_id = await AsyncStorage.getItem('member_id');
-    const selected_chama = await AsyncStorage.getItem('selected_chama');
-    try {
-      const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
+// //  start get loans function
+// useEffect(() => {
+//   const getLoans = async () => {
+//     const member_id = await AsyncStorage.getItem('member_id');
+//     const selected_chama = await AsyncStorage.getItem('selected_chama');
+//     try {
+//       const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
       
-      const response = await axios.get(url);
-      const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
-      const response2 = await axios.get(url2);
+//       const response = await axios.get(url);
+//       const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
+//       const response2 = await axios.get(url2);
       
-      if(response.status === 200 && response2.status === 200){
-        const loan = response.data.total_loan - response2.data.total_repayment;
-        // alert(response.data.total_loan)
-        setLoan(loan);
-        setLoanInterest(response.data.interest);
-        if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
-        else{setLoanDate(response.data.loan_date[0].loan_date);}
+//       if(response.status === 200 && response2.status === 200){
+//         const loan = response.data.total_loan - response2.data.total_repayment;
+//         // alert(response.data.total_loan)
+//         setLoan(loan);
+//         setLoanInterest(response.data.interest);
+//         if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
+//         else{setLoanDate(response.data.loan_date[0].loan_date);}
         
-      }
-    } 
-    catch (error) {
-      console.error("Error:", error);
-      return null;
-    }
-  }
-  const interval = setInterval(() => {
-    getLoans();
-  }, 5000); // 5 seconds
+//       }
+//     } 
+//     catch (error) {
+//       console.error("Error:", error);
+//       return null;
+//     }
+//   }
+//   const interval = setInterval(() => {
+//     getLoans();
+//   }, 5000); // 5 seconds
 
-  // Clear interval when component unmounts
-  return () => clearInterval(interval);
+//   // Clear interval when component unmounts
+//   return () => clearInterval(interval);
 
-},[email]);
-// end of get savings function
+// },[email]);
+// end of get loans function
 
 //go to saviings
 const goToSavings = () =>{
@@ -293,10 +288,7 @@ const renderItem = ({ item }) => (
         >
         <InfoCard
           title="Savings"
-          kes={saving}
           interest={interest}
-          date={savingDate.split("T")[0]}
-          dateLabel="Last saving"
         />
         </TouchableOpacity>
 
@@ -305,10 +297,7 @@ const renderItem = ({ item }) => (
         >
         <InfoCard
           title="Loans"
-          kes={loan}
           interest={loanInterest}
-          date={loanDate.split("T")[0]}
-          dateLabel="Last loan"
         />
         </TouchableOpacity>
       </View>
