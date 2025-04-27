@@ -16,8 +16,53 @@ export default function Saving() {
   const route = useRoute();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
+  // const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
   const [transactions, setTransactions] = useState([]);
+  const [chama, setChama] = useState("0");
+  const [saving, setSaving] = useState(0);
+  const [interest, setInterest] = useState(0);
+  const [savingDate, setSavingDate] = useState("N/A");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [penalty, setPenalty] = useState(0);
+
+
+
+  //  start get savings function
+useEffect(() => {
+  const getSavings = async () => {
+    const email = await AsyncStorage.getItem('email');
+    const name = await AsyncStorage.getItem('name');
+    const chama = await AsyncStorage.getItem('chama');
+    setName(name);
+    setEmail(email);
+    try {
+      const url = `https://backend1-1cc6.onrender.com/getContributions/${chama}/${email}/`;
+      const response = await axios.get(url);
+      
+      if(response.status === 200){
+        setSaving(response.data.total_contributions);
+        setInterest(response.data.interest);
+        setPenalty(response.data.penalty);
+        if(response.data.saving_date.length == 0){ setSavingDate("N/A"); }
+        else{setSavingDate(response.data.saving_date[0].contribution_date);}
+      }
+    } 
+    catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
+  
+  const interval = setInterval(() => {
+    getSavings();
+  }, 5000); // 5 seconds
+
+  // Clear interval when component unmounts
+  return () => clearInterval(interval);
+
+},[email]);
+// end of get savings function
 
   // fetch transactions data
   useEffect(() => {
@@ -46,9 +91,7 @@ export default function Saving() {
 
   // handle top up 
   const handleTopUp = () => {
-    navigation.navigate('contribution', {
-      phonenumber: phonenumber,
-    });
+   router.push("/contribution");
   };
   //end of handle top up
 
@@ -78,7 +121,7 @@ export default function Saving() {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{username}</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{name}</Text>
           <Text className='text-lg font-bold text-gray-800 mt-0'>Time to save your money</Text>
           <View className="p-4">
             {/* loan image part */}
@@ -89,7 +132,7 @@ export default function Saving() {
       >
         <View className="p-5">
           <Text className="text-xl font-bold text-gray-900">Your Savings</Text>
-          <Text className="text-2xl font-bold text-gray-800">KES. {savingAmount}</Text>
+          <Text className="text-2xl font-bold text-gray-800">KES. {saving}</Text>
         </View>
       </ImageBackground>
 
@@ -113,31 +156,15 @@ export default function Saving() {
       </View>
 
       {/* saving part */}
-
-      {/* go to invest */}
-      <TouchableOpacity className="bg-yellow-600 rounded-lg w-full mt-5 h-10 flex items-center justify-center" onPress={() => router.push('invest/')}>
-      <Text className="text-white font-bold">Invest</Text>
-      </TouchableOpacity>
-      {/* end of go to invest */}
       <View>
         <Text className='font-bold mt-5'>My savings</Text>
-        <View className='bg-yellow-600 rounded-lg'>
-        <View className='bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around'>
-          <View>
-            <Image source={require('../assets/images2/logo.png')} style={{width:40, height:40}} className='rounded-full'/>
-          </View>
-          <View>
-            <Text className='text-2xl font-bold'>Chamavault</Text>
-            <Text>saving for future</Text>
-          </View>
-        </View>
-        <Text className='ml-5 font-bold'>{username}</Text>
+        <View className='bg-yellow-600'>
         <View className='p-2 mt-0 flex flex-row justify-around'>
           <View>
             <Text>Your savings</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.{savingAmount}</Text>
+            <Text className='font-bold'>KES.{saving}</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>

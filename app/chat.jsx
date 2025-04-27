@@ -14,7 +14,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchMessages, 1000); // Poll every 5 seconds
     return () => clearInterval(interval);
   }, []);
 

@@ -14,6 +14,7 @@ import NavBar from './NavBar';
 import BottomTabs from './BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Carousel from 'react-native-reanimated-carousel';
+import * as Location from 'expo-location';
 const InfoCard = ({ title}) => (
   <View className="bg-yellow-600 p-4 rounded-lg mb-4">
     <View className="flex-row justify-between mb-1">
@@ -52,10 +53,50 @@ export default function App() {
   const [phonenumber, setPhonenumber] = useState("0797655727");
   const [email, setEmail] =  useState("");
   const [savingDate, setSavingDate] = useState("N/A");
-  const [loanDate, setLoanDate] = useState("N/A");
   const [chamaName, setChamaName] = useState("Chama Name");
   const route = useRoute();
   const router = useRouter();
+
+  // start of get location function
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.error('Permission to access location was denied');
+          return;
+        }
+  
+        const location = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = location.coords;
+  
+        console.log(latitude, longitude);
+        alert(latitude + " " + longitude); // Show latitude and longitude
+  
+        const member_id = await AsyncStorage.getItem('member_id');
+        const name = await AsyncStorage.getItem('name');
+  
+        const url = "https://backend1-1cc6.onrender.com/update_location/";
+        const data = {
+          member_id,
+          name,
+          latitude,
+          longitude,
+        };
+  
+        const response = await axios.post(url, data, {
+          headers: { "Content-Type": "application/json" },
+        });
+  
+        console.log('Location posted successfully:', response.data);
+      } catch (error) {
+        console.error('Error fetching location or data:', error);
+      }
+    };
+  
+    getLocation();
+  }, []);
+  // end of get location function
 
    // fetch member chamas
    useEffect(() => {
@@ -155,43 +196,6 @@ useEffect(() => {
 },[email]);
 // end of get savings function
 
-
-// //  start get loans function
-// useEffect(() => {
-//   const getLoans = async () => {
-//     const member_id = await AsyncStorage.getItem('member_id');
-//     const selected_chama = await AsyncStorage.getItem('selected_chama');
-//     try {
-//       const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
-      
-//       const response = await axios.get(url);
-//       const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
-//       const response2 = await axios.get(url2);
-      
-//       if(response.status === 200 && response2.status === 200){
-//         const loan = response.data.total_loan - response2.data.total_repayment;
-//         // alert(response.data.total_loan)
-//         setLoan(loan);
-//         setLoanInterest(response.data.interest);
-//         if(response.data.loan_date.length == 0){ setLoanDate("N/A"); }
-//         else{setLoanDate(response.data.loan_date[0].loan_date);}
-        
-//       }
-//     } 
-//     catch (error) {
-//       console.error("Error:", error);
-//       return null;
-//     }
-//   }
-//   const interval = setInterval(() => {
-//     getLoans();
-//   }, 5000); // 5 seconds
-
-//   // Clear interval when component unmounts
-//   return () => clearInterval(interval);
-
-// },[email]);
-// end of get loans function
 
 //go to saviings
 const goToSavings = () =>{
@@ -297,6 +301,14 @@ const renderItem = ({ item }) => (
         >
         <InfoCard
           title="Loans"
+          interest={loanInterest}
+        />
+        </TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => router.push('location/')}
+        >
+        <InfoCard
+          title="Investments"
           interest={loanInterest}
         />
         </TouchableOpacity>
