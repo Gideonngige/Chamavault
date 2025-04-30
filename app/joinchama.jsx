@@ -94,9 +94,9 @@ export default function Register(){
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-      <Text className="text-xl font-bold">ChamaVault</Text>
+      <Text className="text-xl font-bold font-serif">ChamaVault</Text>
       <View className="w-full z-10">
-  <Text className="text-lg font-bold">Select Chama</Text>
+  <Text className="text-lg font-bold font-serif">Select Chama</Text>
   <DropDownPicker
     open={open}
     value={value}
@@ -123,13 +123,13 @@ export default function Register(){
 
 <View className="w-full z-0">
   <TouchableOpacity
-    className="w-full bg-yellow-600 p-4 mb-6 rounded-lg mt-6"
+    className="w-full bg-green-600 p-4 mb-6 rounded-lg mt-6"
     onPress={handleJoinChama}
   >
     {isLoading ? (
       <ActivityIndicator size="large" color="#fff" />
     ) : (
-      <Text className="text-white text-center font-semibold text-lg">
+      <Text className="text-white text-center font-semibold text-lg font-serif">
         Join Chama
       </Text>
     )}

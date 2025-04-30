@@ -115,53 +115,53 @@ export default function Register(){
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-      <Text className="text-xl font-bold">ChamaVault</Text>
+      <Text className="text-xl font-serif font-bold">ChamaVault</Text>
         
-      <Text className="w-full text-lg font-bold">Enter your fullname</Text>
+      <Text className="w-full text-lg font-bold font-serif mt-5">Enter your fullname</Text>
       <TextInput 
       placeholder="e.g John Doe"
       value={fullname}
       onChangeText={setFullname}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold">Enter your phonenumber</Text>
+      <Text className="w-full text-lg font-bold font-serif">Enter your phonenumber</Text>
       <TextInput 
       placeholder="e.g 0712345678"
       value={phonenumber}
       onChangeText={setPhonenumber}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold">Enter your email</Text>
+      <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
       <TextInput 
       placeholder="e.g johndoe@example.com"
       keyboardType="email-address"
       value={email}
       onChangeText={setEmail}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold">Enter your password</Text>
+      <Text className="w-full text-lg font-bold font-serif">Enter your password</Text>
       <TextInput 
       placeholder="Enter your password"
       secureTextEntry 
       value={password}
       onChangeText={setPassword}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold">Confirm your password</Text>
+      <Text className="w-full text-lg font-bold font-serif">Confirm your password</Text>
       <TextInput 
       placeholder="Confirm your password"
       secureTextEntry 
       value={confirmPassword}
       onChangeText={setConfirmPassword}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleRegister}>
-        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Register</Text>}
+      <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleRegister}>
+        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-serif font-semibold text-lg">Register</Text>}
       </TouchableOpacity> 
       <View className="flex-row justify-center mt-4 mb-6">
-      <Text className="text-lg">Already have an account? </Text>
-      <TouchableOpacity onPress={() => router.push("/")}>
-      <Text className="text-lg text-yellow-600">Login</Text>
+      <Text className="text-lg font-serif">Already have an account? </Text>
+      <TouchableOpacity onPress={() => router.push("/login")}>
+      <Text className="text-lg text-yellow-600 font-serif">Login</Text>
       </TouchableOpacity>
       </View>
       <Toast/>

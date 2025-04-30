@@ -1,7 +1,7 @@
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 export default function Location() {
     const [members, setMembers] = useState([]);
@@ -15,8 +15,8 @@ export default function Location() {
           // Replace with your Django API URL
           const response = await axios.get('https://backend1-1cc6.onrender.com/get_all_locations/');
           setMembers(response.data); // Store the response data (list of members)
-          console.log("Hello" + response.data[0].latitude);
-          alert(response.data[0].latitude);
+          // console.log("Hello" + response.data[0].latitude);
+          // alert(response.data[0].latitude);
         } catch (error) {
           console.error("Error fetching members' locations:", error);
         }
@@ -30,7 +30,7 @@ export default function Location() {
     }, []); // Empty dependency array makes this effect run only once on mount
 
     if(isLoading) {
-        return <Text>Loading...</Text>; // Show loading indicator while fetching data
+        return <ActivityIndicator size="large" color="#FFA500" />;
     }
 
 

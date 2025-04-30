@@ -59,25 +59,25 @@ export default function ForgotPassword(){
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-      <Text className="text-xl font-bold">ChamaVault</Text>
-      <Text className="w-full text-lg font-bold">Enter your email</Text>
+      <Text className="text-xl font-bold font-serif mb-5">ChamaVault</Text>
+      <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
       <TextInput 
       placeholder="Enter your email"
       keyboardType="email-address"
       value={email}
       onChangeText={setEmail}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
 
 <View className="w-full z-0">
   <TouchableOpacity
-    className="w-full bg-yellow-600 p-4 mb-6 rounded-lg mt-6"
+    className="w-full bg-green-600 p-4 mb-6 rounded-lg mt-6"
     onPress={handleForgotPassword}
   >
     {isLoading ? (
       <ActivityIndicator size="large" color="#fff" />
     ) : (
-      <Text className="text-white text-center font-semibold text-lg">
+      <Text className="text-white text-center font-semibold text-lg font-serif">
         Reset Password
       </Text>
     )}

@@ -4,7 +4,7 @@
     "slug": "Chamavault",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images2/logo.png",
+    "icon": "./assets/images2/splash.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -32,7 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images2/logo.png",
+          "image": "./assets/images2/splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

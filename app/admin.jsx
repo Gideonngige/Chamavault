@@ -80,57 +80,57 @@ export default function Admin() {
         <View className="flex-1 justify-center items-center p-5">
           
           {/* Welcome Message */}
-          <Text className="w-full text-xl font-bold mb-3">Hi, {name}</Text>
+          <Text className="w-full text-xl font-bold mb-3 font-serif">Hi, {name}</Text>
 
           {/* Statistics Section */}
           <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-gray-900 text-lg font-bold">{chama}</Text>
+              <Text className="text-gray-900 text-lg font-bold font-serif">{chama}</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-gray-500">Total Members</Text>
-              <Text className="text-lg font-bold">{totalmembers}</Text>
+              <Text className="text-gray-500 font-serif">Total Members</Text>
+              <Text className="text-lg font-bold font-serif">{totalmembers}</Text>
             </View>
           </View>
 
           <View className="w-full flex flex-row justify-between mb-6">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-gray-500">Total Savings</Text>
-              <Text className="text-lg font-bold">KES.{totalSavings}</Text>
+              <Text className="text-gray-500 font-serif">Total Savings</Text>
+              <Text className="text-lg font-bold font-serif">KES.{totalSavings}</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-gray-500">Total Loans</Text>
-              <Text className="text-lg font-bold">KES.{totalLoans}</Text>
+              <Text className="text-gray-500 font-serif">Total Loans</Text>
+              <Text className="text-lg font-bold font-serif">KES.{totalLoans}</Text>
             </View>
           </View>
 
           {/* Manage Roles Section */}
-          <Text className="w-full text-lg font-bold mb-3">Manage Roles</Text>
+          <Text className="w-full text-lg font-bold mb-3 font-serif">Manage Roles</Text>
 
           {/* Button Grid */}
           <View className="w-full flex-row flex-wrap justify-between">
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleManageroles}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Manage Roles</Text>}
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Manage Roles</Text>}
             </TouchableOpacity>
 
-            <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleManagemembers}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Manage Members</Text>}
+            <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2 font-serif" onPress={handleManagemembers}>
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Manage Members</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleChat}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Chat Message</Text>}
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Chat Message</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleSchedule}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Schedule Meeting</Text>}
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Schedule Meeting</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handlePoll}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Poll</Text>}
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Poll</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleProfile}>
-              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Go To Profile</Text>}
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Go To Profile</Text>}
             </TouchableOpacity>
           </View>
         </View>

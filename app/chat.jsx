@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar, SafeAreaView, ScrollView, } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -59,6 +59,8 @@ const ChatScreen = () => {
   // end of function to send message
 
   return (
+    <SafeAreaView className="flex-1 bg-white">
+    <ScrollView nestedScrollEnabled={true} className="p-2 mb-20">
     <View style={styles.container}>
       <FlatList
         data={messages}
@@ -68,9 +70,9 @@ const ChatScreen = () => {
             styles.messageBubble,
             item.sender === name ? styles.sentMessage : styles.receivedMessage
           ]}>
-            <View className="items-start flex-row">
-              <Image source={require('../assets/images2/profile3.png')} style={{width:20, height:20}} className='rounded-full'/>
-              <Text className='font-bold ml-2'>{item.sender}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image source={require('../assets/images2/profile3.png')} style={{ width: 20, height: 20, borderRadius: 999 }} />
+              <Text style={{ fontWeight: 'bold', marginLeft: 8 }}>{item.sender}</Text>
             </View>
             <Text style={styles.messageText}>{item.text}</Text>
             <Text style={styles.timestamp}>
@@ -78,6 +80,7 @@ const ChatScreen = () => {
             </Text>
           </View>
         )}
+        
       />
 
       <View style={styles.inputContainer}>
@@ -97,6 +100,8 @@ const ChatScreen = () => {
             translucent={true}
             />
     </View>
+    </ScrollView>
+    </SafeAreaView>
   );
 };
 

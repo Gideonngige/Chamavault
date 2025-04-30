@@ -79,15 +79,15 @@ const saveTransaction = async (transactionRef, amount, email) => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className="text-gray-950">Contribution amount</Text>
-          <Text className="text-yellow-600 font-bold text-xl">KES.{display}</Text>
+          <Text className="text-gray-950 text-lg font-serif">Contribution amount</Text>
+          <Text className="text-yellow-600 font-bold text-xl font-serif">KES.{display}</Text>
 
           <TextInput
             placeholder="Enter contribution amount"
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg"
+            className="w-full p-4 bg-white rounded-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
           />
 
           {/* Payment Method Selection */}
@@ -95,12 +95,12 @@ const saveTransaction = async (transactionRef, amount, email) => {
 <View className="w-full flex-row justify-center mb-4">
   <TouchableOpacity
     onPress={() => setSelectedPaymentMethod("card")}
-    className={`p-3 mx-2 rounded-xl shadow-md w-40 ${
+    className={`p-6 mr-1 rounded-sm ${
       selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-200"
     }`}
   >
     <Text
-      className={`text-center font-medium ${
+      className={`text-center font-serif font-medium ${
         selectedPaymentMethod === "card" ? "text-white" : "text-gray-800"
       }`}
     >
@@ -110,12 +110,12 @@ const saveTransaction = async (transactionRef, amount, email) => {
 
   <TouchableOpacity
     onPress={() => setSelectedPaymentMethod("mobile_money")}
-    className={`p-3 mx-2 rounded-xl shadow-md w-40 ${
+    className={`p-6 rounded-sm ml-1 ${
       selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-200"
     }`}
   >
     <Text
-      className={`text-center font-medium ${
+      className={`text-center font-medium font-serif ${
         selectedPaymentMethod === "mobile_money" ? "text-white" : "text-gray-800"
       }`}
     >
@@ -126,13 +126,13 @@ const saveTransaction = async (transactionRef, amount, email) => {
 
 
           <TouchableOpacity
-            className="w-full bg-yellow-600 p-4 rounded-lg"
+            className="w-full bg-green-600 p-4 rounded-sm"
             onPress={() => setShowPaystack(true)}
           >
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg">Proceed to Payment</Text>
+              <Text className="text-white text-center font-semibold text-lg font-serif">Proceed to Payment</Text>
             )}
           </TouchableOpacity>
 

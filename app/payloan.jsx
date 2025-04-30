@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Modal,
+  Image,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -99,50 +100,52 @@ export default function PayLoan() {
       <ScrollView className="p-4">
         <View className="flex-1 justify-center items-center space-y-6">
           <Text className="text-lg font-bold text-gray-800 w-full">
-            Your Loan: <Text className="text-yellow-600">KES.{loan}</Text>
+            My Loan: <Text className="text-yellow-600 font-serif">KES.{loan}</Text>
           </Text>
 
           <View className="w-full space-y-1">
-            <Text className="text-gray-700 text-base">Repayment Amount</Text>
-            <Text className="text-yellow-600 font-bold text-2xl">KES.{display}</Text>
+            <Text className="text-gray-700 text-base font-serif">Repayment Amount</Text>
+            <Text className="text-yellow-600 font-bold text-2xl font-serif">KES.{display}</Text>
           </View>
+
+          <Image source={require('../assets/images2/payloan.png')} className="w-full h-56 mb-0" style={{ resizeMode:"contain", height:300}}/>
 
           <TextInput
             placeholder="Enter repayment amount"
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="w-full p-4 rounded-xl bg-white border border-yellow-500 text-gray-800 text-lg shadow-md"
+            className="w-full p-4 rounded-sm bg-white border border-yellow-500 text-gray-800 text-lg font-serif"
           />
 
           <View className="w-full flex-row justify-between mt-2">
             <TouchableOpacity
               onPress={() => setSelectedPaymentMethod("card")}
-              className={`flex-1 mr-1 p-3 rounded-xl ${
+              className={`flex-1 mr-1 p-6 rounded-sm ${
                 selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-300"
               }`}
             >
-              <Text className="text-white text-center font-semibold">Pay with Card</Text>
+              <Text className="text-white text-center font-semibold font-serif">Pay with Card</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setSelectedPaymentMethod("mobile_money")}
-              className={`flex-1 ml-1 p-3 rounded-xl ${
+              className={`flex-1 ml-1 p-6 rounded-sm ${
                 selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-300"
               }`}
             >
-              <Text className="text-white text-center font-semibold">Pay with M-Pesa</Text>
+              <Text className="text-white text-center font-semibold font-serif">Pay with M-Pesa</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            className="w-full bg-yellow-600 p-4 rounded-xl mt-4 shadow-md"
+            className="w-full bg-green-600 p-4 rounded-sm mt-4"
             onPress={() => setShowPaystack(true)}
           >
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-bold text-lg">Proceed to Payment</Text>
+              <Text className="text-white text-center font-bold text-lg font-serif">Proceed to Payment</Text>
             )}
           </TouchableOpacity>
 

@@ -137,12 +137,12 @@ useEffect(() => {
     return(
       <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
           <View>
-            <Text>{transactionType}</Text>
-            <Text>Chama{chama}</Text>
+            <Text className='font-serif'>{transactionType}</Text>
+            <Text className='font-serif'>Chama{chama}</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.{amount}</Text>
-            <Text className='font-bold'>{transactionTime}</Text>
+            <Text className='font-bold font-serif'>KES.{amount}</Text>
+            <Text className='font-bold font-serif'>{transactionTime}</Text>
           </View>
         </View>
     );
@@ -158,8 +158,8 @@ useEffect(() => {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{name}</Text>
-          <Text className='text-lg font-bold text-gray-800 mt-0'>Time to borrow money</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0 font-serif">Welcome back,{name}</Text>
+          <Text className='text-lg font-bold text-gray-800 mt-0 font-serif'>Time to borrow money</Text>
           <View className="p-4">
             {/* loan image part */}
       <ImageBackground
@@ -168,35 +168,35 @@ useEffect(() => {
         style={{ resizeMode: 'contain', width: '100%', height: 200 }}
       >
         <View className="p-5">
-          <Text className="text-xl font-bold text-gray-900">Your Loans</Text>
-          <Text className="text-2xl font-bold text-gray-800">KES. {loan}</Text>
+          <Text className="text-xl font-bold text-gray-900 font-serif">Your Loans</Text>
+          <Text className="text-2xl font-bold text-gray-800 font-serif">KES. {loan}</Text>
         </View>
       </ImageBackground>
 
 <View className="space-y-6 mt-5">
 
   {/* Short-Term Loan Section */}
-  <View className="bg-yellow-600 p-4 mb-5 rounded-xl shadow-md">
-    <Text className="text-xl font-bold text-white mb-2">Short-Term Loan</Text>
+  <View className="bg-yellow-600 p-4 mb-5 rounded-sm">
+    <Text className="text-xl font-bold text-white mb-2 font-serif">Short-Term Loan</Text>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Outstanding Loan</Text>
-      <Text className="text-white font-bold">KES. {totalSTL}</Text>
+      <Text className="text-white font-serif">Outstanding Loan</Text>
+      <Text className="text-white font-bold font-serif">KES. {totalSTL}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Interest</Text>
-      <Text className="text-white font-bold">30%</Text>
+      <Text className="text-white font-serif">Interest</Text>
+      <Text className="text-white font-bold font-serif">30%</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Total Payable</Text>
-      <Text className="text-white font-bold">KES.{totalSTLRepayment}</Text>
+      <Text className="text-white font-serif">Total Payable</Text>
+      <Text className="text-white font-bold font-serif">KES.{totalSTLRepayment}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Date taken</Text>
-      <Text className="text-white font-bold">{stlDate.split("T")[0]}</Text>
+      <Text className="text-white font-serif">Date taken</Text>
+      <Text className="text-white font-bold font-serif">{stlDate.split("T")[0]}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Due date</Text>
-      <Text className="text-white font-bold">{stlDueDate.split("T")[0]}</Text>
+      <Text className="text-white font-serif">Due date</Text>
+      <Text className="text-white font-bold font-serif">{stlDueDate.split("T")[0]}</Text>
     </View>
 
     <View className="flex-row justify-around">
@@ -206,7 +206,7 @@ useEffect(() => {
         disabled={isDisabled}
       >
         <FontAwesome6 name="plus" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
+        <Text className="text-gray-900 font-medium mt-1 font-serif">Take Loan</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -214,33 +214,33 @@ useEffect(() => {
         onPress={() => handlePayLoan(totalSTLRepayment,"STL")}
       >
         <FontAwesome6 name="money-bills" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
+        <Text className="text-gray-900 font-medium mt-1 font-serif">Pay Loan</Text>
       </TouchableOpacity>
     </View>
   </View>
 
   {/* Long-Term Loan Section */}
-  <View className="bg-yellow-600 p-4 rounded-xl shadow-md">
-    <Text className="text-xl font-bold text-white mb-2">Long-Term Loan</Text>
+  <View className="bg-yellow-600 p-4 rounded-sm">
+    <Text className="text-xl font-bold text-white mb-2 font-serif">Long-Term Loan</Text>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Outstanding Loan</Text>
-      <Text className="text-white font-bold">KES. {totalLTL}</Text>
+      <Text className="text-white font-serif">Outstanding Loan</Text>
+      <Text className="text-white font-bold font-serif">KES. {totalLTL}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Interest</Text>
-      <Text className="text-white font-bold">10%</Text>
+      <Text className="text-white font-serif">Interest</Text>
+      <Text className="text-white font-bold font-serif">10%</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Total Payable</Text>
-      <Text className="text-white font-bold">KES.{totalLTLRepayment}</Text>
+      <Text className="text-white font-serif">Total Payable</Text>
+      <Text className="text-white font-bold font-serif">KES.{totalLTLRepayment}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Date taken</Text>
-      <Text className="text-white font-bold">{ltlDate.split("T")[0]}</Text>
+      <Text className="text-white font-serif">Date taken</Text>
+      <Text className="text-white font-bold font-serif">{ltlDate.split("T")[0]}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white">Due data</Text>
-      <Text className="text-white font-bold">{ltlDueDate.split("T")[0]}</Text>
+      <Text className="text-white font-serif">Due date</Text>
+      <Text className="text-white font-bold font-serif">{ltlDueDate.split("T")[0]}</Text>
     </View>
 
     <View className="flex-row justify-around">
@@ -250,7 +250,7 @@ useEffect(() => {
         disabled={isDisabled} // Disable the button
       >
         <FontAwesome6 name="plus" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1">Take Loan</Text>
+        <Text className="text-gray-900 font-medium mt-1 font-serif">Take Loan</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -258,7 +258,7 @@ useEffect(() => {
         onPress={() => handlePayLoan(totalLTLRepayment,"LTL")}
       >
         <FontAwesome6 name="money-bills" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1">Pay Loan</Text>
+        <Text className="text-gray-900 font-medium mt-1 font-serif">Pay Loan</Text>
       </TouchableOpacity>
     </View>
   </View>
@@ -267,7 +267,7 @@ useEffect(() => {
       <View>
 
         {/* your activity part  */}
-        <Text className='ml-1 font-bold mt-5'>Your activity</Text>
+        <Text className='ml-1 font-bold mt-5 font-serif'>My activities</Text>
 
         <FlatList
             data={transactions} // Array of data

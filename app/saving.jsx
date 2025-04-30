@@ -100,12 +100,12 @@ useEffect(() => {
     return(
       <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
           <View>
-            <Text>{transactionType}</Text>
+            <Text className='font-serif'>{transactionType}</Text>
             <Text>Chama{chama}</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.{amount}</Text>
-            <Text className='font-bold'>{transactionTime}</Text>
+            <Text className='font-bold font-serif'>KES.{amount}</Text>
+            <Text className='font-bold font-serif'>{transactionTime}</Text>
           </View>
         </View>
     );
@@ -121,8 +121,8 @@ useEffect(() => {
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0">Welcome back,{name}</Text>
-          <Text className='text-lg font-bold text-gray-800 mt-0'>Time to save your money</Text>
+          <Text className="text-3xl font-bold text-gray-800 mb-0 font-serif">Welcome back,{name}</Text>
+          <Text className='text-lg font-bold text-gray-800 mt-0 font-serif'>Time to save your money</Text>
           <View className="p-4">
             {/* loan image part */}
       <ImageBackground
@@ -131,19 +131,19 @@ useEffect(() => {
         style={{ resizeMode: 'contain', width: '100%', height: 200 }}
       >
         <View className="p-5">
-          <Text className="text-xl font-bold text-gray-900">Your Savings</Text>
-          <Text className="text-2xl font-bold text-gray-800">KES. {saving}</Text>
+          <Text className="text-xl font-bold text-gray-900 font-serif">My Savings</Text>
+          <Text className="text-2xl font-bold text-gray-800 font-serif">KES. {saving}</Text>
         </View>
       </ImageBackground>
 
       {/* top up part */}
       <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
         <TouchableOpacity
-          className="bg-white py-3 px-5 rounded-xl items-center"
+          className="bg-white py-3 px-5 rounded-xl items-center font-serif"
           onPress={handleTopUp}
         >
           <FontAwesome6 name="add" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Top up</Text>
+          <Text className="text-gray-900 font-medium mt-1 font-serif">Top up</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -151,7 +151,7 @@ useEffect(() => {
           onPress={() => alert("Coming soon!")}
         >
           <FontAwesome6 name="money-bills" size={24} color="black" />
-          <Text className="text-gray-900 font-medium mt-1">Withdraw</Text>
+          <Text className="text-gray-900 font-medium mt-1 font-serif">Withdraw</Text>
         </TouchableOpacity>
       </View>
 
@@ -161,32 +161,32 @@ useEffect(() => {
         <View className='bg-yellow-600'>
         <View className='p-2 mt-0 flex flex-row justify-around'>
           <View>
-            <Text>Your savings</Text>
+            <Text className='font-serif'>Your savings</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.{saving}</Text>
-          </View>
-        </View>
-        <View className='p-2 mt-0 flex flex-row justify-around'>
-          <View>
-            <Text>Annual rate</Text>
-          </View>
-          <View>
-            <Text className='font-bold'>{interest}%</Text>
+            <Text className='font-bold font-serif'>KES.{saving}</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>
           <View>
-            <Text>Penality</Text>
+            <Text className='font-serif'>Annual rate</Text>
           </View>
           <View>
-            <Text className='font-bold'>KES.{penalty}</Text>
+            <Text className='font-bold font-serif'>{interest}%</Text>
+          </View>
+        </View>
+        <View className='p-2 mt-0 flex flex-row justify-around'>
+          <View>
+            <Text className='font-serif'>Penality</Text>
+          </View>
+          <View>
+            <Text className='font-bold font-serif'>KES.{penalty}</Text>
           </View>
         </View>
         </View>
 
         {/* your activity part  */}
-        <Text className='ml-1 font-bold mt-5'>Your activity</Text>
+        <Text className='ml-1 font-bold mt-5'>My activities</Text>
 
         <FlatList
                 data={transactions} // Array of data

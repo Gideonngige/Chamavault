@@ -44,7 +44,7 @@ export default function Chama(){
         setRentExpense(response4.data.total_rent);
         setTravelExpense(response4.data.total_travel);
         setBusinessExpense(response4.data.total_business);
-        alert("Total", response.data.total_members);
+        // alert("Total", response.data.total_members);
       }
 
     }
@@ -84,10 +84,10 @@ const Contribution = ({name, contribution_date, amount}) => {
   return(
     <View className='w-full bg-yellow-600 mt-4 mb-4 p-2'>
     <View className='flex-row justify-between'>
-        <Text className='font-bold text-lg'>{name}</Text>
-        <Text className='font-bold text-lg'>{contribution_date}</Text>
+        <Text className='font-bold text-lg font-serif'>{name}</Text>
+        <Text className='font-bold text-lg font-serif'>{contribution_date}</Text>
     </View>
-    <Text className='font-bold text-lg mt-2'>KES.{amount}</Text>
+    <Text className='font-bold text-lg mt-2 font-serif'>KES.{amount}</Text>
 </View>
   )
 }
@@ -97,7 +97,7 @@ const Contribution = ({name, contribution_date, amount}) => {
 const Alert = () => {
   return (
     <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-      <Text className="text-white font-bold">No contributions</Text>
+      <Text className="text-white font-bold font-serif">No contributions</Text>
     </View>
   );
 };
@@ -110,43 +110,43 @@ const Alert = () => {
             {/* savings and loan part */}
             <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold">KES.{totalSavings}</Text>
-              <Text className="text-gray-900">Total savings</Text>
+              <Text className="text-lg font-bold font-serif">KES.{totalSavings}</Text>
+              <Text className="text-gray-900 font-serif">Total savings</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold">KES.{totalLoans}</Text>
-              <Text className="text-gray-500">Total loans</Text>
+              <Text className="text-lg font-bold font-serif">KES.{totalLoans}</Text>
+              <Text className="text-gray-500 font-serif">Total loans</Text>
             </View>
           </View>
           {/* expenses */}
-          <Text className='w-full text-lg font-bold ml-4'>Expenses</Text>
+          <Text className='w-full text-lg font-bold ml-4 font-serif'>Expenses</Text>
           <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold">KES.{rentExpense}</Text>
-              <Text className="text-gray-900">Rent</Text>
+              <Text className="text-lg font-bold font-serif">KES.{rentExpense}</Text>
+              <Text className="text-gray-900 font-serif">Rent</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold">KES.{travelExpense}</Text>
-              <Text className="text-gray-500">Travel</Text>
+              <Text className="text-lg font-bold font-serif">KES.{travelExpense}</Text>
+              <Text className="text-gray-500 font-serif">Travel</Text>
             </View>
           </View>
           <View className="w-full bg-white p-4 rounded-lg shadow-lg flex-1 mb-4 mx-2">
-              <Text className="text-lg font-bold">KES.{businessExpense}</Text>
-              <Text className="text-gray-500">Business</Text>
+              <Text className="text-lg font-bold font-serif">KES.{businessExpense}</Text>
+              <Text className="text-gray-500 font-serif">Business</Text>
             </View>
           {/* end of expenses */}
           {/* end of saving and laon */}
 
               {/* members button */}
               <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
-                <Text className='font-bold'>Members {totalmembers}</Text>
+                <Text className='font-bold font-serif'>Members {totalmembers}</Text>
                 <Ionicons name="chevron-forward" size={24} color="black" />
               </TouchableOpacity>
               {/* end of members button */}
 
               {/* roles part */}
               <View className='w-full mt-5'>
-                <Text className='font-bold text-lg'>Members contribution</Text>
+                <Text className='font-bold text-lg font-serif'>Members contribution</Text>
               </View>
               {/* end of roles part */}
 
@@ -154,19 +154,35 @@ const Alert = () => {
               <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
-                <Text className='font-bold'>Print Saving History</Text>
+                <Text className='font-bold font-serif'>Print Saving History</Text>
                 <Entypo name="print" size={24} color="black" />
               </TouchableOpacity>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
-                <Text className='font-bold'>Print Loan History</Text>
+                <Text className='font-bold font-serif'>Print Loan History</Text>
                 <Entypo name="print" size={24} color="black" />
               </TouchableOpacity>
             </View>
             
           </View>
           {/* end of part to print transaction */}
+
+          {/* defaulter */}
+          <View className="w-full flex flex-row justify-between mb-4">
+            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
+                <Text className='font-bold font-serif'>Defaulters</Text>
+              </TouchableOpacity>
+            </View>
+            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("location/")}>
+                <Text className='font-bold font-serif'>Defaulters Location</Text>
+              </TouchableOpacity>
+            </View>
+            
+          </View>
+          {/* defaulters */}
 
               {/* member and their contribution view */}
                <View className='w-full'>

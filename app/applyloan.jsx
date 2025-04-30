@@ -117,22 +117,22 @@ useEffect(() => {
       />
     </View>
 
-      <Text className="w-full mt-4 text-lg font-bold">Enter loan amount</Text>
+      <Text className="w-full mt-4 text-lg font-bold font-serif">Enter loan amount</Text>
       <TextInput 
       placeholder="Enter loan amount"
       value={loanAmount}
       onChangeText={setLoanAmount}
       keyboardType="numeric"
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
 
-      <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleApplyLoan}>
-      {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Apply Loan</Text> }      
+      <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleApplyLoan}>
+      {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Apply Loan</Text> }      
       </TouchableOpacity>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-     <Text>Read our terms & conditions </Text>
+     <Text className='font-serif text-lg'>Read our terms & conditions </Text>
      <TouchableOpacity className='mb-40' onPress={() => router.push("/terms")}>
-     <Text style={{ color: '#eab308', textDecorationLine: 'underline' }}>here</Text>
+     <Text style={{ color: '#eab308', textDecorationLine: 'underline' }} className='font-serif text-lg'>here</Text>
     </TouchableOpacity>
     </View>
 
