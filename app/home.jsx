@@ -251,7 +251,7 @@ const renderItem = ({ item }) => (
       {/* Header */}
     <View className="mb-2 w-full">
   <TouchableOpacity
-    className="bg-green-600 p-2 rounded-lg flex-row items-center mb-2"
+    className="bg-yellow-600 p-2 rounded-lg flex-row items-center mb-2"
     onPress={handleProfile}
   >
     <Image 
@@ -273,7 +273,7 @@ const renderItem = ({ item }) => (
 
   <Toast />
 </View>
-      <Text className="text-lg align-middle font-bold text-green-600">{chamaName}</Text>
+      <Text className="text-lg align-middle font-bold text-yellow-600">{chamaName}</Text>
 
       <Carousel
         data={data}

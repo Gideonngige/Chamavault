@@ -161,7 +161,7 @@ export default function Register(){
       <View className="flex-row justify-center mt-4 mb-6">
       <Text className="text-lg font-serif">Already have an account? </Text>
       <TouchableOpacity onPress={() => router.push("/login")}>
-      <Text className="text-lg text-yellow-600 font-serif">Login</Text>
+      <Text className="text-lg text-yellow-600 font-serif mb-40">Login</Text>
       </TouchableOpacity>
       </View>
       <Toast/>

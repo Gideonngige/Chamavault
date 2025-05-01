@@ -16,6 +16,8 @@ export default function Saving() {
   const route = useRoute();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
   // const { username, email, chama, savingAmount, interest, penalty, phonenumber} = route.params;
   const [transactions, setTransactions] = useState([]);
   const [chama, setChama] = useState("0");
@@ -36,6 +38,7 @@ useEffect(() => {
     const chama = await AsyncStorage.getItem('chama');
     setName(name);
     setEmail(email);
+    setIsLoadingData(true);
     try {
       const url = `https://backend1-1cc6.onrender.com/getContributions/${chama}/${email}/`;
       const response = await axios.get(url);
@@ -52,16 +55,14 @@ useEffect(() => {
       console.error("Error:", error);
       return null;
     }
+    finally{
+      setIsLoadingData(false);
+    }
   }
-  
-  const interval = setInterval(() => {
-    getSavings();
-  }, 5000); // 5 seconds
-
-  // Clear interval when component unmounts
-  return () => clearInterval(interval);
+  getSavings();
 
 },[email]);
+
 // end of get savings function
 
   // fetch transactions data
@@ -70,6 +71,7 @@ useEffect(() => {
     const fetchTransactions = async() => {
        const email = await AsyncStorage.getItem('email');
        const chama_id = await AsyncStorage.getItem('chama');
+       setIsLoadingTransactions(true);
       axios.get(`https://backend1-1cc6.onrender.com/transactions/Contribution/${email}/${chama_id}/`)
           .then((response) => {
             setTransactions(response.data);
@@ -77,6 +79,9 @@ useEffect(() => {
           })
           .catch((error) => {
             console.error(error);
+          })
+          .finally(() => {
+            setIsLoadingTransactions(false);
           });
 
     }
@@ -112,9 +117,6 @@ useEffect(() => {
   }
   // end of activity
 
-  if (isLoading) {
-          return <ActivityIndicator size="large" color="#FFA500" />;
-  }
   return (
     <SafeAreaView  className="flex-1 bg-white">
       <ScrollView  className="p-4">
@@ -132,7 +134,7 @@ useEffect(() => {
       >
         <View className="p-5">
           <Text className="text-xl font-bold text-gray-900 font-serif">My Savings</Text>
-          <Text className="text-2xl font-bold text-gray-800 font-serif">KES. {saving}</Text>
+          <Text className="text-2xl font-bold text-gray-800 font-serif">{isLoadingData ? "Loading..." : `${saving}`}</Text>
         </View>
       </ImageBackground>
 
@@ -164,7 +166,7 @@ useEffect(() => {
             <Text className='font-serif'>Your savings</Text>
           </View>
           <View>
-            <Text className='font-bold font-serif'>KES.{saving}</Text>
+            <Text className='font-bold font-serif'>{isLoadingData ? "Loading..." : `KES.${saving}`}</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>
@@ -172,7 +174,7 @@ useEffect(() => {
             <Text className='font-serif'>Annual rate</Text>
           </View>
           <View>
-            <Text className='font-bold font-serif'>{interest}%</Text>
+            <Text className='font-bold font-serif'> {isLoadingData ? "Loading..." : `${interest}%`}</Text>
           </View>
         </View>
         <View className='p-2 mt-0 flex flex-row justify-around'>
@@ -180,7 +182,7 @@ useEffect(() => {
             <Text className='font-serif'>Penality</Text>
           </View>
           <View>
-            <Text className='font-bold font-serif'>KES.{penalty}</Text>
+            <Text className='font-bold font-serif'>{isLoadingData ? "Loading..." : `KES.${penalty}`}</Text>
           </View>
         </View>
         </View>
@@ -188,13 +190,18 @@ useEffect(() => {
         {/* your activity part  */}
         <Text className='ml-1 font-bold mt-5'>My activities</Text>
 
-        <FlatList
-                data={transactions} // Array of data
-                keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
-                renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
-                showsVerticalScrollIndicator={false} // Hides the scrollbar
-                listMode="SCROLLVIEW"
-            />
+        {isLoadingTransactions ? <Text className='text-lg font-bold'>Loading...</Text> : (
+           <FlatList
+           data={transactions} // Array of data
+           keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
+           renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
+           showsVerticalScrollIndicator={false} // Hides the scrollbar
+           listMode="SCROLLVIEW"
+       />
+
+        )}
+
+       
         
       </View>
 

@@ -66,7 +66,7 @@ export default function ForgotPassword(){
       keyboardType="email-address"
       value={email}
       onChangeText={setEmail}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+      className="w-full p-4 bg-white rounded-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
 
 <View className="w-full z-0">

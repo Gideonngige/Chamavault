@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NavBar from './NavBar';
 
 export default function Loans() {
   const navigation = useNavigation();
@@ -154,7 +155,7 @@ useEffect(() => {
     }
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4">
+      <ScrollView className="p-4 mb-20" nestedScrollEnabled={true}>
         <View className="flex-row justify-between items-start mb-6 ">
         <View className="w-full p-4 bg-white">
           {/* welcome part */}
@@ -282,6 +283,7 @@ useEffect(() => {
         </View>
         </View>
       </ScrollView>
+      <NavBar/>
       <StatusBar
             barStyle="dark-content" // or "light-content" depending on your background
             backgroundColor="transparent"

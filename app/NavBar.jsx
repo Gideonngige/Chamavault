@@ -29,7 +29,7 @@ export default function BottomNavBar() {
   }
 
   return (
-    <View className="absolute bottom-0 left-0 right-0 bg-green-600 pt-2 border-t border-gray-200">
+    <View className="absolute bottom-0 left-0 right-0 bg-yellow-600 pt-2 border-t border-gray-200">
       <View className="flex-row justify-between items-center px-6 pb-4">
         {/* Left Tab */}
         <TouchableOpacity 

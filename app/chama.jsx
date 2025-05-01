@@ -11,6 +11,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 
 export default function Chama(){
     const [chama, setChama] = useState("");
+    const [isLoadingContribution, setIsLoadingContribution] = useState(false);
+    const [isLoadingData, setIsLoadingData] = useState(false);
     const [description, setDescription] = useState("");
     const [data, setData] = useState([]);
     const [totalmembers, setTotalmembers] = useState(0);
@@ -25,6 +27,7 @@ export default function Chama(){
  // function to fetch data
  useEffect(() => {
   const fetchData = async () => {
+    setIsLoadingData(true);
     try{
       const chama = await AsyncStorage.getItem('selected_chama');
       const chama_id = await AsyncStorage.getItem('chama');
@@ -51,6 +54,10 @@ export default function Chama(){
     catch(error){
       console.error(error);
     }
+    finally{
+      setIsLoadingData(false);
+    }
+
 
   }
   
@@ -63,6 +70,7 @@ export default function Chama(){
 // function to fetch members contribution
 useEffect(() => {
     const fetchData = async () => {
+        setIsLoadingContribution(true);
         try {
           const chama_id = await AsyncStorage.getItem('chama');
             const response = await axios.get(`https://backend1-1cc6.onrender.com/getmemberscontribution/${chama_id}/`);
@@ -72,6 +80,10 @@ useEffect(() => {
         } catch (error) {
             console.error(error);
         }
+        finally {
+            setIsLoadingContribution(false);
+        }
+
     };
 
     fetchData();
@@ -110,11 +122,11 @@ const Alert = () => {
             {/* savings and loan part */}
             <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">KES.{totalSavings}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSavings}`}</Text>
               <Text className="text-gray-900 font-serif">Total savings</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">KES.{totalLoans}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLoans}`}</Text>
               <Text className="text-gray-500 font-serif">Total loans</Text>
             </View>
           </View>
@@ -122,16 +134,16 @@ const Alert = () => {
           <Text className='w-full text-lg font-bold ml-4 font-serif'>Expenses</Text>
           <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">KES.{rentExpense}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${rentExpense}`}</Text>
               <Text className="text-gray-900 font-serif">Rent</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">KES.{travelExpense}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${travelExpense}`}</Text>
               <Text className="text-gray-500 font-serif">Travel</Text>
             </View>
           </View>
           <View className="w-full bg-white p-4 rounded-lg shadow-lg flex-1 mb-4 mx-2">
-              <Text className="text-lg font-bold font-serif">KES.{businessExpense}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${businessExpense}`}</Text>
               <Text className="text-gray-500 font-serif">Business</Text>
             </View>
           {/* end of expenses */}
