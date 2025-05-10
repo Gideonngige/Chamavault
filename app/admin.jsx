@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export default function Admin() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
   const router = useRouter();
   const [name, setName] = useState("");
   const [chama, setChama] = useState("");
@@ -16,6 +17,7 @@ export default function Admin() {
   // function to fetch data
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoadingData(true);
       try{
         const name = await AsyncStorage.getItem('name');
         const chama = await AsyncStorage.getItem('selected_chama');
@@ -37,16 +39,20 @@ export default function Admin() {
       catch(error){
         console.error(error);
       }
+      finally{
+        setIsLoadingData(false);
+      }
+
 
     }
     
     fetchData();
-    const interval = setInterval(() => {
-      fetchData();
-    }, 10000); // 10 seconds
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 10000); // 10 seconds
   
-    // Clear interval when component unmounts
-    return () => clearInterval(interval);
+    // // Clear interval when component unmounts
+    // return () => clearInterval(interval);
   },[name, chama]);
   // end of function to fetch data
 
@@ -72,6 +78,9 @@ export default function Admin() {
   const handleManagemembers = async () => {
     router.push('managemembers/');
   };
+  const handleContributionDate = async () => {
+    router.push('contributiondate/');
+  };
   
 
   return (
@@ -89,18 +98,18 @@ export default function Admin() {
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <Text className="text-gray-500 font-serif">Total Members</Text>
-              <Text className="text-lg font-bold font-serif">{totalmembers}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `${totalmembers}`}</Text>
             </View>
           </View>
 
           <View className="w-full flex flex-row justify-between mb-6">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <Text className="text-gray-500 font-serif">Total Savings</Text>
-              <Text className="text-lg font-bold font-serif">KES.{totalSavings}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSavings}`}</Text>
             </View>
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
               <Text className="text-gray-500 font-serif">Total Loans</Text>
-              <Text className="text-lg font-bold font-serif">KES.{totalLoans}</Text>
+              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLoans}`}</Text>
             </View>
           </View>
 
@@ -131,6 +140,9 @@ export default function Admin() {
 
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleProfile}>
               {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Go To Profile</Text>}
+            </TouchableOpacity>
+            <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleContributionDate}>
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Contribution Date</Text>}
             </TouchableOpacity>
           </View>
         </View>

@@ -37,16 +37,16 @@ export default function Notifications() {
     return (
       <View className="w-full bg-yellow-600 p-3 rounded-lg mb-5">
         {/* Date and Event Title */}
-        <View className="flex-row justify-between bg-yellow-600 p-3 rounded-lg">
-          <Text className="font-bold text-white">{date}</Text>
-          <Text className="font-bold text-white">{type}</Text>
+        <View className="flex-row justify-between bg-white p-3 rounded-lg">
+          <Text className="font-bold text-gray-950 font-serif">{date}</Text>
+          <Text className="font-bold text-gray-950 font-serif">{type}</Text>
         </View>
 
         {/* Divider */}
         <View className="border-b border-gray-300 my-2"></View>
 
         {/* Description */}
-        <Text className="text-white">{message}</Text>
+        <Text className="text-gray-950 font-serif">{message}</Text>
       </View>
     );
   };
@@ -57,7 +57,7 @@ export default function Notifications() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView nestedScrollEnabled={true} className="p-4">
+      {/* <ScrollView nestedScrollEnabled={true} className="p-4"> */}
       
         <View className="bg-white  p-5 font-sans">
           {notifications.length === 0 ? (
@@ -78,7 +78,7 @@ export default function Notifications() {
             />
           )}
         </View>
-        </ScrollView>
+        {/* </ScrollView> */}
         <StatusBar
             barStyle="dark-content" // or "light-content" depending on your background
             backgroundColor="transparent"

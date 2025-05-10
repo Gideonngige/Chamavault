@@ -6,14 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NavBar from './NavBar';
 
 export default function Loans() {
   const navigation = useNavigation();
   const router = useRouter();
   const route = useRoute();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+
   // const { username, email, loan, loanInterest} = route.params;
   const [transactions, setTransactions] = useState([]);
   const [loan, setLoan] = useState(0);
@@ -43,7 +43,7 @@ useEffect(() => {
     const member_id = await AsyncStorage.getItem('member_id');
     const selected_chama = await AsyncStorage.getItem('selected_chama');
     
-    
+    setIsLoadingData(true);
     try {
       const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
       const response = await axios.get(url);
@@ -75,14 +75,11 @@ useEffect(() => {
       console.error("Error:", error);
       return null;
     }
+    finally{
+      setIsLoadingData(false);
+    }
   }
   getLoans();
-  const interval = setInterval(() => {
-    getLoans();
-  }, 5000); // 5 seconds
-
-  // Clear interval when component unmounts
-  return () => clearInterval(interval);
 
 },[email]);
 // end of get loans function
@@ -90,28 +87,22 @@ useEffect(() => {
 
     // fetch loan transactions data
     useEffect(() => {
-      setIsLoading(true); 
+      setIsLoadingTransactions(true); 
       const fetchTransactions = async() => {
         const email = await AsyncStorage.getItem('email');
         const chama_id = await AsyncStorage.getItem('chama');
         // await AsyncStorage.setItem('loan', loan.toString());
         axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
             .then((response) => {
-              setTransactions(response.data);
-              setIsLoading(false);
+              setTransactions(response.data);s
             })
             .catch((error) => {
               console.error(error);
-            }).finally(() => {setIsLoading(false);});
+            }).finally(() => {setIsLoadingTransactions(false);});
   
       }
       fetchTransactions();
-      const interval = setInterval(() => {
-        fetchTransactions();
-      }, 8000); // 5 seconds
-    
-      // Clear interval when component unmounts
-      return () => clearInterval(interval);
+      
     }, []);
     // end of fetch loan transactions
 
@@ -149,10 +140,6 @@ useEffect(() => {
     );
   }
   // end of activity
-
-   if (isLoading2) {
-            return <ActivityIndicator size="large" color="#FFA500" />;
-    }
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4 mb-20" nestedScrollEnabled={true}>
@@ -170,7 +157,7 @@ useEffect(() => {
       >
         <View className="p-5">
           <Text className="text-xl font-bold text-gray-900 font-serif">Your Loans</Text>
-          <Text className="text-2xl font-bold text-gray-800 font-serif">KES. {loan}</Text>
+          <Text className="text-2xl font-bold text-gray-800 font-serif">{isLoadingData ? "Loading..." : `KES.${loan}`}</Text>
         </View>
       </ImageBackground>
 
@@ -181,7 +168,7 @@ useEffect(() => {
     <Text className="text-xl font-bold text-white mb-2 font-serif">Short-Term Loan</Text>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Outstanding Loan</Text>
-      <Text className="text-white font-bold font-serif">KES. {totalSTL}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSTL}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Interest</Text>
@@ -189,15 +176,15 @@ useEffect(() => {
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Total Payable</Text>
-      <Text className="text-white font-bold font-serif">KES.{totalSTLRepayment}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSTLRepayment}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Date taken</Text>
-      <Text className="text-white font-bold font-serif">{stlDate.split("T")[0]}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${stlDate.split("T")[0]}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Due date</Text>
-      <Text className="text-white font-bold font-serif">{stlDueDate.split("T")[0]}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${stlDueDate.split("T")[0]}`}</Text>
     </View>
 
     <View className="flex-row justify-around">
@@ -225,7 +212,7 @@ useEffect(() => {
     <Text className="text-xl font-bold text-white mb-2 font-serif">Long-Term Loan</Text>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Outstanding Loan</Text>
-      <Text className="text-white font-bold font-serif">KES. {totalLTL}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLTL}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Interest</Text>
@@ -233,15 +220,15 @@ useEffect(() => {
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Total Payable</Text>
-      <Text className="text-white font-bold font-serif">KES.{totalLTLRepayment}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLTLRepayment}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Date taken</Text>
-      <Text className="text-white font-bold font-serif">{ltlDate.split("T")[0]}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${ltlDate.split("T")[0]}`}</Text>
     </View>
     <View className="flex-row justify-between items-center mb-4">
       <Text className="text-white font-serif">Due date</Text>
-      <Text className="text-white font-bold font-serif">{ltlDueDate.split("T")[0]}</Text>
+      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${ltlDueDate.split("T")[0]}`}</Text>
     </View>
 
     <View className="flex-row justify-around">
@@ -269,21 +256,24 @@ useEffect(() => {
 
         {/* your activity part  */}
         <Text className='ml-1 font-bold mt-5 font-serif'>My activities</Text>
+        {isLoadingTransactions ? <Text className='text-lg font-bold font-serif'>Loading...</Text> : (
+          <FlatList
+          data={transactions} // Array of data
+          keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
+          renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
+          showsVerticalScrollIndicator={false} // Hides the scrollbar
+          listMode="SCROLLVIEW"
+          />
 
-        <FlatList
-            data={transactions} // Array of data
-            keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
-            renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
-            showsVerticalScrollIndicator={false} // Hides the scrollbar
-            listMode="SCROLLVIEW"
-            />
+        )}
+
+        
         
       </View>
       </View>
         </View>
         </View>
       </ScrollView>
-      <NavBar/>
       <StatusBar
             barStyle="dark-content" // or "light-content" depending on your background
             backgroundColor="transparent"

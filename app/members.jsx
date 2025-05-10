@@ -48,17 +48,17 @@ export default function Members(){
 
       const ProfileCard = ({ name, email, joined_date }) => {
         return (
-          <View className="bg-yellow-600 mb-6 p-4 rounded-2xl shadow-lg w-80 mx-auto">
+          <View className="bg-yellow-600 mb-6 p-4 rounded-2xl w-80 mx-auto">
             {/* Profile Image */}
             <View className="items-center">
             <Image source={require('../assets/images2/profile3.png')} style={{width:50, height:50}} className='rounded-full'/>
             </View>
       
             {/* User Info */}
-            <View className="mt-4 items-center">
-              <Text className="text-xl font-bold text-gray-900">{name}</Text>
+            <View className="mt-2 items-center">
+              <Text className="text-xl font-bold text-gray-900 font-serif">{name}</Text>
               <Text className="text-gray-900">{email}</Text>
-              <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300'>Joined: {joined_date}</Text>
+              <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300 font-serif'>Joined: {joined_date}</Text>
             </View>
           </View>
         );
@@ -75,7 +75,7 @@ export default function Members(){
         <SafeAreaView className="flex-1 bg-white">
           {/* search bar */}
           <View className="flex-1 bg-white justify-center items-center mt-10 w-full p-5 font-sans">
-        <View className="flex-row items-center bg-gray-300 rounded-lg h-10 p-2 w-full mb-2">
+        <View className="flex-row items-center bg-gray-300 rounded-lg h-10 p-2 w-full mb-1">
         <Ionicons name="search" size={20} color="gray" />
             <TextInput 
             value={search}

@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar, SafeAreaView, ScrollView, } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  StatusBar,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
+  const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
-  const [name, setName] = useState("");
-
-  // Replace with your Django backend URL
+  const [name, setName] = useState('');
   const API_URL = 'https://backend1-1cc6.onrender.com/sendmessage/';
-  
 
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 1000); // Poll every 5 seconds
-    return () => clearInterval(interval);
+    // const interval = setInterval(fetchMessages, 1000);
+    // return () => clearInterval(interval);
   }, []);
 
-  // start of function to fetch messages
   const fetchMessages = async () => {
+    setIsLoading(true);
     try {
       const chama_id = await AsyncStorage.getItem('chama');
       const name = await AsyncStorage.getItem('name');
@@ -30,87 +41,87 @@ const ChatScreen = () => {
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
+    finally {
+      setIsLoading(false);
+    }
   };
-  // end of function to fetch messages
 
-
-  // function to send messages
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
+    setIsSending(true);
     try {
       const chama_id = await AsyncStorage.getItem('chama');
       const name = await AsyncStorage.getItem('name');
-      setName(name);
       const member_id = await AsyncStorage.getItem('member_id');
       await axios.post(API_URL, {
         text: newMessage,
-        sender: name, // Replace with actual user identification
+        sender: name,
         timestamp: new Date().toISOString(),
         chama: chama_id,
         member_id: member_id,
       });
       setNewMessage('');
-      fetchMessages(); // Refresh messages after sending
+      fetchMessages();
     } catch (error) {
       console.error('Error sending message:', error);
     }
+    finally {
+      setIsSending(false);
+    }
   };
-  // end of function to send message
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-    <ScrollView nestedScrollEnabled={true} className="p-2 mb-20">
-    <View style={styles.container}>
-      <FlatList
-        data={messages}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={[
-            styles.messageBubble,
-            item.sender === name ? styles.sentMessage : styles.receivedMessage
-          ]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image source={require('../assets/images2/profile3.png')} style={{ width: 20, height: 20, borderRadius: 999 }} />
-              <Text style={{ fontWeight: 'bold', marginLeft: 8 }}>{item.sender}</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white', marginBottom:100 }}>
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
+      
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={80}
+      >
+        {isLoading ? <Text className='font-serif p-4'>Loading your chats...</Text> : (
+        <FlatList
+          data={messages}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={[
+              styles.messageBubble,
+              item.sender === name ? styles.sentMessage : styles.receivedMessage
+            ]}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image source={require('../assets/images2/profile3.png')} style={styles.profileImage} />
+                <Text style={styles.senderName} className='font-serif'>{item.sender == name ? "You" : item.sender}</Text>
+              </View>
+              <Text style={styles.messageText} className='font-serif'>{item.text}</Text>
+              <Text style={styles.timestamp} className='font-serif'>
+                {new Date(item.timestamp).toLocaleTimeString()}
+              </Text>
             </View>
-            <Text style={styles.messageText}>{item.text}</Text>
-            <Text style={styles.timestamp}>
-              {new Date(item.timestamp).toLocaleTimeString()}
-            </Text>
-          </View>
-        )}
-        
-      />
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Type a message..."
+          )}
+          contentContainerStyle={{ paddingBottom: 80, padding: 10 }}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
-      </View>
-      <StatusBar
-            barStyle="dark-content" // or "light-content" depending on your background
-            backgroundColor="transparent"
-            translucent={true}
-            />
-    </View>
-    </ScrollView>
+      )}
+
+        {/* Input at the bottom */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={newMessage}
+            onChangeText={setNewMessage}
+            placeholder="Type a message..."
+            className='font-serif'
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+            <Text style={styles.sendButtonText} className='font-serif'>{isSending ? "Sending..." : "Send"}</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: 'white',
-  },
   messageBubble: {
     padding: 15,
     borderRadius: 10,
@@ -120,7 +131,7 @@ const styles = StyleSheet.create({
   sentMessage: {
     backgroundColor: '#ca8a04',
     alignSelf: 'flex-end',
-    marginRight:6,
+    marginRight: 6,
   },
   receivedMessage: {
     backgroundColor: '#e5e5ea',
@@ -137,7 +148,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
+    borderTopColor: '#ddd',
+    borderTopWidth: 1,
+    backgroundColor: '#fff',
   },
   input: {
     flex: 1,
@@ -158,6 +173,15 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  profileImage: {
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+  },
+  senderName: {
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });
 

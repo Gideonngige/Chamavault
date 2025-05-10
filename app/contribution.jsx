@@ -64,11 +64,25 @@ const saveTransaction = async (transactionRef, amount, email) => {
 
 
       if (response.status === 200) {
-        console.log("Transaction saved successfully:", data);
+        Toast.show({
+          type: "success", // Can be "success", "error", "info"
+          text1: "Transaction Successful",
+          text2: "Transaction Ref: " + transactionRef,
+        });
+        setAmount("");
       } else {
-        console.error("Failed to save transaction:", data);
+        Toast.show({
+          type: "error",
+          text1: "Transaction Failed",
+          text2: response.data.message,
+        });
       }
     } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Transaction Error",
+        text2: error.message,
+      });
       console.error("Error saving transaction:", error);
     }
   };

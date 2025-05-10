@@ -2,9 +2,6 @@ import { useState, useEffect } from 'react';
 import {View, Text, TouchableOpacity, Image, FlatList, TextInput, StatusBar, SafeAreaView, ScrollView} from 'react-native';
 import { useRouter } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -47,7 +44,6 @@ export default function Chama(){
         setRentExpense(response4.data.total_rent);
         setTravelExpense(response4.data.total_travel);
         setBusinessExpense(response4.data.total_business);
-        // alert("Total", response.data.total_members);
       }
 
     }
@@ -57,12 +53,8 @@ export default function Chama(){
     finally{
       setIsLoadingData(false);
     }
-
-
   }
-  
   fetchData();
-  
 },[chama]);
 // end of function to fetch data
 
@@ -151,7 +143,7 @@ const Alert = () => {
 
               {/* members button */}
               <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
-                <Text className='font-bold font-serif'>Members {totalmembers}</Text>
+                <Text className='font-bold font-serif'>{isLoadingData ? "Loading..." : `Members ${totalmembers}`}</Text>
                 <Ionicons name="chevron-forward" size={24} color="black" />
               </TouchableOpacity>
               {/* end of members button */}
@@ -183,7 +175,7 @@ const Alert = () => {
           {/* defaulter */}
           <View className="w-full flex flex-row justify-between mb-4">
             <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
+              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("defaulters/")}>
                 <Text className='font-bold font-serif'>Defaulters</Text>
               </TouchableOpacity>
             </View>

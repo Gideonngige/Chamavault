@@ -37,7 +37,7 @@ const data = [
   { title: 'Borrow money to grow', image: require('../assets/images2/loan.png') },
 ];
 
-export default function App() {
+export default function Home() {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -133,9 +133,11 @@ export default function App() {
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
+        const url2 = `https://backend1-1cc6.onrender.com/send_reminder_message/2/`;
+        const response2 = await axios.get(url2);
         await AsyncStorage.setItem('email',email);
         
-        if(response.status === 200){
+        if(response.status === 200 && response2.status === 200){
           Toast.show({
             type: "success", // Can be "success", "error", "info"
             text1: "Successfully Login",
@@ -164,37 +166,6 @@ export default function App() {
     fetchData();
 
   },[email]);
-
-//  start get savings function
-useEffect(() => {
-  const getSavings = async () => {
-    try {
-      const url = `https://backend1-1cc6.onrender.com/getContributions/${chama}/${email}/`;
-      const response = await axios.get(url);
-      
-      if(response.status === 200){
-        setSaving(response.data.total_contributions);
-        setInterest(response.data.interest);
-        setPenalty(response.data.penalty);
-        if(response.data.saving_date.length == 0){ setSavingDate("N/A"); }
-        else{setSavingDate(response.data.saving_date[0].contribution_date);}
-      }
-    } 
-    catch (error) {
-      console.error("Error:", error);
-      return null;
-    }
-  }
-  
-  const interval = setInterval(() => {
-    getSavings();
-  }, 5000); // 5 seconds
-
-  // Clear interval when component unmounts
-  return () => clearInterval(interval);
-
-},[email]);
-// end of get savings function
 
 
 //go to saviings
@@ -317,7 +288,7 @@ const renderItem = ({ item }) => (
       <View className="items-center mt-4 mb-2">
         <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("chama/")}>
         <Text className='font-serif text-white'>Go To {chamaName} Profile</Text>
-        <Ionicons name="chevron-forward" size={24} color="black" />
+        <Ionicons name="chevron-forward" size={24} color="white" />
         </TouchableOpacity>
 
   <View className="w-full p-0 rounded-lg mt-4 flex flex-row justify-between">

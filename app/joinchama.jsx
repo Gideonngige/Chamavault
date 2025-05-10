@@ -39,8 +39,8 @@ export default function Register(){
     // start of function to join chama
     const handleJoinChama = async() => {
       const member_id = await AsyncStorage.getItem('member_id');
-      alert(member_id);
-      alert(value)
+      // alert(member_id);
+      // alert(value)
       setIsLoading(true);
       try{
         if(value == null){
@@ -113,7 +113,8 @@ export default function Register(){
     }}
     style={{
       borderColor: '#ca8a04',
-      borderWidth: 2,
+      borderWidth: 1,
+      borderRadius:1
     }}
     zIndex={3000}
     zIndexInverse={1000}

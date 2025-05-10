@@ -9,6 +9,7 @@ export default function Chama(){
     const [appliedLoans, setAppliedLoans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingLoanId, setLoadingLoanId] = useState(null);
 
     useEffect(() => {
         // Fetch data from the API
@@ -27,70 +28,75 @@ export default function Chama(){
         fetchLoans();
     })
 
-    const handleConfirm = async(loan_id, loonee_id, approval, chama_id) =>{
-        try{
-            setIsLoading(true);
+    const handleConfirm = async(loan_id, loonee_id, approval, chama_id) => {
+        try {
+            setLoadingLoanId(loan_id); // Set currently loading loan
             const approverEmail = await AsyncStorage.getItem('email');
             const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loonee_id}/${approverEmail}/${approval}/${chama_id}/`;
             const response = await axios.get(url);
+    
             if(response.status === 200){
                 Toast.show({
-                    type: "success", // Can be "success", "error", "info"
+                    type: "success",
                     text1: "Successfully Approved",
                     text2: response.data.message,
                 });
-            }
-            else{
+            } else {
                 Toast.show({
-                    type: "info", // Can be "success", "error", "info"
+                    type: "info",
                     text1: "Not yet approved",
                     text2: response.data.message,
                 });
             }
-        }
-        catch(error){
+        } catch(error) {
             Toast.show({
-                type: "error", // Can be "success", "error", "info"
+                type: "error",
                 text1: "An error occurred",
                 text2: error.message,
             });
+        } finally {
+            setLoadingLoanId(null); // Reset loading state
         }
-        finally{
-            setIsLoading(false);
-        }
-
-    }
+    };
 
 
 
-    const AppliedLoans = ({loan_id, loonee_id, loan, date, chama_id,  creditScore, loanType}) => {
-        return(
-            
+    const AppliedLoans = ({loan_id, loonee_id, loan, date, chama_id, loanType}) => {
+        return (
             <View className='w-80 p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
                 <View className="flex-row justify-between bg-white p-3 rounded-lg">
-                    <Text className='font-bold'>{loonee_id}</Text>
-                    <Text className='font-bold'>KES.{loan}</Text>
-                    <Text className='font-bold'>{date}</Text>
+                    <Text className='font-bold font-serif'>{loonee_id}</Text>
+                    <Text className='font-bold font-serif'>KES.{loan}</Text>
+                    <Text className='font-bold font-serif'>{date}</Text>
                 </View>
-                <Text className='m-3'>Credit Score: 90</Text>
-                <Text className='m-3'>Type: {loanType}</Text>
+                <Text className='m-3 font-serif'>Credit Score: 90</Text>
+                <Text className='m-3 font-serif'>Type: {loanType}</Text>
                 <View className="flex-row justify-between bg-gray-950 p-3 rounded-lg">
-                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"approved", chama_id)}>
-                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className='text-white'>Confirm</Text> }
-                    </TouchableOpacity >
-                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id,"declined")}>
-                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className='text-white'>Decline</Text> }
+                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id, "approved", chama_id)}>
+                        {loadingLoanId === loan_id ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                        ) : (
+                            <Text className='text-white font-serif'>Confirm</Text>
+                        )}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id, "declined", chama_id)}>
+                        {loadingLoanId === loan_id ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                        ) : (
+                            <Text className='text-white font-serif'>Decline</Text>
+                        )}
                     </TouchableOpacity>
                 </View>
             </View>
         );
-    }
+    };
+    
 
     // Alert component
   const Alert = () => {
     return (
       <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold">You have 0 notifications</Text>
+        <Text className="text-white font-bold font-serif">You have 0 notifications</Text>
       </View>
     );
   };
@@ -100,7 +106,6 @@ export default function Chama(){
     }
     return(
         <SafeAreaView className="flex-1 bg-white">
-        <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
         {appliedLoans.length === 0 ? (
             <Alert />
@@ -116,7 +121,6 @@ export default function Chama(){
             <Toast/>
 
         </View>
-        </ScrollView>
         <StatusBar
       barStyle="dark-content" // or "light-content" depending on your background
       backgroundColor="transparent"

@@ -39,7 +39,11 @@ export default function UpdateProfile() {
   // function to handel update profile
   const handleUpdate = async() =>{
     if(fullname == "" || phonenumber == ""){
-      alert("Please fill all fields");
+      Toast.show({
+          type: "info", // Can be "success", "error", "info"
+          text1: "Empty field",
+          text2: "Please fill all fields",
+      });
     }
     else{
       setIsLoading(true);
@@ -89,24 +93,25 @@ export default function UpdateProfile() {
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-      <Text className='font-bold text-lg'>{email}</Text>
+      <Text className='font-bold text-lg font-serif'>{email}</Text>
     </View>
-    <Text className="w-full text-lg font-bold">Your fullname</Text>
+    <Text className="w-full text-lg font-bold font-serif">Your fullname</Text>
       <TextInput 
       placeholder="e.g John Doe"
       value={fullname}
       onChangeText={setFullname}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold">Your phonenumber</Text>
+      <Text className="w-full text-lg font-bold font-serif">Your phonenumber</Text>
       <TextInput 
       placeholder="e.g 0712345678"
       value={phonenumber}
       onChangeText={setPhonenumber}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+      keyboardType="phone-pad"
       />
-      <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleUpdate}>
-      {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Update</Text>}
+      <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleUpdate}>
+      {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Update</Text>}
       </TouchableOpacity>
 
         </View>

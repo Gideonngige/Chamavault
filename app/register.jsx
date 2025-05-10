@@ -52,7 +52,7 @@ export default function Register(){
             position:"center",
           });
           if(response.data.message == "Successfully registered"){
-            router.push("/");
+            router.push("login/");
           }
           else{
             Toast.show({

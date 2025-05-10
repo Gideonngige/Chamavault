@@ -44,6 +44,8 @@ export default function RootLayout() {
         <Stack.Screen name="forgotpassword"options={{title:"Forgot Password"}}  />
         <Stack.Screen name="terms"options={{title:"Terms & Conditions"}}  />
         <Stack.Screen name="location"options={{title:"Location"}}  />
+        <Stack.Screen name="defaulters"options={{title:"Defaulters"}}  />
+        <Stack.Screen name="contributiondate"options={{title:"Contribution Date"}}  />
         
         
       </Stack>

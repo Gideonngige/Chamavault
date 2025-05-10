@@ -75,7 +75,6 @@ useEffect(() => {
       axios.get(`https://backend1-1cc6.onrender.com/transactions/Contribution/${email}/${chama_id}/`)
           .then((response) => {
             setTransactions(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);
@@ -85,12 +84,13 @@ useEffect(() => {
           });
 
     }
-    const interval = setInterval(() => {
-      fetchTransactions();
-    }, 5000); // 5 seconds
+    fetchTransactions();
+    // const interval = setInterval(() => {
+    //   fetchTransactions();
+    // }, 5000); // 5 seconds
   
-    // Clear interval when component unmounts
-    return () => clearInterval(interval);
+    // // Clear interval when component unmounts
+    // return () => clearInterval(interval);
   }, []);
   // end of fetch transactions
 
@@ -133,8 +133,8 @@ useEffect(() => {
         style={{ resizeMode: 'contain', width: '100%', height: 200 }}
       >
         <View className="p-5">
-          <Text className="text-xl font-bold text-gray-900 font-serif">My Savings</Text>
-          <Text className="text-2xl font-bold text-gray-800 font-serif">{isLoadingData ? "Loading..." : `${saving}`}</Text>
+          <Text className="text-xl font-bold text-gray-900 font-serif">Total Balance</Text>
+          <Text className="text-2xl font-bold text-gray-800 font-serif">{isLoadingData ? "Loading..." : `KES.${saving}`}</Text>
         </View>
       </ImageBackground>
 
@@ -190,7 +190,7 @@ useEffect(() => {
         {/* your activity part  */}
         <Text className='ml-1 font-bold mt-5'>My activities</Text>
 
-        {isLoadingTransactions ? <Text className='text-lg font-bold'>Loading...</Text> : (
+        {isLoadingTransactions ? <Text className='text-lg font-bold font-serif'>Loading...</Text> : (
            <FlatList
            data={transactions} // Array of data
            keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
