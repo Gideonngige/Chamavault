@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Notifications() {
   const [loading, setLoading] = useState(true);
@@ -34,29 +35,34 @@ export default function Notifications() {
   }, []);
 
   const NotificationItem = ({ date, type, message }) => {
-    return (
-      <View className="w-full bg-yellow-600 p-3 rounded-lg mb-5">
-        {/* Date and Event Title */}
-        <View className="flex-row justify-between bg-white p-3 rounded-lg">
-          <Text className="font-bold text-gray-950 font-serif">{date}</Text>
-          <Text className="font-bold text-gray-950 font-serif">{type}</Text>
+  return (
+    <View className="w-full bg-white rounded-2xl shadow-md p-4 mb-4 border border-gray-200">
+      {/* Header: Icon + Date + Type */}
+      <View className="flex-row justify-between items-center mb-2">
+        <View className="flex-row items-center space-x-2">
+          <MaterialCommunityIcons name="bell-ring" size={20} color="#facc15" />
+          <Text className="text-sm text-gray-500">{date}</Text>
         </View>
-
-        {/* Divider */}
-        <View className="border-b border-gray-300 my-2"></View>
-
-        {/* Description */}
-        <Text className="text-gray-950 font-serif">{message}</Text>
+        <Text className="text-sm font-semibold text-yellow-600 lowercase">{type}</Text>
       </View>
-    );
-  };
+
+      {/* Message */}
+      <Text className="text-gray-800 text-base leading-5">{message}</Text>
+    </View>
+  );
+};
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#FFA500" />;
+    return (
+      <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#FFA500" />
+          <Text className="text-gray-600 font-serif">Loading notifications...</Text>
+        </View>
+    )
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white mb-20">
       {/* <ScrollView nestedScrollEnabled={true} className="p-4"> */}
       
         <View className="bg-white  p-5 font-sans">

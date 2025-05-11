@@ -1,112 +1,111 @@
-import { useState } from 'react';
-import {View, Text, TouchableOpacity, FlatList, Image, TextInput, StatusBar, SafeAreaView, ScrollView, ActivityIndicator} from 'react-native';
+import { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  TextInput,
+  StatusBar,
+  SafeAreaView,
+  ActivityIndicator
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Members(){  
-    
-      const [members, setMembers] = useState([]);
-      const [loading, setLoading] = useState(true);
-      const [search, setSearch] = useState('');
-      const [filteredMembers, setFilteredMembers] = useState([]);
+export default function Members() {
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [filteredMembers, setFilteredMembers] = useState([]);
 
-      useEffect(() => {
-        // Fetch data from the API using Axios
-        const getdata = async() => {
-          const email = await AsyncStorage.getItem('email');
-          const chama_id = await AsyncStorage.getItem('chama');
-          axios.get(`https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`)
-          .then((response) => {
-            setMembers(response.data);
-            setFilteredMembers(response.data);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        }
-        getdata();
-      }, []);
+  useEffect(() => {
+    const getData = async () => {
+      const email = await AsyncStorage.getItem('email');
+      const chama_id = await AsyncStorage.getItem('chama');
+      axios.get(`https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`)
+        .then((response) => {
+          setMembers(response.data);
+          setFilteredMembers(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    getData();
+  }, []);
 
-       // for searching
-       useEffect(() => {
-        if (Array.isArray(members)) { // Ensure members is an array
-          setFilteredMembers(
-            members.filter((member) =>
-              member.name?.toLowerCase().includes(search.toLowerCase()) // Safe check for name
-            )
-          );
-        } else {
-          setFilteredMembers([]); // Set an empty array if members is not valid
-        }
-      }, [search, members]);
-      ;
-      // end of searching
+  useEffect(() => {
+    if (Array.isArray(members)) {
+      setFilteredMembers(
+        members.filter((member) =>
+          member.name?.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredMembers([]);
+    }
+  }, [search, members]);
 
-      const ProfileCard = ({ name, email, joined_date }) => {
-        return (
-          <View className="bg-yellow-600 mb-6 p-4 rounded-2xl w-80 mx-auto">
-            {/* Profile Image */}
-            <View className="items-center">
-            <Image source={require('../assets/images2/profile3.png')} style={{width:50, height:50}} className='rounded-full'/>
-            </View>
-      
-            {/* User Info */}
-            <View className="mt-2 items-center">
-              <Text className="text-xl font-bold text-gray-900 font-serif">{name}</Text>
-              <Text className="text-gray-900">{email}</Text>
-              <Text className='mt-2 mb-2 mr-2 font-bold text-gray-300 font-serif'>Joined: {joined_date}</Text>
-            </View>
-          </View>
-        );
-      };
+  const ProfileCard = ({ name, email, joined_date }) => (
+    <View className="bg-yellow-600 mb-4 p-4 rounded-2xl mx-4 shadow-lg">
+      <View className="flex-row items-center space-x-4">
+        <Image
+          source={require('../assets/images2/profile3.png')}
+          style={{ width: 60, height: 60 }}
+          className="rounded-full"
+        />
+        <View className="flex-1">
+          <Text className="text-lg font-bold text-gray-900 font-serif">{name}</Text>
+          <Text className="text-sm text-gray-900">{email}</Text>
+          <Text className="text-xs text-gray-100 mt-1 font-serif">Joined: {joined_date}</Text>
+        </View>
+      </View>
+    </View>
+  );
 
-      if (loading) {
-        return <ActivityIndicator size="large" color="#FFA500" />;
-      }
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#FFA500" />
+        <Text className="text-gray-600 mt-4 font-serif">Loading members...</Text>
+      </View>
+    );
+  }
 
-     
-    
-    return(
-        
-        <SafeAreaView className="flex-1 bg-white">
-          {/* search bar */}
-          <View className="flex-1 bg-white justify-center items-center mt-10 w-full p-5 font-sans">
-        <View className="flex-row items-center bg-gray-300 rounded-lg h-10 p-2 w-full mb-1">
-        <Ionicons name="search" size={20} color="gray" />
-            <TextInput 
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
+
+      {/* Search Bar */}
+      <View className="px-5 pt-12 pb-2">
+        <View className="flex-row items-center bg-gray-200 rounded-lg p-2 shadow-sm">
+          <Ionicons name="search" size={20} color="gray" />
+          <TextInput
             value={search}
             onChangeText={(text) => setSearch(text)}
             placeholder="Search member here..."
-            className="flex-1 h-10  text-gray-900 text-lg p-2 decoration-none"
-            />
-        </View>
-        </View>
-        {/* end of search bar */}
-        <ScrollView className="p-4">
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-        
-
-        {/* members part */}
-      <FlatList
-        data={filteredMembers} // Array of data
-        keyExtractor={(item) => item.member_id.toString()} // Unique key for each item
-        renderItem={({ item }) => <ProfileCard name={item.name} email={item.email} joined_date={item.joined_date.split("T")[0]} />} // How each item is displayed
-        showsVerticalScrollIndicator={false} // Hides the scrollbar
-        listMode="SCROLLVIEW"
-      />
-        {/* end of members part */}
-            
-        </View>
-        </ScrollView>
-        <StatusBar
-            barStyle="dark-content" // or "light-content" depending on your background
-            backgroundColor="transparent"
-            translucent={true}
+            className="flex-1 ml-2 text-gray-800 text-base font-serif"
           />
-        </SafeAreaView>
-    );
+        </View>
+      </View>
+
+      {/* Members List */}
+      <FlatList
+        data={filteredMembers}
+        keyExtractor={(item) => item.member_id.toString()}
+        renderItem={({ item }) => (
+          <ProfileCard
+            name={item.name}
+            email={item.email}
+            joined_date={item.joined_date.split('T')[0]}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
+    </SafeAreaView>
+  );
 }

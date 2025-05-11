@@ -1,8 +1,18 @@
-import { SafeAreaView, ScrollView, Text, View,FlatList, ActivityIndicator, TouchableOpacity,Image, ImageBackground, StatusBar } from 'react-native';
-import { useRouter } from "expo-router";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  ImageBackground,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native';
+import { useRouter } from 'expo-router';
 import { useRoute } from '@react-navigation/native';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,17 +21,17 @@ export default function Loans() {
   const navigation = useNavigation();
   const router = useRouter();
   const route = useRoute();
+
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
 
-  // const { username, email, loan, loanInterest} = route.params;
   const [transactions, setTransactions] = useState([]);
   const [loan, setLoan] = useState(0);
   const [loanInterest, setLoanInterest] = useState(0);
   const [loanDate, setLoanDate] = useState("N/A");
-  const [email, setEmail] =  useState("");
-  const [name, setName]  = useState("");
-  const [isDisabled, setIsDisabled] = useState(false);// Initialize isDisabled to false
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
   const [totalSTL, setTotalSTL] = useState(0);
   const [totalLTL, setTotalLTL] = useState(0);
   const [totalSTLRepayment, setTotalSTLRepayment] = useState(0);
@@ -31,254 +41,194 @@ export default function Loans() {
   const [stlDueDate, setStlDueDate] = useState("N/A");
   const [ltlDueDate, setLtlDueDate] = useState("N/A");
 
+  useEffect(() => {
+    const getLoans = async () => {
+      const email = await AsyncStorage.getItem('email');
+      const name = await AsyncStorage.getItem('name');
+      const chama = await AsyncStorage.getItem('chama');
+      const member_id = await AsyncStorage.getItem('member_id');
+      const selected_chama = await AsyncStorage.getItem('selected_chama');
 
+      setName(name);
+      setEmail(email);
+      setIsLoadingData(true);
 
-  //  start get loans function
-useEffect(() => {
-  const getLoans = async () => {
-    const email = await AsyncStorage.getItem('email');
-    const name = await AsyncStorage.getItem('name');
-    const chama = await AsyncStorage.getItem('chama');
-    setName(name);
-    const member_id = await AsyncStorage.getItem('member_id');
-    const selected_chama = await AsyncStorage.getItem('selected_chama');
-    
-    setIsLoadingData(true);
-    try {
-      const url = `https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`;
-      const response = await axios.get(url);
+      try {
+        const response = await axios.get(`https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`);
+        const response2 = await axios.get(`https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`);
 
-      const url2 = `https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`;
-      const response2 = await axios.get(url2);
-      
-      if(response.status === 200 && response2.status === 200){
-        const total_stl_new = response.data.total_stl_loan - response2.data.total_stl_repayment;
-        // alert("Alert" + total_stl_new);
-        const total_ltl_new = response.data.total_ltl_loan - response2.data.total_ltl_repayment;
-        if(total_stl_new > 0){
-          setIsDisabled(true); // Disable the button if loan_new is greater than 0
+        if (response.status === 200 && response2.status === 200) {
+          const total_stl_new = response.data.total_stl_loan - response2.data.total_stl_repayment;
+          const total_ltl_new = response.data.total_ltl_loan - response2.data.total_ltl_repayment;
+
+          if (total_stl_new > 0) setIsDisabled(true);
+
+          setLoan(response.data.total_loan);
+          setLoanInterest(response.data.interest);
+          setTotalSTL(total_stl_new);
+          setTotalLTL(total_ltl_new);
+          setTotalSTLRepayment(response.data.total_stl_repayment);
+          setTotalLTLRepayment(response.data.total_ltl_repayment);
+          setStlDate(response.data.stl_loan_date[0]?.loan_date || "N/A");
+          setLtlDate(response.data.ltl_loan_date[0]?.loan_date || "N/A");
+          setStlDueDate(response.data.stl_loan_deadline[0]?.loan_deadline || "N/A");
+          setLtlDueDate(response.data.ltl_loan_deadline[0]?.loan_deadline || "N/A");
         }
-        setLoan(response.data.total_loan);
-        setLoanInterest(response.data.interest);
-        setTotalSTL(total_stl_new);
-        setTotalLTL(total_ltl_new );
-        setTotalSTLRepayment(response.data.total_stl_repayment);
-        setTotalLTLRepayment(response.data.total_ltl_repayment);
-        setStlDate(response.data.stl_loan_date[0].loan_date);
-        setLtlDate(response.data.ltl_loan_date[0].loan_date);
-        setStlDueDate(response.data.stl_loan_deadline[0].loan_deadline);
-        setLtlDueDate(response.data.ltl_loan_deadline[0].loan_deadline);
-        
+      } catch (error) {
+        console.error("Error fetching loan data:", error);
+      } finally {
+        setIsLoadingData(false);
       }
-    } 
-    catch (error) {
-      console.error("Error:", error);
-      return null;
-    }
-    finally{
-      setIsLoadingData(false);
-    }
-  }
-  getLoans();
+    };
 
-},[email]);
-// end of get loans function
+    getLoans();
+  }, []);
 
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      setIsLoadingTransactions(true);
+      const email = await AsyncStorage.getItem('email');
+      const chama_id = await AsyncStorage.getItem('chama');
 
-    // fetch loan transactions data
-    useEffect(() => {
-      setIsLoadingTransactions(true); 
-      const fetchTransactions = async() => {
-        const email = await AsyncStorage.getItem('email');
-        const chama_id = await AsyncStorage.getItem('chama');
-        // await AsyncStorage.setItem('loan', loan.toString());
-        axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
-            .then((response) => {
-              setTransactions(response.data);s
-            })
-            .catch((error) => {
-              console.error(error);
-            }).finally(() => {setIsLoadingTransactions(false);});
-  
-      }
-      fetchTransactions();
-      
-    }, []);
-    // end of fetch loan transactions
+      axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
+        .then((response) => setTransactions(response.data))
+        .catch((error) => console.error("Error fetching transactions:", error))
+        .finally(() => setIsLoadingTransactions(false));
+    };
 
-  const handleApplyLoan =()=>{
-    navigation.navigate('applyloan', {
-      email:email,
-    });
-  }
+    fetchTransactions();
+  }, []);
 
-
-  const handleTerms = async(loan_type) => {
+  const handleTerms = async (loan_type) => {
     await AsyncStorage.setItem('loan_type', loan_type);
     router.push('terms');
-  }
+  };
 
-  const handlePayLoan = async(repayment_amount, loan_type) => {
+  const handlePayLoan = async (repayment_amount, loan_type) => {
     await AsyncStorage.setItem('repayment_amount', JSON.stringify(repayment_amount));
     await AsyncStorage.setItem('loan_type', loan_type);
     router.push('payloan');
-  }
+  };
 
-   // start of activity
-   const Activity = ({transactionType, chama, amount, transactionTime}) => {
-    return(
-      <View className='bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around'>
-          <View>
-            <Text className='font-serif'>{transactionType}</Text>
-            <Text className='font-serif'>Chama{chama}</Text>
-          </View>
-          <View>
-            <Text className='font-bold font-serif'>KES.{amount}</Text>
-            <Text className='font-bold font-serif'>{transactionTime}</Text>
-          </View>
-        </View>
-    );
-  }
-  // end of activity
+  const Activity = ({ transactionType, chama, amount, transactionTime }) => (
+    <View className="bg-yellow-100 p-4 rounded-xl mb-3">
+      <Text className="text-lg font-bold text-gray-800 font-serif">{transactionType}</Text>
+      <Text className="text-gray-700 font-serif">Chama: {chama}</Text>
+      <Text className="text-gray-700 font-serif">Amount: KES.{amount}</Text>
+      <Text className="text-sm text-gray-600 font-serif">Date: {transactionTime}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4 mb-20" nestedScrollEnabled={true}>
-        <View className="flex-row justify-between items-start mb-6 ">
-        <View className="w-full p-4 bg-white">
-          {/* welcome part */}
-          <Text className="text-3xl font-bold text-gray-800 mb-0 font-serif">Welcome back,{name}</Text>
-          <Text className='text-lg font-bold text-gray-800 mt-0 font-serif'>Time to borrow money</Text>
-          <View className="p-4">
-            {/* loan image part */}
-      <ImageBackground
-        source={require('../assets/images2/loan.png')}
-        className="w-full h-48 rounded-lg overflow-hidden justify-center"
-        style={{ resizeMode: 'contain', width: '100%', height: 200 }}
-      >
-        <View className="p-5">
-          <Text className="text-xl font-bold text-gray-900 font-serif">Your Loans</Text>
-          <Text className="text-2xl font-bold text-gray-800 font-serif">{isLoadingData ? "Loading..." : `KES.${loan}`}</Text>
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+      <ScrollView className="p-4">
+        <View className="mb-6">
+          <Text className="text-3xl font-bold text-gray-800 font-serif">Welcome back, {name}</Text>
+          <Text className="text-lg font-semibold text-gray-600 font-serif mt-1">Time to borrow money</Text>
         </View>
-      </ImageBackground>
 
-<View className="space-y-6 mt-5">
+        {/* Loan Summary Card */}
+        <ImageBackground
+          source={require('../assets/images2/loan.png')}
+          className="w-full h-48 rounded-xl overflow-hidden mb-6"
+          style={{ resizeMode: 'cover' }}
+        >
+          <View className="p-6 bg-black/30 h-full justify-center">
+            <Text className="text-white text-xl font-bold font-serif">Your Loans</Text>
+            <Text className="text-white text-3xl font-bold font-serif">
+              {isLoadingData ? 'Loading...' : `KES.${loan}`}
+            </Text>
+          </View>
+        </ImageBackground>
 
-  {/* Short-Term Loan Section */}
-  <View className="bg-yellow-600 p-4 mb-5 rounded-sm">
-    <Text className="text-xl font-bold text-white mb-2 font-serif">Short-Term Loan</Text>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Outstanding Loan</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSTL}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Interest</Text>
-      <Text className="text-white font-bold font-serif">30%</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Total Payable</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSTLRepayment}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Date taken</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${stlDate.split("T")[0]}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Due date</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${stlDueDate.split("T")[0]}`}</Text>
+       {[{
+  title: "Short-Term Loan",
+  total: totalSTL,
+  interest: "30%",
+  payable: totalSTLRepayment,
+  date: stlDate,
+  due: stlDueDate,
+  loanType: "STL"
+}, {
+  title: "Long-Term Loan",
+  total: totalLTL,
+  interest: "10%",
+  payable: totalLTLRepayment,
+  date: ltlDate,
+  due: ltlDueDate,
+  loanType: "LTL"
+}].map((loanItem, index) => (
+  <View key={index} className="bg-yellow-600 p-5 rounded-2xl mb-6 shadow-lg">
+    <Text className="text-xl font-bold text-white mb-4 font-serif">{loanItem.title}</Text>
+    
+    <View className="space-y-3 mb-6">
+      <View className="flex-row justify-between">
+        <Text className="text-white font-serif">Outstanding Loan:</Text>
+        <Text className="text-white font-bold font-serif">KES.{loanItem.total}</Text>
+      </View>
+      <View className="flex-row justify-between">
+        <Text className="text-white font-serif">Interest:</Text>
+        <Text className="text-white font-bold font-serif">{loanItem.interest}</Text>
+      </View>
+      <View className="flex-row justify-between">
+        <Text className="text-white font-serif">Total Payable:</Text>
+        <Text className="text-white font-bold font-serif">KES.{loanItem.payable}</Text>
+      </View>
+      <View className="flex-row justify-between">
+        <Text className="text-white font-serif">Date Taken:</Text>
+        <Text className="text-white font-bold font-serif">{loanItem.date.split("T")[0]}</Text>
+      </View>
+      <View className="flex-row justify-between">
+        <Text className="text-white font-serif">Due Date:</Text>
+        <Text className="text-white font-bold font-serif">{loanItem.due.split("T")[0]}</Text>
+      </View>
     </View>
 
-    <View className="flex-row justify-around">
+    {/* Full-width buttons stacked vertically */}
+    <View className="space-y-3">
       <TouchableOpacity
-        className="bg-white py-3 px-5 rounded-xl items-center"
-        onPress={()=>handleTerms("STL")}
+        className="bg-white py-3 w-full rounded-xl items-center mb-4"
+        onPress={() => handleTerms(loanItem.loanType)}
         disabled={isDisabled}
       >
-        <FontAwesome6 name="plus" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1 font-serif">Take Loan</Text>
+        <FontAwesome6 name="plus" size={20} color="black" />
+        <Text className="text-black font-medium mt-1 font-serif">Take Loan</Text>
       </TouchableOpacity>
-
+      
       <TouchableOpacity
-        className="bg-white py-3 px-5 rounded-xl items-center"
-        onPress={() => handlePayLoan(totalSTLRepayment,"STL")}
+        className="bg-white py-3 w-full rounded-xl items-center"
+        onPress={() => handlePayLoan(loanItem.payable, loanItem.loanType)}
       >
-        <FontAwesome6 name="money-bills" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1 font-serif">Pay Loan</Text>
+        <FontAwesome6 name="money-bills" size={20} color="black" />
+        <Text className="text-black font-medium mt-1 font-serif">Pay Loan</Text>
       </TouchableOpacity>
     </View>
   </View>
+))}
 
-  {/* Long-Term Loan Section */}
-  <View className="bg-yellow-600 p-4 rounded-sm">
-    <Text className="text-xl font-bold text-white mb-2 font-serif">Long-Term Loan</Text>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Outstanding Loan</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLTL}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Interest</Text>
-      <Text className="text-white font-bold font-serif">10%</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Total Payable</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLTLRepayment}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Date taken</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${ltlDate.split("T")[0]}`}</Text>
-    </View>
-    <View className="flex-row justify-between items-center mb-4">
-      <Text className="text-white font-serif">Due date</Text>
-      <Text className="text-white font-bold font-serif">{isLoadingData ? "Loading..." : `${ltlDueDate.split("T")[0]}`}</Text>
-    </View>
-
-    <View className="flex-row justify-around">
-      <TouchableOpacity
-        className="bg-white py-3 px-5 rounded-xl items-center"
-        onPress={()=>handleTerms("LTL")}
-        disabled={isDisabled} // Disable the button
-      >
-        <FontAwesome6 name="plus" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1 font-serif">Take Loan</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        className="bg-white py-3 px-5 rounded-xl items-center"
-        onPress={() => handlePayLoan(totalLTLRepayment,"LTL")}
-      >
-        <FontAwesome6 name="money-bills" size={24} color="black" />
-        <Text className="text-gray-900 font-medium mt-1 font-serif">Pay Loan</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-
-</View>
-      <View>
-
-        {/* your activity part  */}
-        <Text className='ml-1 font-bold mt-5 font-serif'>My activities</Text>
-        {isLoadingTransactions ? <Text className='text-lg font-bold font-serif'>Loading...</Text> : (
-          <FlatList
-          data={transactions} // Array of data
-          keyExtractor={(item) => item.transaction_id.toString()} // Unique key for each item
-          renderItem={({ item }) => <Activity transactionType={item.transaction_type} chama={item.chama} amount={item.amount} transactionTime={item.transaction_date.split("T")[0]} />} // How each item is displayed
-          showsVerticalScrollIndicator={false} // Hides the scrollbar
-          listMode="SCROLLVIEW"
-          />
-
-        )}
-
-        
-        
-      </View>
-      </View>
-        </View>
+        {/* Activity Section */}
+        <View className="mt-4">
+          <Text className="text-xl font-bold mb-2 font-serif">My Activities</Text>
+          {isLoadingTransactions ? (
+            <ActivityIndicator size="large" color="#facc15" />
+          ) : (
+            <FlatList
+              data={transactions}
+              keyExtractor={(item) => item.transaction_id.toString()}
+              renderItem={({ item }) => (
+                <Activity
+                  transactionType={item.transaction_type}
+                  chama={item.chama}
+                  amount={item.amount}
+                  transactionTime={item.transaction_date.split("T")[0]}
+                />
+              )}
+              scrollEnabled={false}
+            />
+          )}
         </View>
       </ScrollView>
-      <StatusBar
-            barStyle="dark-content" // or "light-content" depending on your background
-            backgroundColor="transparent"
-            translucent={true}
-          />
     </SafeAreaView>
   );
 }

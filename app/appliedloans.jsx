@@ -60,36 +60,50 @@ export default function Chama(){
     };
 
 
+// start of applied loans component
+const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) => {
+  return (
+    <View className="w-80 p-4 mb-4 bg-white rounded-2xl shadow-md border border-gray-200">
+      {/* Top Info Section */}
+      <View className="flex-row justify-between items-center mb-3">
+        <Text className="text-sm text-gray-700 font-semibold">Loanee: {loonee_id}</Text>
+        <Text className="text-base font-bold text-green-600">KES {loan}</Text>
+      </View>
 
-    const AppliedLoans = ({loan_id, loonee_id, loan, date, chama_id, loanType}) => {
-        return (
-            <View className='w-80 p-4 m-2 bg-yellow-600 rounded-lg shadow-lg'>
-                <View className="flex-row justify-between bg-white p-3 rounded-lg">
-                    <Text className='font-bold font-serif'>{loonee_id}</Text>
-                    <Text className='font-bold font-serif'>KES.{loan}</Text>
-                    <Text className='font-bold font-serif'>{date}</Text>
-                </View>
-                <Text className='m-3 font-serif'>Credit Score: 90</Text>
-                <Text className='m-3 font-serif'>Type: {loanType}</Text>
-                <View className="flex-row justify-between bg-gray-950 p-3 rounded-lg">
-                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id, "approved", chama_id)}>
-                        {loadingLoanId === loan_id ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                        ) : (
-                            <Text className='text-white font-serif'>Confirm</Text>
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleConfirm(loan_id, loonee_id, "declined", chama_id)}>
-                        {loadingLoanId === loan_id ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                        ) : (
-                            <Text className='text-white font-serif'>Decline</Text>
-                        )}
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    };
+      {/* Loan Metadata */}
+      <Text className="text-sm text-gray-500 mb-1">Applied on: {date}</Text>
+      <Text className="text-sm text-gray-600 mb-1">Credit Score: 90</Text>
+      <Text className="text-sm text-gray-600 mb-3">Type: {loanType}</Text>
+
+      {/* Action Buttons */}
+      <View className="flex-row justify-between mt-3">
+        <TouchableOpacity
+          onPress={() => handleConfirm(loan_id, loonee_id, "approved", chama_id)}
+          className="bg-green-600 px-4 py-2 rounded-lg"
+        >
+          {loadingLoanId === loan_id ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text className="text-white font-semibold">Approve</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => handleConfirm(loan_id, loonee_id, "declined", chama_id)}
+          className="bg-red-600 px-4 py-2 rounded-lg"
+        >
+          {loadingLoanId === loan_id ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text className="text-white font-semibold">Decline</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+// end of applied loans component
     
 
     // Alert component
@@ -102,7 +116,12 @@ export default function Chama(){
   };
 
     if (loading) {
-        return <ActivityIndicator size="large" color="#FFA500" />;
+        return (
+            <View className="flex-1 justify-center items-center">
+                <ActivityIndicator size="large" color="#FFA500" />
+                <Text className="text-gray-600 font-serif">Loading loans...</Text>
+            </View>
+        )
     }
     return(
         <SafeAreaView className="flex-1 bg-white">
