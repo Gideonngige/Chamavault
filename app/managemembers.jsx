@@ -155,11 +155,11 @@ import {
           <View className="flex-1 justify-center items-center p-5">
             
             {/* Page Title */}
-            <Text className="w-full text-xl font-bold mb-3">Manage Members</Text>
+            <Text className="w-full text-xl font-bold mb-3 font-serif">Manage Members</Text>
   
             {/* Member Selection */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2">Select a Member</Text>
+              <Text className="text-lg font-semibold mb-2 font-serif">Select a Member</Text>
               <DropDownPicker
                 open={open}
                 value={value}
@@ -168,16 +168,16 @@ import {
                 setValue={setValue}
                 setItems={setItems}
                 placeholder="Select a member"
-                style={{ borderColor: '#ca8a04', borderWidth: 2 }}
+                style={{ borderColor: '#ca8a04', borderWidth: 1, borderRadius:1, height:50, fontFamily: 'sans-serif', }}
                 listMode="SCROLLVIEW"
               />
             </View>
   
             {/* Message Input Field */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2">Write a Message</Text>
+              <Text className="text-lg font-semibold mb-2 font-serif">Write a Message</Text>
               <TextInput
-                className="w-full bg-white p-4 rounded-lg shadow-md border border-gray-300"
+                className="w-full bg-white font-serif p-4 rounded-lg shadow-md border border-gray-300 h-40"
                 placeholder="Type your message here..."
                 multiline
                 numberOfLines={4}
@@ -187,27 +187,36 @@ import {
             </View>
   
             {/* Action Buttons */}
-            <View className="w-full flex-row justify-between">
-              <TouchableOpacity 
-                className="bg-red-600 p-4 rounded-lg flex-1 mr-2"
-                onPress={deletemember}
-              >
-                {isLoading 
-                  ? <ActivityIndicator size="large" color="#fff" /> 
-                  : <Text className="text-white text-center font-semibold text-lg">DELETE</Text>
-                }
-              </TouchableOpacity>
-  
-              <TouchableOpacity 
-                className="bg-yellow-600 p-4 rounded-lg flex-1 ml-2"
-                onPress={handleSendMessage}
-              >
-                {isLoading2 
-                  ? <ActivityIndicator size="large" color="#fff" /> 
-                  : <Text className="text-white text-center font-semibold text-lg">SEND MESSAGE</Text>
-                }
-              </TouchableOpacity>
-            </View>
+<View className="w-full flex-row justify-between">
+  <TouchableOpacity 
+    className="bg-red-600 p-4 rounded-lg flex-1 mr-2 justify-center items-center"
+    onPress={deletemember}
+  >
+    {isLoading 
+      ? <ActivityIndicator size="small" color="#fff" /> 
+      : (
+        <Text className="text-white font-semibold text-lg font-serif text-center">
+          DELETE
+        </Text>
+      )
+    }
+  </TouchableOpacity>
+
+  <TouchableOpacity 
+    className="bg-green-600 p-4 rounded-lg flex-1 ml-2 justify-center items-center"
+    onPress={handleSendMessage}
+  >
+    {isLoading2 
+      ? <ActivityIndicator size="small" color="#fff" /> 
+      : (
+        <Text className="text-white font-semibold text-lg font-serif text-center">
+          SEND MESSAGE
+        </Text>
+      )
+    }
+  </TouchableOpacity>
+</View>
+
             <Toast/>
   
             <StatusBar />

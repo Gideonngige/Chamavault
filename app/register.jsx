@@ -1,179 +1,209 @@
-import {Text, View, StatusBar, TextInput, TouchableOpacity, Image,SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Text, View, StatusBar, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
 import "../global.css";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { Asset } from 'expo-asset';
 
-export default function Register(){
+
+export default function Register() {
     const router = useRouter();
-    const [fullname,setFullname] = useState("");
-    const [phonenumber,setPhonenumber] = useState("");
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [confirmPassword,setConfirmPassword] = useState("");
+    const [fullname, setFullname] = useState("");
+    const [phonenumber, setPhonenumber] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [image, setImage] = useState(null);
 
-    //start function to handle registration
-    const handleRegister = async() => {
-      if(fullname == "" || phonenumber == "" || email == "" || password == "" || confirmPassword == ""){
-        Toast.show({
-              type: "error", // Can be "success", "error", "info"
-              text1: "Empty fields",
-              text2: "Please fill in all fields",
-              position:"center",
-            });
-        return;
-      }
-      else{
-      if(password == confirmPassword){
-        setIsLoading(true);
-        try {
-          const url = "https://backend1-1cc6.onrender.com/postsignUp/";
-          const data = {
-              name: fullname,
-              email: email,
-              phone_number: phonenumber,
-              password: password,
-          };
-  
-          console.log("Sending data:", data);  // Log request data
-  
-          const response = await axios.post(url, data, {
-              headers: { "Content-Type": "application/json" },
-          });
-  
-          console.log("Response received:", response.data);  // Log response
-          Toast.show({
-            type: "success", // Can be "success", "error", "info"
-            text1: "Successfully",
-            text2: "Registration successful!",
-            position:"center",
-          });
-          if(response.data.message == "Successfully registered"){
-            router.push("login/");
-          }
-          else{
+    useEffect(() => {
+    const loadDefaultImage = async () => {
+        const asset = Asset.fromModule(require('../assets/images2/profile3.png'));
+        await asset.downloadAsync();
+        setImage(asset.localUri || asset.uri);
+    };
+
+    if (!image) {
+        loadDefaultImage();
+    }
+}, []);
+
+
+    // Image picker
+    const pickImage = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Permission to access media is required!');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    // Handle registration
+    const handleRegister = async () => {
+        if (fullname === "" || phonenumber === "" || email === "" || password === "" || confirmPassword === "") {
             Toast.show({
-              type: "error", // Can be "success", "error", "info"
-              text1: "Failed registration",
-              text2: response.data.message,
-              position:"center",
+                type: "error",
+                text1: "Empty fields",
+                text2: "Please fill in all fields",
+                position: "center",
             });
-            // alert(response.data.message);
-          }
-  
-      } 
-      catch (error) {
-          // console.error("Error during registration:", error);
-  
-          if (error.response) {
-              // console.error("Server Error:", error.response.data);
-              Toast.show({
-                type: "error", // Can be "success", "error", "info"
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Toast.show({
+                type: "error",
+                text1: "Password mismatch",
+                text2: "Passwords do not match",
+                position: "center",
+            });
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            const url = "https://backend1-1cc6.onrender.com/postsignUp/";
+            const formData = new FormData();
+
+            formData.append("name", fullname);
+            formData.append("email", email);
+            formData.append("phone_number", phonenumber);
+            formData.append("password", password);
+
+            if (image) {
+                const fileName = image.split('/').pop();
+                const fileType = fileName.split('.').pop();
+
+                formData.append("profile_image", {
+                    uri: image,
+                    name: fileName,
+                    type: `image/${fileType}`,
+                });
+            }
+
+            const response = await axios.post(url, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            Toast.show({
+                type: "success",
+                text1: "Success",
+                text2: "Registration successful!",
+                position: "center",
+            });
+
+            if (response.data.message === "Successfully registered") {
+                router.push("login/");
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: "Registration failed",
+                    text2: response.data.message,
+                    position: "center",
+                });
+            }
+
+        } catch (error) {
+            const message = error?.response?.data?.message || error.message;
+            Toast.show({
+                type: "error",
                 text1: "Error",
-                text2: error.response.data.message,
-                position:"center",
-              });
-              // alert("Server Error: " + JSON.stringify(error.response.data));
-          } else {
-              console.error("Network Error:", error.message);
-              Toast.show({
-                type: "error", // Can be "success", "error", "info"
-                text1: "Network Error",
-                text2: error.message,
-                position:"center",
-              });
-              // alert("Network Error: " + error.message);
-          }
-      }
-      finally{
-        setIsLoading(false);
-      }
-    }
-    else{
-      Toast.show({
-        type: "error", // Can be "success", "error", "info"
-        text1: "Password mismatch",
-        text2: "Password do not match",
-        position:"center",
-      });
-      // alert("Passwords do not match");
-    }
-  }
-  }
-  // end of function to handle registration
+                text2: message,
+                position: "center",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-
-    return(
+    return (
         <SafeAreaView className="flex-1 bg-white">
-        <ScrollView nestedScrollEnabled={true} className="p-4">
-    <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-    <Image 
-        source={require('../assets/images2/logo.png')}
-        style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
-        }}
-      />
-      <Text className="text-xl font-serif font-bold">ChamaVault</Text>
-        
-      <Text className="w-full text-lg font-bold font-serif mt-5">Enter your fullname</Text>
-      <TextInput 
-      placeholder="e.g John Doe"
-      value={fullname}
-      onChangeText={setFullname}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <Text className="w-full text-lg font-bold font-serif">Enter your phonenumber</Text>
-      <TextInput 
-      placeholder="e.g 0712345678"
-      value={phonenumber}
-      onChangeText={setPhonenumber}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
-      <TextInput 
-      placeholder="e.g johndoe@example.com"
-      keyboardType="email-address"
-      value={email}
-      onChangeText={setEmail}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <Text className="w-full text-lg font-bold font-serif">Enter your password</Text>
-      <TextInput 
-      placeholder="Enter your password"
-      secureTextEntry 
-      value={password}
-      onChangeText={setPassword}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <Text className="w-full text-lg font-bold font-serif">Confirm your password</Text>
-      <TextInput 
-      placeholder="Confirm your password"
-      secureTextEntry 
-      value={confirmPassword}
-      onChangeText={setConfirmPassword}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleRegister}>
-        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-serif font-semibold text-lg">Register</Text>}
-      </TouchableOpacity> 
-      <View className="flex-row justify-center mt-4 mb-6">
-      <Text className="text-lg font-serif">Already have an account? </Text>
-      <TouchableOpacity onPress={() => router.push("/login")}>
-      <Text className="text-lg text-yellow-600 font-serif mb-40">Login</Text>
-      </TouchableOpacity>
-      </View>
-      <Toast/>
-      <StatusBar/>
-      </View>
-      </ScrollView>
-      <StatusBar
-            barStyle="dark-content" // or "light-content" depending on your background
-            backgroundColor="transparent"
-            translucent={true}
-          />
-      </SafeAreaView>
-    
+            <ScrollView nestedScrollEnabled={true} className="p-4">
+                <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
+                    <TouchableOpacity onPress={pickImage}>
+                        {image ? (
+                            <Image source={{ uri: image }} style={{ width: 150, height: 150, borderRadius: 75, borderWidth: 3, borderColor: '#fff' }} />
+                        ) : (
+                            <Image source={require('../assets/images2/profile3.png')} style={{ width: 150, height: 150, borderRadius: 75, borderWidth: 3, borderColor: '#fff' }} />
+                        )}
+                    </TouchableOpacity>
+                    <Text className="text-md font-serif text-gray-500 mt-2">Tap image to upload profile picture</Text>
+
+                    <Text className="w-full text-lg font-bold font-serif mt-5">Enter your fullname</Text>
+                    <TextInput
+                        placeholder="e.g John Doe"
+                        value={fullname}
+                        onChangeText={setFullname}
+                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                    />
+
+                    <Text className="w-full text-lg font-bold font-serif">Enter your phonenumber</Text>
+                    <TextInput
+                        placeholder="e.g 0712345678"
+                        value={phonenumber}
+                        onChangeText={setPhonenumber}
+                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                    />
+
+                    <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
+                    <TextInput
+                        placeholder="e.g johndoe@example.com"
+                        keyboardType="email-address"
+                        value={email}
+                        onChangeText={setEmail}
+                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                    />
+
+                    <Text className="w-full text-lg font-bold font-serif">Enter your password</Text>
+                    <TextInput
+                        placeholder="Enter your password"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword}
+                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
+                    />
+
+                    <Text className="w-full text-lg font-bold font-serif">Confirm your password</Text>
+                    <TextInput
+                        placeholder="Confirm your password"
+                        secureTextEntry
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
+                    />
+
+                    <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleRegister}>
+                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-serif font-semibold text-lg">Register</Text>}
+                    </TouchableOpacity>
+
+                    <View className="flex-row justify-center mt-4 mb-6">
+                        <Text className="text-lg font-serif">Already have an account? </Text>
+                        <TouchableOpacity onPress={() => router.push("/login")}>
+                            <Text className="text-lg text-yellow-600 font-serif mb-40">Login</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <Toast />
+                    <StatusBar />
+                </View>
+            </ScrollView>
+            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
+        </SafeAreaView>
     );
 }

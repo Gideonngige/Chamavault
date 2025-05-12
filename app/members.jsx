@@ -49,11 +49,11 @@ export default function Members() {
     }
   }, [search, members]);
 
-  const ProfileCard = ({ name, email, joined_date }) => (
+  const ProfileCard = ({ name, email, joined_date, profile_image }) => (
     <View className="bg-yellow-600 mb-4 p-4 rounded-2xl mx-4 shadow-lg">
       <View className="flex-row items-center space-x-4">
         <Image
-          source={require('../assets/images2/profile3.png')}
+          source={{ uri: profile_image }}
           style={{ width: 60, height: 60 }}
           className="rounded-full"
         />
@@ -101,6 +101,7 @@ export default function Members() {
             name={item.name}
             email={item.email}
             joined_date={item.joined_date.split('T')[0]}
+            profile_image={item.profile_image}
           />
         )}
         showsVerticalScrollIndicator={false}

@@ -17,13 +17,16 @@ export default function Profile() {
   const router = useRouter();
   const[email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [profileImg, setProfileImg] = useState("");
 
   useEffect(() =>{
     const handleGetDaya = async() =>{
       const email = await AsyncStorage.getItem('email');
       const name = await AsyncStorage.getItem('name');
+      const profile_image = await AsyncStorage.getItem('profile_image');
       setEmail(email);
       setName(name);
+      setProfileImg(profile_image);
 
     }
     handleGetDaya();
@@ -63,7 +66,7 @@ export default function Profile() {
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
         <View className="items-center mb-8">
         <Image 
-        source={require('../assets/images2/profile3.png')}
+        source={{ uri: profileImg }}
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />

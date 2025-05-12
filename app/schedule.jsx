@@ -76,10 +76,10 @@ export default function Schedule() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className="w-full text-lg font-bold">Meeting date</Text>
+          <Text className="w-full text-lg font-bold font-serif">Meeting date</Text>
       <View className='w-full'>
       <TouchableOpacity onPress={showDatePicker} className=" bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
-      <Text className="w-full text-lg font-bold">Meeting Date: {date.toLocaleDateString()}</Text>
+      <Text className="w-full text-lg font-bold font-serif">Meeting Date: {date.toLocaleDateString()}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -93,9 +93,9 @@ export default function Schedule() {
     </View>
                 {/* Message Input Field */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2">Write a Message</Text>
+              <Text className="text-lg font-semibold mb-2 font-serif">Write a Message</Text>
               <TextInput
-                className="w-full bg-white p-4 rounded-lg shadow-md border border-gray-300"
+                className="w-full font-serif bg-white p-4 h-40 rounded-lg shadow-md border border-gray-300"
                 placeholder="Type your message here..."
                 multiline
                 numberOfLines={4}
@@ -103,8 +103,8 @@ export default function Schedule() {
                 onChangeText={setMessage}
               />
             </View>
-                <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleSchedule}>
-                {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg">Schedule</Text> }
+                <TouchableOpacity className="w-full bg-green-600 p-4 rounded-sm" onPress={handleSchedule}>
+                {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Schedule</Text> }
                         
                 </TouchableOpacity>
                 <Toast/>

@@ -54,6 +54,7 @@ export default function Home() {
   const [email, setEmail] =  useState("");
   const [savingDate, setSavingDate] = useState("N/A");
   const [chamaName, setChamaName] = useState("Chama Name");
+  const [profileImg, setProfileImg] = useState("");
   const route = useRoute();
   const router = useRouter();
 
@@ -128,8 +129,10 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
+        const profile_image = await AsyncStorage.getItem('profile_image');
         const selected_chama = await AsyncStorage.getItem('selected_chama');
         setChamaName(selected_chama);
+        setProfileImg(profile_image);
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
@@ -226,7 +229,7 @@ const renderItem = ({ item }) => (
     onPress={handleProfile}
   >
     <Image 
-      source={require('../assets/images2/profile3.png')}
+      source={{ uri: profileImg }}
       style={{
         width: 50,
         height: 50,

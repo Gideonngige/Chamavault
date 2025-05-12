@@ -45,6 +45,7 @@ export default function Index() {
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('role', response2.data.role);
           await AsyncStorage.setItem('name', response2.data.name);
+          await AsyncStorage.setItem('profile_image', response2.data.profile_image);
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
           await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
           // alert(response2.data.member_id);
@@ -54,6 +55,7 @@ export default function Index() {
       else{
         const message = response.data.message; 
         if(message == "Successfully logged in"){
+          await AsyncStorage.setItem('profile_image', response2.data.profile_image);
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
