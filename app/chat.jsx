@@ -101,7 +101,7 @@ const ChatScreen = () => {
                   </Text>
                 </View>
                 <Text className="text-black dark:text-black font-serif mt-1">{item.text}</Text>
-                <Text className="text-xs text-gray-300 mt-1 font-serif">
+                <Text className="text-xs text-white mt-1 font-serif">
                   {new Date(item.timestamp).toLocaleTimeString()}
                 </Text>
               </View>

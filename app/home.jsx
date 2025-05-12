@@ -15,17 +15,30 @@ import BottomTabs from './BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Carousel from 'react-native-reanimated-carousel';
 import * as Location from 'expo-location';
-const InfoCard = ({ title}) => (
-  <View className="bg-yellow-600 p-4 rounded-lg mb-4">
-    <View className="flex-row justify-between mb-1">
-    <Text className="text-lg mb-2 text-white font-serif">{title}</Text>
-    <Ionicons name="chevron-forward" size={24} color="black" />
+const InfoCard = ({ title, icon, onPress }) => (
+  <TouchableOpacity 
+    onPress={onPress} 
+    style={{
+      backgroundColor: '#fff',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 12,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+      elevation: 4,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    }}
+  >
+    <View>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333' }}>{title}</Text>
+      <Text style={{ fontSize: 14, color: '#777' }}>Interest rate: 10%-30%</Text>
     </View>
-    <View className="flex-row justify-between mb-1">
-      <Text className="text-gray-950 font-serif">Interest rate p.a</Text>
-      <Text className="text-gray-950 font-serif">10%-30%</Text>
-    </View>
-  </View>
+    <Ionicons name={icon} size={24} color="#fbbf24" />
+  </TouchableOpacity>
 );
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -33,8 +46,8 @@ const ITEM_WIDTH = SLIDER_WIDTH * 0.8;
 
 const data = [
   { title: 'Welcome to chamavault', image: require('../assets/images2/payment.png') },
-  { title: 'Save your money to earn interest', image: require('../assets/images2/invest.png') },
-  { title: 'Borrow money to grow', image: require('../assets/images2/loan.png') },
+  { title: 'Invest Smartly', image: require('../assets/images2/invest.png') },
+  { title: 'Borrow Easily', image: require('../assets/images2/loan.png') },
 ];
 
 export default function Home() {
@@ -260,74 +273,62 @@ const renderItem = ({ item }) => (
       />
 
       {/* Main Content */}
-      <View className="space-y-4">
-        <TouchableOpacity
-        onPress={goToSavings}
-        >
-        <InfoCard
-          title="Savings"
-          interest={interest}
-        />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-        onPress={goToLoans}
-        >
-        <InfoCard
-          title="Loans"
-          interest={loanInterest}
-        />
-        </TouchableOpacity>
-        <TouchableOpacity
-        onPress={() => router.push('invest/')}
-        >
-        <InfoCard
-          title="Investments"
-          interest={loanInterest}
-        />
-        </TouchableOpacity>
+      
+      {/* Info Cards */}
+      <View className="mt-6">
+        <Text className="text-lg font-semibold text-gray-800 mb-2">Quick Actions</Text>
+        <InfoCard title="Savings" icon="wallet" onPress={() => router.push('/saving')} />
+        <InfoCard title="Loans" icon="cash" onPress={() => router.push('/loan')} />
+        <InfoCard title="Investments" icon="trending-up" onPress={() => router.push('/invest')} />
       </View>
+    {/* end of info cards */}
+
       {/* Chamas Section */}
       <View className="items-center mt-4 mb-2">
-        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("chama/")}>
+        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg shadow-md' onPress={() => router.push("chama/")}>
         <Text className='font-serif text-white'>Go To {chamaName} Profile</Text>
         <Ionicons name="chevron-forward" size={24} color="white" />
         </TouchableOpacity>
 
-  <View className="w-full p-0 rounded-lg mt-4 flex flex-row justify-between">
-  {/* Create Chama Button */}
-  <TouchableOpacity 
-    className=" py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('createchama/')}
-  >
-    <View className='bg-yellow-600 rounded-full p-4'>
-    <Ionicons name="create" size={50} color="white" />
-    </View>
-    <Text className="text-gray-900 font-medium font-serif mt-3">Create Chama</Text>
-  </TouchableOpacity>
+  <View className="w-full mt-6 px-2">
+  <View className="flex-row justify-between items-center space-x-2">
+    
+    {/* Create Chama */}
+    <TouchableOpacity 
+      className="flex-1 bg-white rounded-2xl items-center py-4 shadow-md"
+      onPress={() => router.push('createchama/')}
+    >
+      <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
+        <Ionicons name="create" size={32} color="white" />
+      </View>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Create Chama</Text>
+    </TouchableOpacity>
 
-  {/* Join Chama Button */}
-  <TouchableOpacity 
-    className="py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('joinchama/')}
-  >
-    <View className='bg-yellow-600 rounded-full p-4'>
-      <Ionicons name="enter" size={50} color="white" />
-    </View>
-    <Text className="text-gray-900 font-medium font-serif mt-3">Join Chama</Text>
-  </TouchableOpacity>
+    {/* Join Chama */}
+    <TouchableOpacity 
+      className="flex-1 bg-white rounded-2xl items-center py-4 shadow-md"
+      onPress={() => router.push('joinchama/')}
+    >
+      <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
+        <Ionicons name="enter" size={32} color="white" />
+      </View>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Join Chama</Text>
+    </TouchableOpacity>
 
-  {/* Invite Button */}
-  <TouchableOpacity 
-    className="py-3 rounded-lg items-center w-1/3"
-    onPress={() => router.push('invitation/')}
-  >
-    <View className='bg-yellow-600 rounded-full p-4'>
-    <Entypo name="add-user" size={50} color="white" />
-    </View>
-    <Text className="text-gray-900 font-medium font-serif mt-3">Invite</Text>
-  </TouchableOpacity>
+    {/* Invite */}
+    <TouchableOpacity 
+      className="flex-1 bg-white rounded-2xl items-center py-4 shadow-md"
+      onPress={() => router.push('invitation/')}
+    >
+      <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
+        <Entypo name="add-user" size={32} color="white" />
+      </View>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Invite</Text>
+    </TouchableOpacity>
+
+  </View>
 </View>
+
 
 
           
