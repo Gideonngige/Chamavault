@@ -81,6 +81,9 @@ export default function Admin() {
   const handleContributionDate = async () => {
     router.push('contributiondate/');
   };
+  const handleInvestment = async () => {
+    router.push('investment/');
+  };
   
 
   return (
@@ -143,6 +146,9 @@ export default function Admin() {
             </TouchableOpacity>
             <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleContributionDate}>
               {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Contribution Date</Text>}
+            </TouchableOpacity>
+            <TouchableOpacity className="bg-yellow-600 p-4 rounded-lg w-[48%] mb-2" onPress={handleInvestment}>
+              {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Investment</Text>}
             </TouchableOpacity>
           </View>
         </View>

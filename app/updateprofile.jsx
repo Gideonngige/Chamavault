@@ -1,126 +1,146 @@
-import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity,Image, ActivityIndicator, StatusBar } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator, StatusBar, Alert } from 'react-native';
 import { useRouter } from "expo-router";
-import { push } from 'expo-router/build/global-state/routing';
 import { useEffect, useState } from 'react';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
-
+import * as ImagePicker from 'expo-image-picker';
 
 export default function UpdateProfile() {
-   const navigation = useNavigation();
+  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [fullname,setFullname] = useState("");
+  const [fullname, setFullname] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [email, setEmail] = useState("");
   const [memberId, setMemberId] = useState(0);
+  const [profileImg, setProfileImg] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // function to fetch all items
   useEffect(() => {
-    const fetchData = async() =>{
+    const fetchData = async () => {
       const member_id = await AsyncStorage.getItem('member_id');
       const email = await AsyncStorage.getItem('email');
       const name = await AsyncStorage.getItem('name');
       const phone_number = await AsyncStorage.getItem('phonenumber');
+      const profile_image = await AsyncStorage.getItem('profile_image');
       setEmail(email);
       setFullname(name);
       setPhonenumber(phone_number);
       setMemberId(member_id);
+      setProfileImg(profile_image);
     }
     fetchData();
   }, []);
-  // end of function to fetch all items
 
-  // function to handel update profile
-  const handleUpdate = async() =>{
-    if(fullname == "" || phonenumber == ""){
-      Toast.show({
-          type: "info", // Can be "success", "error", "info"
-          text1: "Empty field",
-          text2: "Please fill all fields",
-      });
+  // Pick an image from gallery
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      setSelectedImage(uri);
+      setProfileImg(uri); // update preview
     }
-    else{
-      setIsLoading(true);
-      try{
-        const url = "https://backend1-1cc6.onrender.com/updateprofile/";
-        const data = {
-              member_id: memberId,
-              name: fullname,
-              phone_number: phonenumber,
-          };
-        const response = await axios.post(url, data, {
-            headers: { "Content-Type": "application/json" },
+  };
+
+  const handleUpdate = async () => {
+    if (fullname === "" || phonenumber === "") {
+      Alert.alert("Empty field", "Please fill all fields");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("member_id", memberId);
+      formData.append("name", fullname);
+      formData.append("phone_number", phonenumber);
+
+      if (selectedImage) {
+        const filename = selectedImage.split('/').pop();
+        const match = /\.(\w+)$/.exec(filename ?? '');
+        const type = match ? `image/${match[1]}` : `image`;
+
+        formData.append("profile_image", {
+          uri: selectedImage,
+          name: filename,
+          type,
         });
-        
-        if(response.status == 200){
-          if(response.data.message == "ok"){
-            alert("Updated successfully");
-          }
+      }
 
+      const response = await axios.post(
+        "https://backend1-1cc6.onrender.com/updateprofile/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-        else{
-          alert("An error occurred");
-        }
+      );
 
+      if (response.status === 200 && response.data.message === "ok") {
+        Alert.alert("Success", "Updated successfully");
+      } else {
+        Alert.alert("Error", "An error occurred");
       }
-      catch(error){
-        alert(error);
-      }
-      finally{
-        setIsLoading(false);
-      }
-
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
     }
-    
-    
-  }
-  // end of function to handle update profile
-
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-        <View className="items-center mb-8">
-        <Image 
-        source={require('../assets/images2/profile3.png')}
-        style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
-        }}
-      />
-      <Text className='font-bold text-lg font-serif'>{email}</Text>
-    </View>
-    <Text className="w-full text-lg font-bold font-serif">Your fullname</Text>
-      <TextInput 
-      placeholder="e.g John Doe"
-      value={fullname}
-      onChangeText={setFullname}
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
-      <Text className="w-full text-lg font-bold font-serif">Your phonenumber</Text>
-      <TextInput 
-      placeholder="e.g 0712345678"
-      value={phonenumber}
-      onChangeText={setPhonenumber}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
-      keyboardType="phone-pad"
-      />
-      <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleUpdate}>
-      {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Update</Text>}
-      </TouchableOpacity>
+          <TouchableOpacity onPress={pickImage} className="items-center mb-4">
+            <Image
+              source={{ uri: profileImg }}
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 75,
+                borderWidth: 3,
+                borderColor: '#fff',
+                resizeMode: 'cover',
+              }}
+            />
+            <Text className="text-blue-500 mt-2 underline font-serif">Change Photo</Text>
+          </TouchableOpacity>
 
+          <Text className="w-full text-lg font-bold font-serif">Your fullname</Text>
+          <TextInput
+            placeholder="e.g John Doe"
+            value={fullname}
+            onChangeText={setFullname}
+            className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+          />
+
+          <Text className="w-full text-lg font-bold font-serif">Your phonenumber</Text>
+          <TextInput
+            placeholder="e.g 0712345678"
+            value={phonenumber}
+            onChangeText={setPhonenumber}
+            keyboardType="phone-pad"
+            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+          />
+
+          <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleUpdate}>
+            {isLoading ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <Text className="text-white text-center font-semibold text-lg font-serif">Update</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar
-            barStyle="dark-content" // or "light-content" depending on your background
-            backgroundColor="transparent"
-            translucent={true}
-          />
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
     </SafeAreaView>
   );
 }

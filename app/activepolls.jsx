@@ -1,209 +1,166 @@
-import { Text, View, StatusBar, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from "react-native";
-import { useState, useEffect } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  StatusBar,
+} from "react-native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from "@expo/vector-icons";
 
-export default function Activepolls() {
-  const [polls, setPolls] = useState([]);
+export default function ActivePolls() {
+  const [poll, setPoll] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [hasVoted, setHasVoted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Function to check if the user has voted
-  useEffect(() => {
-    const check = async () => {
-      const member_id = await AsyncStorage.getItem("member_id");
-      const chama_id = await AsyncStorage.getItem("chama");
-      setIsLoading(true);
-      try{
-        const response2 = await axios.get(`https://backend1-1cc6.onrender.com/checkmembervoted/${member_id}/${chama_id}/`);
-        if(response2.status === 200){
-          alert(response2.data.message);
-          if(response2.data.message == "true"){
-            setHasVoted(true);
-          }
-          else{
-            setHasVoted(false);
-          }
-        }
-
-      }
-      catch(error){
-        console.error("Error fetching member ID:", error);
-      }
-      finally{
-        setIsLoading(false);
-      }
-    }
-    check();
-    
-  },[]); 
-  // Check if the user has voted when the component mounts
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
-    const fetchPolls = async () => {
-      setIsLoading(true);
+    const fetchPoll = async () => {
       try {
         const chama_id = await AsyncStorage.getItem("chama");
-        const member_id = await AsyncStorage.getItem("member_id");
-        const response = await axios.get(`http://127.0.0.1:8000/activepolls/${chama_id}/`);
-        const pollsData = response.data.polls;
-  
-        // Filter out polls that the user has already voted on
-        const filteredPolls = [];
-        for (const poll of pollsData) {
-          const voteCheck = await axios.get(`http://127.0.0.1:8000/checkmembervoted/${member_id}/${chama_id}/${poll.id}/`);
-          if (!voteCheck.data.message) {
-            filteredPolls.push(poll);  // Only include polls the user hasn't voted on
-          }
-        }
-  
-        setPolls(filteredPolls);
+        const response = await axios.get(`https://backend1-1cc6.onrender.com/activepolls/${chama_id}/`);
+        const pollData = response.data.polls[0]; // Assuming 1 active poll
+        setPoll(pollData);
       } catch (error) {
-        console.error("Error fetching polls:", error);
+        console.error("Error fetching poll:", error);
       } finally {
         setIsLoading(false);
       }
     };
-  
-    fetchPolls();
-  }, []);
-  // end of function to fetch polls
 
-  // Function to handle vote submission
+    fetchPoll();
+  }, []);
+
   const handleVote = async () => {
-    if (!selectedOption) {
-      return; // Make sure the user selects an option
-    }
-  
+    if (!selectedOption) return;
+
+    setIsSending(true);
     try {
       const email = await AsyncStorage.getItem("email");
       const chama_id = await AsyncStorage.getItem("chama");
-      // Assuming each poll has an 'id' and each choice has an 'id'
-      const pollId = polls[0].id;  // Get the poll_id (assuming you're displaying only one poll at a time)
-      const choiceId = selectedOption; // Get the selected choice_id
-  
-      // Send poll_id and choice_id to the backend
-      const url = "https://backend1-1cc6.onrender.com/membervote/"
+
       const data = {
-        poll_id: pollId,
-        choice_id: choiceId,
-        email: email,
-        chama_id: chama_id,
-    };
-    const response = await axios.post(url, data, {
-      headers: { "Content-Type": "application/json" },
-  });
-  
-      if (response.status === 200) {
+        poll_id: poll.id,
+        choice_id: selectedOption,
+        email,
+        chama_id,
+      };
+
+      const response = await axios.post("https://backend1-1cc6.onrender.com/membervote/", data, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 200 && response.data.message === "Vote recorded successfully") {
         Toast.show({
           type: "success",
           text1: "Vote submitted successfully!",
         });
-        if(response.data.message == "Vote recorded successfully") {
-          setHasVoted(true);
-        }
-       
       } else {
-        throw new Error("Failed to submit vote");
+        Toast.show({
+          type: "info",
+          text1: "Failed to vote!",
+          text2: response.data.message,
+        });
       }
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: error.message,
+        text1: "Vote failed",
+        text2: error.message,
       });
     }
+    finally{
+      setIsSending(false);
+    }
   };
-  // end of function to handle vote submission
-
-  // alert component
-  const Alert = () => {
-    return (
-      <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold">All set, no poll available.</Text>
-      </View>
-    );
-  };
-
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#FFA500" />;
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#FFA500" />
+         <Text className="text-gray-600 font-serif">Loading polls...</Text>
+      </View>
+    );
   }
-  
+
+  if (!poll) {
+    return (
+      <View className="flex-1 justify-center items-center p-4">
+        <Text>No active poll available.</Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 p-4">
-        {/* Poll question */}
-        {polls.length === 0 ? <Alert /> : null}
+      <ScrollView className="p-4">
+        <View className="bg-yellow-500 p-5 rounded-2xl shadow-lg mb-4">
+          <Text className="text-white text-lg font-semibold mb-4">{poll.question}</Text>
+
+          {poll.choices.map((choice) => (
+            <TouchableOpacity
+              key={choice.id}
+              onPress={() => setSelectedOption(choice.id)}
+              className={`flex-row items-center justify-between border p-3 rounded-xl mb-2 ${
+                selectedOption === choice.id ? "border-yellow-600 bg-yellow-50" : "border-gray-300"
+              }`}
+            >
+              <Text className="text-base font-medium">{choice.choice_text}</Text>
+              {selectedOption === choice.id && (
+                <Ionicons name="checkmark-circle" size={24} color="#eab308" />
+              )}
+            </TouchableOpacity>
+          ))}
+
+          <TouchableOpacity
+            onPress={handleVote}
+            className={`bg-yellow-600 p-3 rounded-xl mt-4 ${!selectedOption ? "opacity-50" : ""}`}
+            disabled={!selectedOption}
+          >
+            {isSending ? <ActivityIndicator size="large" color="#FFA500" /> : 
+            <Text className="text-white font-bold text-center">Submit Vote</Text>
+            }
+          </TouchableOpacity>
+        </View>
+
+      {/* Poll Results Section */}
+<View className="mt-8 bg-white p-4 rounded-2xl shadow-md">
+  <Text className="text-xl font-bold mb-4 text-gray-800">Poll Results</Text>
+
+  {poll.choices.map((choice) => {
+    const totalVotes = poll.choices.reduce((sum, c) => sum + c.votes, 0);
+    const percentage = totalVotes ? ((choice.votes / totalVotes) * 100).toFixed(0) : 0;
+
+    return (
+      <View key={choice.id} className="mb-4">
+        {/* Choice text and percentage */}
+        <View className="flex-row justify-between mb-1">
+          <Text className="text-base text-gray-800 font-medium">{choice.choice_text}</Text>
+          <Text className="text-base text-gray-600">{percentage}%</Text>
+        </View>
+
+        {/* Progress Bar */}
+        <View className="w-full h-3 bg-gray-200 rounded-full">
+          <View
+            className="h-3 bg-green-500 rounded-full"
+            style={{ width: `${percentage}%` }}
+          />
+        </View>
+      </View>
+    );
+  })}
+</View>
 
 
-        {polls.map((poll) => (
-          <View key={poll.id} className="bg-yellow-500 p-5 rounded-2xl shadow-lg mb-4">
-            <Text className="text-white text-lg font-semibold">{poll.question}</Text>
 
-            {/* Options with check selection */}
-            {!hasVoted && (
-              <View className="space-y-4">
-                {poll.choices.map((choice) => (
-                  <TouchableOpacity
-                    key={choice.id}
-                    onPress={() => setSelectedOption(choice.id)}
-                    className={`flex-row items-center justify-between border p-3 rounded-xl ${
-                      selectedOption === choice.id ? "border-yellow-600 bg-yellow-50" : "border-gray-300"
-                    }`}
-                  >
-                    <Text className="text-base font-medium">{choice.choice_text}</Text>
-                    {selectedOption === choice.id && (
-                      <Ionicons name="checkmark-circle" size={24} color="#eab308" />
-                    )}
-                  </TouchableOpacity>
-                ))}
-
-                <TouchableOpacity
-                  onPress={handleVote}
-                  className={`bg-yellow-600 p-3 rounded-xl ${!selectedOption ? "opacity-50" : ""}`}
-                  disabled={!selectedOption}
-                >
-                  <Text className="text-white font-bold text-center">Submit Vote</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            {/* Results after voting */}
-            {hasVoted && (
-              <View className="mt-8">
-                <Text className="text-lg font-semibold mb-2">Poll Results</Text>
-                {poll.choices.map((choice) => {
-                  const totalVotes = poll.choices.reduce((sum, opt) => sum + opt.votes, 0);
-                  const percent = totalVotes ? ((choice.votes / totalVotes) * 100).toFixed(0) : 0;
-
-                  return (
-                    <View key={choice.id} className="mb-3">
-                      <Text className="text-base font-medium mb-1">
-                        {choice.choice_text} — {percent}%
-                      </Text>
-                      <View className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <View className="h-2 bg-yellow-600" style={{ width: `${percent}%` }} />
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
-            )}
-          </View>
-        ))}
-        <Toast/>
-
+        <Toast />
         <StatusBar />
       </ScrollView>
-      <StatusBar
-      barStyle="dark-content" // or "light-content" depending on your background
-      backgroundColor="transparent"
-      translucent={true}
-      />
     </SafeAreaView>
   );
 }

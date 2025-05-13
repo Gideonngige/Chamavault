@@ -46,6 +46,7 @@ export default function RootLayout() {
         <Stack.Screen name="location"options={{title:"Location"}}  />
         <Stack.Screen name="defaulters"options={{title:"Defaulters"}}  />
         <Stack.Screen name="contributiondate"options={{title:"Contribution Date"}}  />
+        <Stack.Screen name="investment"options={{title:"Investments"}}  />
         
         
       </Stack>

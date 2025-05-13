@@ -1,94 +1,78 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
 
 export default function BottomNavBar() {
   const [activeRoute, setActiveRoute] = useState('home');
   const navigation = useNavigation();
 
   const handleNotifications = () => {
-    navigation.navigate('notifications', {
-      
-    });
+    setActiveRoute('notifications');
+    navigation.navigate('notifications');
+  };
 
-  }
+  const handleProfile = () => {
+    setActiveRoute('profile');
+    navigation.navigate('profile');
+  };
 
-  const handleProfile =() =>{
-    navigation.navigate('profile', {
-      
-    });
-  }
+  const handleChat = () => {
+    setActiveRoute('chat');
+    navigation.navigate('chat');
+  };
 
-  const handleChat =() =>{
-    navigation.navigate('chat', {
-      
-    });
-  }
+  const handleHome = () => {
+    setActiveRoute('home');
+    navigation.navigate('home'); // You can replace this with your actual home navigation logic
+  };
 
   return (
-    <View className="absolute bottom-0 left-0 right-0 bg-yellow-600 pt-2 border-t border-gray-200">
-      <View className="flex-row justify-between items-center px-6 pb-4">
-        {/* Left Tab */}
-        <TouchableOpacity 
-          className="items-center"
-          onPress={() => {setActiveRoute('home'); alert("Home page!")}}
-        >
-          <MaterialCommunityIcons 
-            name={activeRoute === 'home' ? 'home' : 'home-outline'} 
-            size={24} 
-            color={activeRoute === 'home' ? 'white' : '#64748b'} 
+    <View className="absolute bottom-4 left-4 right-4 bg-yellow-600 rounded-full px-6 py-3 shadow-lg shadow-black/20">
+      <View className="flex-row justify-between items-center">
+        {/* Home */}
+        <TouchableOpacity onPress={handleHome} className="items-center flex-1">
+          <MaterialCommunityIcons
+            name={activeRoute === 'home' ? 'home' : 'home-outline'}
+            size={28}
+            color={activeRoute === 'home' ? 'black' : 'white'}
           />
-          {activeRoute === 'home' && (
-            <Text className="text-white text-xs mt-1">Home</Text>
-          )}
+          <Text className={`text-xs mt-1 ${activeRoute === 'home' ? 'text-black font-bold' : 'text-white'}`}>Home</Text>
         </TouchableOpacity>
 
-         {/* chat button */}
-       <TouchableOpacity 
-        className="items-center"
-       onPress={handleChat}
-      >
-      <Ionicons name="chatbubble-ellipses-sharp" size={24} color="white" />
-      {activeRoute === 'notifications' && (
-      <Text className="text-yellow-600 text-xs mt-1">chat</Text>
-      )}
-      </TouchableOpacity>
-       {/* end of chat button */}
-
-
-       {/* notfication button */}
-       <TouchableOpacity 
-        className="items-center"
-       onPress={handleNotifications}
-      >
-      <MaterialCommunityIcons 
-      name={activeRoute === 'notifications' ? 'bell' : 'bell-outline'} 
-      size={24} 
-      color={activeRoute === 'notifications' ? 'black' : 'white'} 
-      />
-      {activeRoute === 'notifications' && (
-      <Text className="text-yellow-600 text-xs mt-1">Notifications</Text>
-      )}
-      </TouchableOpacity>
-       {/* end of notification button */}
-        
-
-        {/* Right Tab */}
-        <TouchableOpacity 
-          className="items-center"
-          onPress={handleProfile}
-        >
-          <MaterialCommunityIcons 
-            name={activeRoute === 'profile' ? 'account' : 'account-outline'} 
-            size={24} 
-            color={activeRoute === 'profile' ? 'black' : 'white'} 
+        {/* Chat */}
+        <TouchableOpacity onPress={handleChat} className="items-center flex-1">
+          <Ionicons
+            name={activeRoute === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
+            size={26}
+            color={activeRoute === 'chat' ? 'black' : 'white'}
           />
-          {activeRoute === 'profile' && (
-            <Text className="text-yellow-600 text-xs mt-1">Profile</Text>
-          )}
+          <Text className={`text-xs mt-1 ${activeRoute === 'chat' ? 'text-black font-bold' : 'text-white'}`}>Chat</Text>
+        </TouchableOpacity>
+
+        {/* Notifications */}
+        <TouchableOpacity onPress={handleNotifications} className="items-center flex-1">
+          <MaterialCommunityIcons
+            name={activeRoute === 'notifications' ? 'bell' : 'bell-outline'}
+            size={28}
+            color={activeRoute === 'notifications' ? 'black' : 'white'}
+          />
+          <Text className={`text-xs mt-1 ${activeRoute === 'notifications' ? 'text-black font-bold' : 'text-white'}`}>
+            Alerts
+          </Text>
+        </TouchableOpacity>
+
+        {/* Profile */}
+        <TouchableOpacity onPress={handleProfile} className="items-center flex-1">
+          <MaterialCommunityIcons
+            name={activeRoute === 'profile' ? 'account' : 'account-outline'}
+            size={28}
+            color={activeRoute === 'profile' ? 'black' : 'white'}
+          />
+          <Text className={`text-xs mt-1 ${activeRoute === 'profile' ? 'text-black font-bold' : 'text-white'}`}>
+            Profile
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

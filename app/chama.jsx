@@ -1,216 +1,204 @@
 import { useState, useEffect } from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList, TextInput, StatusBar, SafeAreaView, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
 import { useRouter } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Entypo from '@expo/vector-icons/Entypo';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Entypo from '@expo/vector-icons/Entypo';
 
-export default function Chama(){
-    const [chama, setChama] = useState("");
-    const [isLoadingContribution, setIsLoadingContribution] = useState(false);
-    const [isLoadingData, setIsLoadingData] = useState(false);
-    const [description, setDescription] = useState("");
-    const [data, setData] = useState([]);
-    const [totalmembers, setTotalmembers] = useState(0);
-    const [totalSavings, setTotalSavings] = useState(0);
-    const [totalLoans, setTotalLoans] = useState(0);
-    const [rentExpense, setRentExpense] = useState(0);
-    const [travelExpense, setTravelExpense] = useState(0);
-    const [businessExpense, setBusinessExpense] = useState(0);
-    const router = useRouter();
+export default function Chama() {
+  const [chama, setChama] = useState("");
+  const [isLoadingContribution, setIsLoadingContribution] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [data, setData] = useState([]);
+  const [totalmembers, setTotalmembers] = useState(0);
+  const [totalSavings, setTotalSavings] = useState(0);
+  const [totalLoans, setTotalLoans] = useState(0);
+  const [rentExpense, setRentExpense] = useState(0);
+  const [travelExpense, setTravelExpense] = useState(0);
+  const [businessExpense, setBusinessExpense] = useState(0);
+  const router = useRouter();
 
-
- // function to fetch data
- useEffect(() => {
-  const fetchData = async () => {
-    setIsLoadingData(true);
-    try{
-      const chama = await AsyncStorage.getItem('selected_chama');
-      const chama_id = await AsyncStorage.getItem('chama');
-      setChama(chama);
-      const url = `https://backend1-1cc6.onrender.com/totalchamamembers/${chama}/`;
-      const response = await axios.get(url);
-      const url2 = `https://backend1-1cc6.onrender.com/totalchamasavings/${chama}/`;
-      const response2 = await axios.get(url2);
-      const url3 = `https://backend1-1cc6.onrender.com/totalchamaloans/${chama}/`;
-      const response3 = await axios.get(url3);
-      const url4 = `https://backend1-1cc6.onrender.com/getexpenses/${chama_id}/`;
-      const response4 = await axios.get(url4);
-      if(response.status === 200 && response2.status === 200 && response3.status === 200 && response4.status === 200){
-        setTotalmembers(response.data.total_members);
-        setTotalSavings(response2.data.total_savings);
-        setTotalLoans(response3.data.total_loans);
-        setRentExpense(response4.data.total_rent);
-        setTravelExpense(response4.data.total_travel);
-        setBusinessExpense(response4.data.total_business);
-      }
-
-    }
-    catch(error){
-      console.error(error);
-    }
-    finally{
-      setIsLoadingData(false);
-    }
-  }
-  fetchData();
-},[chama]);
-// end of function to fetch data
-
-
-// function to fetch members contribution
-useEffect(() => {
+  // Fetch core chama data
+  useEffect(() => {
     const fetchData = async () => {
-        setIsLoadingContribution(true);
-        try {
-          const chama_id = await AsyncStorage.getItem('chama');
-            const response = await axios.get(`https://backend1-1cc6.onrender.com/getmemberscontribution/${chama_id}/`);
-            if(response.status === 200) {
-              setData(response.data);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-        finally {
-            setIsLoadingContribution(false);
-        }
+      setIsLoadingData(true);
+      try {
+        const chama = await AsyncStorage.getItem('selected_chama');
+        const chama_id = await AsyncStorage.getItem('chama');
+        setChama(chama);
 
+        const [membersRes, savingsRes, loansRes, expensesRes] = await Promise.all([
+          axios.get(`https://backend1-1cc6.onrender.com/totalchamamembers/${chama}/`),
+          axios.get(`https://backend1-1cc6.onrender.com/totalchamasavings/${chama}/`),
+          axios.get(`https://backend1-1cc6.onrender.com/totalchamaloans/${chama}/`),
+          axios.get(`https://backend1-1cc6.onrender.com/getexpenses/${chama_id}/`)
+        ]);
+
+        setTotalmembers(membersRes.data.total_members);
+        setTotalSavings(savingsRes.data.total_savings);
+        setTotalLoans(loansRes.data.total_loans);
+        setRentExpense(expensesRes.data.total_rent);
+        setTravelExpense(expensesRes.data.total_travel);
+        setBusinessExpense(expensesRes.data.total_business);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoadingData(false);
+      }
     };
 
     fetchData();
-   
-})
-// end of functio to fetch data
+  }, [chama]);
 
-// contribution component
-const Contribution = ({name, contribution_date, amount}) => {
-  return(
-    <View className='w-full bg-yellow-600 mt-4 mb-4 p-2'>
-    <View className='flex-row justify-between'>
-        <Text className='font-bold text-lg font-serif'>{name}</Text>
-        <Text className='font-bold text-lg font-serif'>{contribution_date}</Text>
-    </View>
-    <Text className='font-bold text-lg mt-2 font-serif'>KES.{amount}</Text>
-</View>
-  )
-}
-// end of contribution component
+  // Fetch contributions
+  useEffect(() => {
+    const fetchContributions = async () => {
+      setIsLoadingContribution(true);
+      try {
+        const chama_id = await AsyncStorage.getItem('chama');
+        const response = await axios.get(`https://backend1-1cc6.onrender.com/getmemberscontribution/${chama_id}/`);
+        if (response.status === 200) {
+          setData(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoadingContribution(false);
+      }
+    };
 
-// Alert component
-const Alert = () => {
-  return (
-    <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-      <Text className="text-white font-bold font-serif">No contributions</Text>
+    fetchContributions();
+  }, []);
+
+  const Contribution = ({ name, contribution_date, amount }) => (
+    <View className="w-full bg-white p-4 rounded-lg shadow-md mb-4">
+      <View className="flex-row justify-between">
+        <Text className="font-bold text-base text-gray-800">{name}</Text>
+        <Text className="text-sm text-gray-500">{contribution_date}</Text>
+      </View>
+      <Text className="text-lg font-bold text-yellow-600 mt-2">KES {amount}</Text>
     </View>
   );
-};
-// end
 
-    return(
-        <SafeAreaView className="flex-1 bg-white">
-        <ScrollView className="p-4">
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-            {/* savings and loan part */}
-            <View className="w-full flex flex-row justify-between mb-4">
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalSavings}`}</Text>
-              <Text className="text-gray-900 font-serif">Total savings</Text>
+  const Alert = () => (
+    <View className="w-full bg-yellow-100 p-4 rounded-md items-center">
+      <Text className="text-yellow-800 font-semibold">No contributions found.</Text>
+    </View>
+  );
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+      <ScrollView className="p-4">
+        <View className="space-y-6">
+
+          {/* Header summary cards */}
+          <View className="flex-row justify-between">
+            <View className="flex-1 bg-white p-4 rounded-lg shadow mr-2">
+              <Text className="text-lg font-bold text-yellow-700">
+                {isLoadingData ? "Loading..." : `KES ${totalSavings}`}
+              </Text>
+              <Text className="text-gray-600">Total Savings</Text>
             </View>
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${totalLoans}`}</Text>
-              <Text className="text-gray-500 font-serif">Total loans</Text>
+            <View className="flex-1 bg-white p-4 rounded-lg shadow ml-2">
+              <Text className="text-lg font-bold text-yellow-700">
+                {isLoadingData ? "Loading..." : `KES ${totalLoans}`}
+              </Text>
+              <Text className="text-gray-600">Total Loans</Text>
             </View>
           </View>
-          {/* expenses */}
-          <Text className='w-full text-lg font-bold ml-4 font-serif'>Expenses</Text>
-          <View className="w-full flex flex-row justify-between mb-4">
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${rentExpense}`}</Text>
-              <Text className="text-gray-900 font-serif">Rent</Text>
+
+          {/* Expenses section */}
+          <Text className="text-lg font-bold text-gray-800">Expenses</Text>
+          <View className="flex-row justify-between">
+            <View className="flex-1 bg-white p-4 rounded-lg shadow mr-2">
+              <Text className="text-lg font-bold text-yellow-700">{`KES ${rentExpense}`}</Text>
+              <Text className="text-gray-600">Rent</Text>
             </View>
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${travelExpense}`}</Text>
-              <Text className="text-gray-500 font-serif">Travel</Text>
+            <View className="flex-1 bg-white p-4 rounded-lg shadow ml-2">
+              <Text className="text-lg font-bold text-yellow-700">{`KES ${travelExpense}`}</Text>
+              <Text className="text-gray-600">Travel</Text>
             </View>
           </View>
-          <View className="w-full bg-white p-4 rounded-lg shadow-lg flex-1 mb-4 mx-2">
-              <Text className="text-lg font-bold font-serif">{isLoadingData ? "Loading..." : `KES.${businessExpense}`}</Text>
-              <Text className="text-gray-500 font-serif">Business</Text>
-            </View>
-          {/* end of expenses */}
-          {/* end of saving and laon */}
+          <View className="bg-white p-4 mt-5 rounded-lg shadow">
+            <Text className="text-lg font-bold text-yellow-700">{`KES ${businessExpense}`}</Text>
+            <Text className="text-gray-600">Business</Text>
+          </View>
 
-              {/* members button */}
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("members/")}>
-                <Text className='font-bold font-serif'>{isLoadingData ? "Loading..." : `Members ${totalmembers}`}</Text>
-                <Ionicons name="chevron-forward" size={24} color="black" />
-              </TouchableOpacity>
-              {/* end of members button */}
+          {/* Members Button */}
+          <TouchableOpacity
+            className="bg-yellow-600 mt-5 mb-5 w-full h-12 flex-row justify-between items-center px-4 rounded-lg"
+            onPress={() => router.push("members/")}
+          >
+            <Text className="font-bold text-white text-base">Members ({totalmembers})</Text>
+            <Ionicons name="chevron-forward" size={24} color="white" />
+          </TouchableOpacity>
+          {/* poll button */}
+          <TouchableOpacity
+            className="bg-yellow-600 mt-5 mb-5 w-full h-12 flex-row justify-between items-center px-4 rounded-lg"
+            onPress={() => router.push("activepolls/")}
+          >
+            <Text className="font-bold text-white text-base">Active Polls</Text>
+            <Ionicons name="chevron-forward" size={24} color="white" />
+          </TouchableOpacity>
 
-              {/* roles part */}
-              <View className='w-full mt-5'>
-                <Text className='font-bold text-lg font-serif'>Members contribution</Text>
+          {/* Print & Reports */}
+          <Text className="text-lg font-bold text-gray-800">Reports</Text>
+          <View className="flex-row justify-between">
+            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow mr-2" onPress={() => alert("Coming soon!")}>
+              <View className="flex-row justify-between items-center">
+                <Text className="font-semibold">Print Savings</Text>
+                <Entypo name="print" size={22} color="black" />
               </View>
-              {/* end of roles part */}
-
-              {/* part to print transactions */}
-              <View className="w-full flex flex-row justify-between mb-4">
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
-                <Text className='font-bold font-serif'>Print Saving History</Text>
-                <Entypo name="print" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => alert("Coming soon!")}>
-                <Text className='font-bold font-serif'>Print Loan History</Text>
-                <Entypo name="print" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-            
+            </TouchableOpacity>
+            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow ml-2" onPress={() => alert("Coming soon!")}>
+              <View className="flex-row justify-between items-center">
+                <Text className="font-semibold">Print Loans</Text>
+                <Entypo name="print" size={22} color="black" />
+              </View>
+            </TouchableOpacity>
           </View>
-          {/* end of part to print transaction */}
 
-          {/* defaulter */}
-          <View className="w-full flex flex-row justify-between mb-4">
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("defaulters/")}>
-                <Text className='font-bold font-serif'>Defaulters</Text>
-              </TouchableOpacity>
-            </View>
-            <View className="bg-white p-4 rounded-lg shadow-lg flex-1 mx-2">
-              <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg' onPress={() => router.push("location/")}>
-                <Text className='font-bold font-serif'>Defaulters Location</Text>
-              </TouchableOpacity>
-            </View>
-            
+          {/* Defaulters Section */}
+          <Text className="text-lg font-bold mt-5 text-gray-800">Defaulters</Text>
+          <View className="flex-row justify-between">
+            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow mr-2" onPress={() => router.push("defaulters/")}>
+              <Text className="font-semibold text-center text-gray-700">View Defaulters</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow ml-2" onPress={() => router.push("location/")}>
+              <Text className="font-semibold text-center text-gray-700">View Locations</Text>
+            </TouchableOpacity>
           </View>
-          {/* defaulters */}
 
-              {/* member and their contribution view */}
-               <View className='w-full'>
-               {data.length === 0 ? (
+          {/* Contributions List */}
+          <Text className="text-lg font-bold mt-5 text-gray-800">Recent Contributions</Text>
+          {data.length === 0 ? (
             <Alert />
           ) : (
-              <FlatList
-                keyExtractor={(item) => item.contribution_id.toString()}
-                data={data}
-                renderItem={({ item }) => <Contribution name={item.member} contribution_date={item.contribution_date.split("T")[0]} amount={item.amount}/>}
-                showsVerticalScrollIndicator={false}
-                listMode="SCROLLVIEW"
+            <FlatList
+              keyExtractor={(item) => item.contribution_id.toString()}
+              data={data}
+              renderItem={({ item }) => (
+                <Contribution
+                  name={item.member}
+                  contribution_date={item.contribution_date.split("T")[0]}
+                  amount={item.amount}
                 />
+              )}
+              scrollEnabled={false}
+            />
           )}
-                </View>
-              {/* end */}
-
-            </View>
-            </ScrollView>
-            <StatusBar
-      barStyle="dark-content" // or "light-content" depending on your background
-      backgroundColor="transparent"
-      translucent={true}
-      />
-            </SafeAreaView>
-    );
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
