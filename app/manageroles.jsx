@@ -105,10 +105,10 @@ export default function Manageroles() {
     <SafeAreaView className="flex-1 bg-white">
     <ScrollView className="p-4">
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-    <Text className='w-full text-lg font-bold font-serif'>Manage roles</Text>
+    <Text className='w-full text-lg font-bold font-lato'>Manage roles</Text>
             {/* Chairperson */}
 <View style={{ zIndex: 3000 }}>
-  <Text className="text-lg font-bold mt-4 font-serif">Chairperson</Text>
+  <Text className="text-lg font-bold mt-4 font-lato">Chairperson</Text>
   <DropDownPicker
     open={open}
     value={value}
@@ -131,7 +131,7 @@ export default function Manageroles() {
 
 {/* Treasurer */}
 <View style={{ zIndex: 2000 }}>
-  <Text className="text-lg font-bold mt-4 font-serif">Treasurer</Text>
+  <Text className="text-lg font-bold mt-4 font-lato">Treasurer</Text>
   <DropDownPicker
     open={open2}
     value={value2}
@@ -154,7 +154,7 @@ export default function Manageroles() {
 
 {/* Secretary */}
 <View style={{ zIndex: 1000 }}>
-  <Text className="text-lg font-bold mt-4 font-serif">Secretary</Text>
+  <Text className="text-lg font-bold mt-4 font-lato">Secretary</Text>
   <DropDownPicker
     open={open3}
     value={value3}
@@ -176,7 +176,7 @@ export default function Manageroles() {
 </View>
 
             <TouchableOpacity className="w-full bg-green-600 mt-4 p-4 rounded-md" onPress={handleChangeRoles}>
-            {isChanging ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Change roles</Text> }
+            {isChanging ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-lato">Change roles</Text> }
             </TouchableOpacity>
     </View>
     <Toast/>

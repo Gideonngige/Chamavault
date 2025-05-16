@@ -66,6 +66,19 @@ export default function Register() {
             return;
         }
 
+         // Password Validation
+    const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+        Toast.show({
+            type: "error",
+            text1: "Weak password",
+            text2: "Password must be at least 6 characters, include a number and a special character.",
+            text2NumberOfLines: 5,
+            position: "center",
+        });
+        return;
+    }
+
         if (password !== confirmPassword) {
             Toast.show({
                 type: "error",
@@ -146,43 +159,43 @@ export default function Register() {
                             <Image source={require('../assets/images2/profile3.png')} style={{ width: 150, height: 150, borderRadius: 75, borderWidth: 3, borderColor: '#fff' }} />
                         )}
                     </TouchableOpacity>
-                    <Text className="text-md font-serif text-gray-500 mt-2">Tap image to upload profile picture</Text>
+                    <Text className="text-md font-lato text-gray-500 mt-2">Tap image to upload profile picture</Text>
 
-                    <Text className="w-full text-lg font-bold font-serif mt-5">Enter your fullname</Text>
+                    <Text className="w-full text-lg font-bold font-lato mt-5">Enter your full name</Text>
                     <TextInput
                         placeholder="e.g John Doe"
                         value={fullname}
                         onChangeText={setFullname}
-                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                        className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
                     />
 
-                    <Text className="w-full text-lg font-bold font-serif">Enter your phonenumber</Text>
+                    <Text className="w-full text-lg font-bold font-lato">Enter your phonenumber</Text>
                     <TextInput
                         placeholder="e.g 0712345678"
                         value={phonenumber}
                         onChangeText={setPhonenumber}
-                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                        className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
                     />
 
-                    <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
+                    <Text className="w-full text-lg font-bold font-lato">Enter your email</Text>
                     <TextInput
                         placeholder="e.g johndoe@example.com"
                         keyboardType="email-address"
                         value={email}
                         onChangeText={setEmail}
-                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+                        className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
                     />
 
                     <View className="w-full">
       {/* Password Field */}
-      <Text className="w-full text-lg font-bold font-serif mb-2">Enter your password</Text>
+      <Text className="w-full text-lg font-bold font-lato mb-2">Enter your password</Text>
       <View className="relative mb-6">
         <TextInput
           placeholder="Enter your password"
           secureTextEntry={!isPasswordVisible}
           value={password}
           onChangeText={setPassword}
-          className="w-full p-4 pr-12 bg-white rounded-sm shadow-sm border border-yellow-600 text-gray-800 text-lg font-serif"
+          className="w-full p-4 pr-12 bg-white rounded-lg shadow-sm border border-yellow-600 text-gray-800 text-lg font-lato"
         />
         <TouchableOpacity
           onPress={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -197,14 +210,14 @@ export default function Register() {
       </View>
 
       {/* Confirm Password Field */}
-      <Text className="w-full text-lg font-bold font-serif mb-2">Confirm your password</Text>
+      <Text className="w-full text-lg font-bold font-lato mb-2">Confirm your password</Text>
       <View className="relative mb-6">
         <TextInput
           placeholder="Confirm your password"
           secureTextEntry={!isConfirmVisible}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
-          className="w-full p-4 pr-12 bg-white rounded-sm shadow-sm border border-yellow-600 text-gray-800 text-lg font-serif"
+          className="w-full p-4 pr-12 bg-white rounded-lg shadow-sm border border-yellow-600 text-gray-800 text-lg font-lato"
         />
         <TouchableOpacity
           onPress={() => setIsConfirmVisible(!isConfirmVisible)}
@@ -220,13 +233,13 @@ export default function Register() {
     </View>
 
                     <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleRegister}>
-                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-serif font-semibold text-lg">Register</Text>}
+                        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-lato font-semibold text-lg">Register</Text>}
                     </TouchableOpacity>
 
                     <View className="flex-row justify-center mt-4 mb-6">
-                        <Text className="text-lg font-serif">Already have an account? </Text>
+                        <Text className="text-lg font-lato">Already have an account? </Text>
                         <TouchableOpacity onPress={() => router.push("/login")}>
-                            <Text className="text-lg text-yellow-600 font-serif mb-40">Login</Text>
+                            <Text className="text-lg text-yellow-600 font-lato mb-40">Login</Text>
                         </TouchableOpacity>
                     </View>
 

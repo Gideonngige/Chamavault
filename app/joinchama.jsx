@@ -87,15 +87,15 @@ export default function Register(){
     return(
         <SafeAreaView className="flex-1 bg-white">
         <ScrollView nestedScrollEnabled={true} className="p-4">
-    <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
+    <View className="flex-1 bg-white justify-center items-center p-5 font-lato">
     <Image 
         source={require('../assets/images2/logo.png')}
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-      <Text className="text-xl font-bold font-serif">ChamaVault</Text>
+      <Text className="text-xl font-bold font-lato">ChamaVault</Text>
       <View className="w-full z-10">
-  <Text className="text-lg font-bold font-serif">Select Chama</Text>
+  <Text className="text-lg font-bold font-lato">Select Chama</Text>
   <DropDownPicker
     open={open}
     value={value}
@@ -113,7 +113,7 @@ export default function Register(){
     style={{
       borderColor: '#ca8a04',
       borderWidth: 1,
-      borderRadius:1
+      borderRadius:6
     }}
     zIndex={3000}
     zIndexInverse={1000}
@@ -129,7 +129,7 @@ export default function Register(){
     {isLoading ? (
       <ActivityIndicator size="large" color="#fff" />
     ) : (
-      <Text className="text-white text-center font-semibold text-lg font-serif">
+      <Text className="text-white text-center font-semibold text-lg font-lato">
         Join Chama
       </Text>
     )}

@@ -90,7 +90,7 @@ export default function Investment() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4 space-y-4">
-        <Text className="text-2xl font-bold text-gray-800 font-serif">Create Investment</Text>
+        <Text className="text-2xl font-bold text-gray-800 font-lato">Create Investment</Text>
 
         {/* Image Picker */}
         <TouchableOpacity
@@ -104,13 +104,13 @@ export default function Investment() {
               resizeMode="cover"
             />
           ) : (
-            <Text className="text-gray-600 font-serif">Tap to pick an image</Text>
+            <Text className="text-gray-600 font-lato">Tap to pick an image</Text>
           )}
         </TouchableOpacity>
 
         {/* Name Field */}
         <TextInput
-          className="border border-gray-300 mb-5 rounded-lg p-3 font-serif"
+          className="border border-gray-300 mb-5 rounded-lg p-3 font-lato"
           placeholder="Investment Name"
           value={name}
           onChangeText={setName}
@@ -118,7 +118,7 @@ export default function Investment() {
 
         {/* Description Field */}
         <TextInput
-          className="border border-gray-300 mb-5 rounded-lg p-3 font-serif"
+          className="border border-gray-300 mb-5 rounded-lg p-3 font-lato"
           placeholder="Description"
           multiline
           numberOfLines={4}
@@ -128,7 +128,7 @@ export default function Investment() {
 
         {/* Minimum Amount */}
         <TextInput
-          className="border border-gray-300 mb-5 rounded-lg p-3 font-serif"
+          className="border border-gray-300 mb-5 rounded-lg p-3 font-lato"
           placeholder="Minimum Amount (KES)"
           keyboardType="numeric"
           value={minAmount}
@@ -137,7 +137,7 @@ export default function Investment() {
 
         {/* Interest Rate */}
         <TextInput
-          className="border border-gray-300 mb-5 rounded-lg p-3 font-serif"
+          className="border border-gray-300 mb-5 rounded-lg p-3 font-lato"
           placeholder="Interest Rate (%)"
           keyboardType="numeric"
           value={interestRate}
@@ -146,7 +146,7 @@ export default function Investment() {
 
         {/* Duration */}
         <TextInput
-          className="border border-gray-300 mb-5 rounded-lg p-3 font-serif"
+          className="border border-gray-300 mb-5 rounded-lg p-3 font-lato"
           placeholder="Duration (days/months)"
           value={duration}
           onChangeText={setDuration}
@@ -157,7 +157,7 @@ export default function Investment() {
         className="bg-yellow-600 p-4 rounded-lg items-center"
         onPress={postInvestment}
         >
-        <Text className="text-white font-bold font-serif">
+        <Text className="text-white font-bold font-lato">
         {isLoading ? "Submitting..." : "Create Investment"}
         </Text>
         </TouchableOpacity>

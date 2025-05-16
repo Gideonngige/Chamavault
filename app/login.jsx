@@ -41,7 +41,6 @@ export default function Index() {
       const url3 =  `https://backend1-1cc6.onrender.com/totalchamamembers/${value}/`;
       const response3 = await axios.get(url3);
      
-      
       if (response.status === 200 && response2.status === 200) {
         if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary" || response3.data.total_members <= 5){
           
@@ -76,7 +75,7 @@ export default function Index() {
           Toast.show({
             type: "error",
             text1: "Login Failed",
-            text2: message,
+            text2: response.data.message,
           });
           // alert(message);
         }
@@ -86,7 +85,7 @@ export default function Index() {
         Toast.show({
           type: "error", // Can be "success", "error", "info"
           text1: "Login failed",
-          text2: response.data,
+          text2: response.data.message,
         });
         // alert("Login Failed:", response.data);
         return null;
@@ -142,26 +141,26 @@ export default function Index() {
     <ScrollView nestedScrollEnabled={true} className="p-4">
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
       <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
-      <Text className="text-3xl font-bold text-gray-800 mb-6 font-serif">ChamaVault</Text>
-      <Text className="w-full text-lg font-bold font-serif">Enter your email</Text>
+      <Text className="text-3xl font-bold text-yellow-600 mb-6 font-lato">ChamaVault</Text>
+      <Text className="w-full text-lg font-bold font-lato">Enter your email</Text>
       <TextInput 
       placeholder="Enter your email"
       keyboardType="email-address"
       value={email}
       onChangeText={setEmail}
-      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
       />
       
 
       <View className="w-full mb-4">
-      <Text className="text-lg font-bold font-serif mb-2">Enter your password</Text>
+      <Text className="text-lg font-bold font-lato mb-2">Enter your password</Text>
       <View className="relative">
         <TextInput
           placeholder="Enter your password"
           secureTextEntry={!isPasswordVisible}
           value={password}
           onChangeText={setPassword}
-          className="w-full p-4 pr-12 bg-white rounded-sm border border-yellow-600 text-gray-800 text-lg font-serif mb-2"
+          className="w-full p-4 pr-12 bg-white rounded-lg border border-yellow-600 text-gray-800 text-lg font-lato mb-2"
         />
         <TouchableOpacity
           onPress={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -177,7 +176,7 @@ export default function Index() {
     </View>
 
      <View className="w-full">
-        <Text className="text-lg font-bold">Select Chama</Text>
+        <Text className="text-lg font-bold font-lato">Select Chama</Text>
           <DropDownPicker
           open={open}
           value={value}
@@ -192,22 +191,22 @@ export default function Index() {
           autoCorrect: false,
           autoCapitalize: "none",
           }}
-          style={{borderColor: '#ca8a04',borderWidth: 1, borderRadius:1, height:50, fontFamily: 'sans-serif',}}
+          style={{borderColor: '#ca8a04',borderWidth: 1, borderRadius:6, height:50, fontFamily: 'Lato',}}
           listMode="SCROLLVIEW"
          />
       </View>
 
       <TouchableOpacity className="w-full flex-row justify-end m-4" onPress={() => router.push("/forgotpassword")}>
-      <Text className="text-lg font-serif">Forgot your password?</Text>
+      <Text className="text-lg font-lato">Forgot your password?</Text>
       </TouchableOpacity>
       <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleLogin}>
-        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Login</Text> }
+        {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-lato">Login</Text> }
         
       </TouchableOpacity>
       <View className="flex-row justify-center mt-4">
-      <Text className="text-lg font-serif">Do not have an account? </Text>
+      <Text className="text-lg font-lato">Do not have an account? </Text>
       <TouchableOpacity onPress={() => router.push("/register")}>
-      <Text className="text-lg text-yellow-600 font-serif">Register</Text>
+      <Text className="text-lg text-yellow-600 font-lato">Register</Text>
       </TouchableOpacity>
       </View>
       <Toast/>

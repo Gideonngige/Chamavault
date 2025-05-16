@@ -3,24 +3,42 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BottomNavBar() {
   const [activeRoute, setActiveRoute] = useState('home');
   const navigation = useNavigation();
 
-  const handleNotifications = () => {
-    setActiveRoute('notifications');
-    navigation.navigate('notifications');
+  const handleNotifications = async() => {
+    const selected_chama = await AsyncStorage.getItem('selected_chama');
+    if(selected_chama == "No Chama"){alert("You must join a chama first")}
+    else{
+      setActiveRoute('notifications');
+      navigation.navigate('notifications');
+
+    }
+    
   };
 
-  const handleProfile = () => {
-    setActiveRoute('profile');
-    navigation.navigate('profile');
+  const handleProfile = async() => {
+    const selected_chama = await AsyncStorage.getItem('selected_chama');
+    if(selected_chama == "No Chama"){alert("You must join a chama first")}
+    else{
+      setActiveRoute('profile');
+      navigation.navigate('profile');
+
+    }
+    
   };
 
-  const handleChat = () => {
-    setActiveRoute('chat');
-    navigation.navigate('chat');
+  const handleChat = async() => {
+    const selected_chama = await AsyncStorage.getItem('selected_chama');
+    if(selected_chama == "No Chama"){alert("You must join a chama first")}
+    else{
+      setActiveRoute('chat');
+      navigation.navigate('chat');
+
+    }
   };
 
   const handleHome = () => {

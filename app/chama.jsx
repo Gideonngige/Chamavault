@@ -126,7 +126,7 @@ export default function Chama() {
   // end of function print contributors
 
   const Contribution = ({ name, contribution_date, amount }) => (
-    <View className="w-full bg-white p-4 rounded-lg shadow-md mb-20">
+    <View className="w-full bg-white p-4 rounded-lg shadow-md mb-2">
       <View className="flex-row justify-between">
         <Text className="font-bold text-base text-gray-800">{name}</Text>
         <Text className="text-sm text-gray-500">{contribution_date}</Text>
@@ -137,14 +137,14 @@ export default function Chama() {
 
   const Alert = () => (
     <View className="w-full bg-yellow-100 p-4 rounded-md items-center">
-      <Text className="text-yellow-800 font-semibold">No contributions found.</Text>
+      <Text className="text-yellow-600 font-semibold">No contributions found.</Text>
     </View>
   );
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-      <ScrollView className="p-4 mb-20">
+      <ScrollView className="p-4">
         <View className="space-y-6">
 
           {/* Header summary cards */}
@@ -227,6 +227,7 @@ export default function Chama() {
           <Toast/>
 
           {/* Contributions List */}
+          <View className='mb-40'>
           <Text className="text-lg font-bold mt-5 text-gray-800">Recent Contributions</Text>
           {data.length === 0 ? (
             <Alert />
@@ -244,6 +245,7 @@ export default function Chama() {
               scrollEnabled={false}
             />
           )}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

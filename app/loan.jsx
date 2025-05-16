@@ -116,9 +116,9 @@ export default function Loans() {
 
   const Activity = ({ transactionType, amount, transactionTime }) => (
     <View className="bg-yellow-100 p-4 rounded-xl mb-5">
-      <Text className="text-lg font-bold text-gray-800 font-serif">{transactionType}</Text>
-      <Text className="text-gray-700 font-serif">Amount: KES.{amount}</Text>
-      <Text className="text-sm text-gray-600 font-serif">Date: {transactionTime}</Text>
+      <Text className="text-lg font-bold text-gray-800 font-lato">{transactionType}</Text>
+      <Text className="text-gray-700 font-lato">Amount: KES.{amount}</Text>
+      <Text className="text-sm text-gray-600 font-lato">Date: {transactionTime}</Text>
     </View>
   );
 
@@ -127,8 +127,8 @@ export default function Loans() {
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
       <ScrollView className="p-4">
         <View className="mb-6">
-          <Text className="text-3xl font-bold text-gray-800 font-serif">Welcome back, {name}</Text>
-          <Text className="text-lg font-semibold text-gray-600 font-serif mt-1">Time to borrow money</Text>
+          <Text className="text-3xl font-bold text-gray-800 font-lato">Welcome back, {name}</Text>
+          <Text className="text-lg font-semibold text-gray-600 font-lato mt-1">Time to borrow money</Text>
         </View>
 
         {/* Loan Summary Card */}
@@ -138,8 +138,8 @@ export default function Loans() {
           style={{ resizeMode: 'cover' }}
         >
           <View className="p-6 bg-black/30 h-full justify-center">
-            <Text className="text-white text-xl font-bold font-serif">Your Loans</Text>
-            <Text className="text-white text-3xl font-bold font-serif">
+            <Text className="text-white text-xl font-bold font-lato">Your Loans</Text>
+            <Text className="text-white text-3xl font-bold font-lato">
               {isLoadingData ? 'Loading...' : `KES.${loan}`}
             </Text>
           </View>
@@ -165,28 +165,28 @@ export default function Loans() {
   status: isDisabled2
 }].map((loanItem, index) => (
   <View key={index} className="bg-yellow-600 p-5 rounded-2xl mb-6 shadow-lg">
-    <Text className="text-xl font-bold text-white mb-4 font-serif">{loanItem.title}</Text>
+    <Text className="text-xl font-bold text-white mb-4 font-lato">{loanItem.title}</Text>
     
     <View className="space-y-3 mb-6">
       <View className="flex-row justify-between">
-        <Text className="text-white font-serif">Outstanding Loan:</Text>
-        <Text className="text-white font-bold font-serif">KES.{loanItem.total}</Text>
+        <Text className="text-white font-lato">Outstanding Loan:</Text>
+        <Text className="text-white font-bold font-lato">KES.{loanItem.total}</Text>
       </View>
       <View className="flex-row justify-between">
-        <Text className="text-white font-serif">Interest:</Text>
-        <Text className="text-white font-bold font-serif">{loanItem.interest}</Text>
+        <Text className="text-white font-lato">Interest:</Text>
+        <Text className="text-white font-bold font-lato">{loanItem.interest}</Text>
       </View>
       <View className="flex-row justify-between">
-        <Text className="text-white font-serif">Total Payable:</Text>
-        <Text className="text-white font-bold font-serif">KES.{loanItem.payable}</Text>
+        <Text className="text-white font-lato">Total Payable:</Text>
+        <Text className="text-white font-bold font-lato">KES.{loanItem.payable}</Text>
       </View>
       <View className="flex-row justify-between">
-        <Text className="text-white font-serif">Date Taken:</Text>
-        <Text className="text-white font-bold font-serif">{loanItem.date.split("T")[0]}</Text>
+        <Text className="text-white font-lato">Date Taken:</Text>
+        <Text className="text-white font-bold font-lato">{loanItem.date.split("T")[0]}</Text>
       </View>
       <View className="flex-row justify-between">
-        <Text className="text-white font-serif">Due Date:</Text>
-        <Text className="text-white font-bold font-serif">{loanItem.due.split("T")[0]}</Text>
+        <Text className="text-white font-lato">Due Date:</Text>
+        <Text className="text-white font-bold font-lato">{loanItem.due.split("T")[0]}</Text>
       </View>
     </View>
 
@@ -198,7 +198,7 @@ export default function Loans() {
         disabled={loanItem.status}
       >
         <FontAwesome6 name="plus" size={20} color="black" />
-        <Text className="text-black font-medium mt-1 font-serif">Take Loan</Text>
+        <Text className="text-black font-medium mt-1 font-lato">Take Loan</Text>
       </TouchableOpacity>
       
       <TouchableOpacity
@@ -206,7 +206,7 @@ export default function Loans() {
         onPress={() => handlePayLoan(loanItem.payable, loanItem.loanType)}
       >
         <FontAwesome6 name="money-bills" size={20} color="black" />
-        <Text className="text-black font-medium mt-1 font-serif">Pay Loan</Text>
+        <Text className="text-black font-medium mt-1 font-lato">Pay Loan</Text>
       </TouchableOpacity>
     </View>
   </View>
@@ -214,7 +214,7 @@ export default function Loans() {
 
         {/* Activity Section */}
         <View className="mt-4 mb-10">
-          <Text className="text-xl font-bold mb-2 font-serif">My Activities</Text>
+          <Text className="text-xl font-bold mb-2 font-lato">My Activities</Text>
           {isLoadingTransactions ? (
             <ActivityIndicator size="large" color="#facc15" />
           ) : (

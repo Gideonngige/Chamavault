@@ -111,31 +111,31 @@ export default function UpdateProfile() {
                 resizeMode: 'cover',
               }}
             />
-            <Text className="text-blue-500 mt-2 underline font-serif">Change Photo</Text>
+            <Text className="text-blue-500 mt-2 underline font-lato">Change Photo</Text>
           </TouchableOpacity>
 
-          <Text className="w-full text-lg font-bold font-serif">Your fullname</Text>
+          <Text className="w-full text-lg font-bold font-lato">Your fullname</Text>
           <TextInput
             placeholder="e.g John Doe"
             value={fullname}
             onChangeText={setFullname}
-            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
           />
 
-          <Text className="w-full text-lg font-bold font-serif">Your phonenumber</Text>
+          <Text className="w-full text-lg font-bold font-lato">Your phonenumber</Text>
           <TextInput
             placeholder="e.g 0712345678"
             value={phonenumber}
             onChangeText={setPhonenumber}
             keyboardType="phone-pad"
-            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
           />
 
           <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleUpdate}>
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg font-serif">Update</Text>
+              <Text className="text-white text-center font-semibold text-lg font-lato">Update</Text>
             )}
           </TouchableOpacity>
         </View>

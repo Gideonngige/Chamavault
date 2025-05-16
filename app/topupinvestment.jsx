@@ -145,16 +145,16 @@ export default function Schedule() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className='text-lg font-bold'>Amount: {display}</Text>
+        <View className="flex-1 bg-white justify-center items-center p-5 font-lato">
+          <Text className='text-lg font-bold font-lato'>Amount: {display}</Text>
               
 
-               <Text className="w-full text-lg mt-4 font-bold">Amount to invest</Text>
+               <Text className="w-full text-lg mt-4 font-bold font-lato">Amount to invest</Text>
                <TextInput 
                placeholder="Amount to invest"
                value={amount}
                onChangeText={setAmount}
-               className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+               className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
                keyboardType='numeric'
                 />
 
@@ -167,7 +167,7 @@ export default function Schedule() {
                     }`}
                   >
                     <Text
-                      className={`text-center font-medium ${
+                      className={`text-center font-medium font-lato ${
                         selectedPaymentMethod === "card" ? "text-white" : "text-gray-800"
                       }`}
                     >
@@ -182,7 +182,7 @@ export default function Schedule() {
                     }`}
                   >
                     <Text
-                      className={`text-center font-medium ${
+                      className={`text-center font-medium font-lato ${
                         selectedPaymentMethod === "mobile_money" ? "text-white" : "text-gray-800"
                       }`}
                     >
@@ -198,7 +198,7 @@ export default function Schedule() {
                   {isLoading ? (
                  <ActivityIndicator size="large" color="#fff" />
                   ) : (
-                <Text className="text-white text-center font-semibold text-lg">Proceed to Top Up</Text>
+                <Text className="text-white text-center font-semibold text-lg font-lato">Proceed to Top Up</Text>
                 )}
                 </TouchableOpacity>
                 

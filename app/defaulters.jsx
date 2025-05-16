@@ -21,7 +21,7 @@ export default function Defaulters() {
 //  // start get defaulters function
     useEffect(() => {
         const getDefaulters = async () => {
-        const chama_id = await AsyncStorage.getItem('chama');
+        const chama_id = await AsyncStorage.getItem('chama_id');
         setIsLoading(true);
         try {
             const url = `https://backend1-1cc6.onrender.com/get_defaulters/${chama_id}/`;
@@ -36,6 +36,16 @@ export default function Defaulters() {
         getDefaulters();
     }, []);
 // end of get defaulters function
+
+// alert
+const Alert = () => {
+    return (
+      <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
+        <Text className="text-white font-bold font-serif">Chama has no defaulter</Text>
+      </View>
+    );
+  };
+// alert
 
 // defaulters component
 const DefaultersItem = ({ name, phone_number }) => {
@@ -76,7 +86,8 @@ const DefaultersItem = ({ name, phone_number }) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
          <View className="flex-1 bg-white justify-center items-center p-5 font-sans mb-40">
-        <FlatList
+          {defaulters.length === 0 ? (<Alert/>) : (
+            <FlatList
               data={defaulters} // Array of data
               keyExtractor={(item) => item.member_id.toString()} // Unique key for each item
               renderItem={({ item }) => (
@@ -88,6 +99,9 @@ const DefaultersItem = ({ name, phone_number }) => {
               showsVerticalScrollIndicator={false} // Hides the scrollbar
               listMode="SCROLLVIEW"
             />
+
+          )}
+        
         </View>
       <StatusBar
             barStyle="dark-content" // or "light-content" depending on your background

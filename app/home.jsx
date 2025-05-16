@@ -145,8 +145,11 @@ export default function Home() {
         const profile_image = await AsyncStorage.getItem('profile_image');
         const selected_chama = await AsyncStorage.getItem('selected_chama');
         const chama_id = await AsyncStorage.getItem('chama_id');
+        const name = await AsyncStorage.getItem('name');
         setChamaName(selected_chama);
         setProfileImg(profile_image);
+        setName(name);
+        setEmail(email);
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
@@ -154,7 +157,7 @@ export default function Home() {
         const response2 = await axios.get(url2);
         await AsyncStorage.setItem('email',email);
         
-        if(response.status === 200 && response2.status === 200){
+        if(response.status === 200){
           Toast.show({
             type: "success", // Can be "success", "error", "info"
             text1: "Successfully Login",
@@ -185,32 +188,6 @@ export default function Home() {
   },[email]);
 
 
-//go to saviings
-const goToSavings = () =>{
-  navigation.navigate('saving', {
-    username: name,
-    email: email,
-    savingAmount: saving,
-    interest: interest,
-    penalty: penalty,
-    chama: chama,
-    phonenumber: phonenumber,
-  });
-}
-//end of goto savings
-
-//go to loans
-const goToLoans = () =>{
-  navigation.navigate('loan', {
-    username: name,
-    email: email,
-    loan: String(loan),
-    loanInterest: interest,
-    chama: chama,
-    phonenumber: phonenumber,
-  });
-}
-//end of goto loans
 
 // got to invest 
 const handleProfile = () =>{
@@ -220,9 +197,52 @@ const handleProfile = () =>{
 }
 // end of go to invest
 
-const handleTerms = () => {
-  router.push('terms/');
+// function to go to saving
+const goToSavings =()=>{
+  if(chamaName == "No Chama"){
+    alert("You must join a chama first");
+  }
+  else{
+    router.push('/saving')
+
+  }
 }
+// end
+
+// function to go to loans
+const goToLoans =()=>{
+  if(chamaName == "No Chama"){
+    alert("You must join a chama first");
+  }
+  else{
+    router.push('/loan')
+
+  }
+}
+// end
+
+// function to go to investment
+const goToInvest =()=>{
+  if(chamaName == "No Chama"){
+    alert("You must join a chama first");
+  }
+  else{
+    router.push('/invest')
+
+  }
+}
+// end
+// function to go to chama
+const goToChama =()=>{
+  if(chamaName == "No Chama"){
+    alert("You must join a chama first");
+  }
+  else{
+    router.push('/chama')
+
+  }
+}
+// end
 
 
 const renderItem = ({ item }) => (
@@ -254,14 +274,14 @@ const renderItem = ({ item }) => (
       }}
     />
     <View className="ml-2">
-      <Text className="text-xl font-bold text-white font-serif">{name}</Text>
-      <Text className="text-white mt-1 font-serif">{email}</Text>
+      <Text className="text-xl font-bold text-white font-lato">{name}</Text>
+      <Text className="text-white mt-1 font-lato">{email}</Text>
     </View>
   </TouchableOpacity>
 
   <Toast />
 </View>
-      <Text className="text-lg align-middle font-bold text-yellow-600">{chamaName}</Text>
+      <Text className="text-lg align-middle font-bold text-yellow-600 font-lato">{chamaName}</Text>
 
       <Carousel
         data={data}
@@ -277,17 +297,17 @@ const renderItem = ({ item }) => (
       
       {/* Info Cards */}
       <View className="mt-6">
-        <Text className="text-lg font-semibold text-gray-800 mb-2">Quick Actions</Text>
-        <InfoCard title="Savings" icon="wallet" onPress={() => router.push('/saving')} />
-        <InfoCard title="Loans" icon="cash" onPress={() => router.push('/loan')} />
-        <InfoCard title="Investments" icon="trending-up" onPress={() => router.push('/invest')} />
+        <Text className="text-lg font-semibold text-gray-800 mb-2 font-lato">Quick Actions</Text>
+        <InfoCard title="Savings" icon="wallet" onPress={goToSavings} />
+        <InfoCard title="Loans" icon="cash" onPress={goToLoans} />
+        <InfoCard title="Investments" icon="trending-up" onPress={goToInvest} />
       </View>
     {/* end of info cards */}
 
       {/* Chamas Section */}
       <View className="items-center mt-4 mb-2">
-        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg shadow-md' onPress={() => router.push("chama/")}>
-        <Text className='font-serif text-white'>Go To {chamaName} Profile</Text>
+        <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg shadow-md' onPress={goToChama}>
+        <Text className='font-lato text-white'>Go To {chamaName} Profile</Text>
         <Ionicons name="chevron-forward" size={24} color="white" />
         </TouchableOpacity>
 
@@ -302,7 +322,7 @@ const renderItem = ({ item }) => (
       <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
         <Ionicons name="create" size={32} color="white" />
       </View>
-      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Create Chama</Text>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-lato">Create Chama</Text>
     </TouchableOpacity>
 
     {/* Join Chama */}
@@ -313,7 +333,7 @@ const renderItem = ({ item }) => (
       <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
         <Ionicons name="enter" size={32} color="white" />
       </View>
-      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Join Chama</Text>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-lato">Join Chama</Text>
     </TouchableOpacity>
 
     {/* Invite */}
@@ -324,7 +344,7 @@ const renderItem = ({ item }) => (
       <View className="bg-yellow-600 p-4 rounded-full shadow-sm">
         <Entypo name="add-user" size={32} color="white" />
       </View>
-      <Text className="mt-3 text-sm font-semibold text-gray-800 font-serif">Invite</Text>
+      <Text className="mt-3 text-sm font-semibold text-gray-800 font-lato">Invite</Text>
     </TouchableOpacity>
 
   </View>

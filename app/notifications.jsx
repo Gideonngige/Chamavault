@@ -13,7 +13,7 @@ export default function Notifications() {
   const Alert = () => {
     return (
       <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold">You have 0 notifications</Text>
+        <Text className="text-white font-bold font-lato">You have 0 notifications</Text>
       </View>
     );
   };
@@ -41,13 +41,13 @@ export default function Notifications() {
       <View className="flex-row justify-between items-center mb-2">
         <View className="flex-row items-center space-x-2">
           <MaterialCommunityIcons name="bell-ring" size={20} color="#facc15" />
-          <Text className="text-sm text-gray-500">{date}</Text>
+          <Text className="text-sm text-gray-500 font-lato">{date}</Text>
         </View>
-        <Text className="text-sm font-semibold text-yellow-600 lowercase">{type}</Text>
+        <Text className="text-sm font-semibold text-yellow-600 lowercase font-lato">{type}</Text>
       </View>
 
       {/* Message */}
-      <Text className="text-gray-800 text-base leading-5">{message}</Text>
+      <Text className="text-gray-800 text-base leading-5 font-lato">{message}</Text>
     </View>
   );
 };
@@ -56,7 +56,7 @@ export default function Notifications() {
     return (
       <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#FFA500" />
-          <Text className="text-gray-600 font-serif">Loading notifications...</Text>
+          <Text className="text-gray-600 font-serif font-lato">Loading notifications...</Text>
         </View>
     )
   }

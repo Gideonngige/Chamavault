@@ -45,9 +45,9 @@ export default function Invitation(){
                     className="w-full h-48 rounded-lg overflow-hidden justify-center"
                     style={{ resizeMode: 'contain', width: '100%', height: 200 }}
             ></Image>
-            <Text className='text-gray-950 w-full font-bold font-serif'>Click the button below to share the app</Text>
+            <Text className='text-gray-950 w-full font-bold font-lato'>Click the button below to share the app</Text>
             <TouchableOpacity className="w-full bg-green-600 p-4 rounded-sm" onPress={shareChamaVaultApp}>
-            {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Share</Text> }
+            {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-lato">Share</Text> }
             </TouchableOpacity>
             <Toast/>
         </View>

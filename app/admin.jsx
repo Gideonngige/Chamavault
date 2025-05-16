@@ -43,32 +43,97 @@ export default function Admin() {
     fetchData();
   }, []);
 
+  // functions to handle admin
+  const manageRoles=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('manageroles/')
+    }
+  }
+
+  const manageMembers=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('managemembers/')
+    }
+  }
+
+  const chat=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('chat/')
+    }
+  }
+
+  const scheduleMeeting=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('schedule/')
+    }
+  }
+
+  const poll=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('poll/')
+    }
+  }
+
+  const contributionDate=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('contributiondate/')
+    }
+  }
+
+  const Investment=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('investment/')
+    }
+  }
+  // end
+
   const actions = [
-    { title: 'Manage Roles', onPress: () => router.push('manageroles/') },
-    { title: 'Manage Members', onPress: () => router.push('managemembers/') },
-    { title: 'Chat Message', onPress: () => router.push('chat/') },
-    { title: 'Schedule Meeting', onPress: () => router.push('schedule/') },
-    { title: 'Poll', onPress: () => router.push('poll/') },
+    { title: 'Manage Roles', onPress: manageRoles},
+    { title: 'Manage Members', onPress: manageMembers },
+    { title: 'Chat Message', onPress: chat },
+    { title: 'Schedule Meeting', onPress: scheduleMeeting },
+    { title: 'Poll', onPress: poll },
     { title: 'Go To Home', onPress: () => router.push('home/') },
-    { title: 'Contribution Date', onPress: () => router.push('contributiondate/') },
-    { title: 'Investment', onPress: () => router.push('investment/') },
+    { title: 'Contribution Date', onPress: contributionDate },
+    { title: 'Investment', onPress: Investment },
   ];
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }} className="p-4">
-        <Text className="text-2xl font-bold text-gray-800 mb-4">👋 Hi, {name}</Text>
+        <Text className="text-2xl font-bold text-gray-800 mb-4 font-lato">👋 Hi, {name}</Text>
 
         {/* Overview Cards */}
         <View className="mb-6">
           <View className="flex flex-row justify-between mb-3">
             <View className="bg-white p-4 rounded-2xl shadow-md flex-1 mx-1">
-              <Text className="text-gray-600 text-sm">Chama</Text>
-              <Text className="text-xl font-bold text-blue-600">{chama}</Text>
+              <Text className="text-gray-600 text-sm font-lato">Chama</Text>
+              <Text className="text-xl font-bold text-blue-600 font-lato">{chama}</Text>
             </View>
             <View className="bg-white p-4 rounded-2xl shadow-md flex-1 mx-1">
-              <Text className="text-gray-600 text-sm">Members</Text>
+              <Text className="text-gray-600 text-sm font-lato">Members</Text>
               <Text className="text-xl font-bold text-green-600">
                 {isLoadingData ? "..." : totalmembers}
               </Text>
@@ -76,14 +141,14 @@ export default function Admin() {
           </View>
           <View className="flex flex-row justify-between">
             <View className="bg-white p-4 rounded-2xl shadow-md flex-1 mx-1">
-              <Text className="text-gray-600 text-sm">Total Savings</Text>
-              <Text className="text-xl font-bold text-indigo-600">
+              <Text className="text-gray-600 text-sm font-lato">Total Savings</Text>
+              <Text className="text-xl font-bold text-indigo-600 font-lato">
                 {isLoadingData ? "..." : `KES ${totalSavings}`}
               </Text>
             </View>
             <View className="bg-white p-4 rounded-2xl shadow-md flex-1 mx-1">
-              <Text className="text-gray-600 text-sm">Total Loans</Text>
-              <Text className="text-xl font-bold text-red-600">
+              <Text className="text-gray-600 text-sm font-lato">Total Loans</Text>
+              <Text className="text-xl font-bold font-lato text-red-600">
                 {isLoadingData ? "..." : `KES ${totalLoans}`}
               </Text>
             </View>
@@ -91,7 +156,7 @@ export default function Admin() {
         </View>
 
         {/* Actions */}
-        <Text className="text-xl font-semibold text-gray-800 mb-3">⚙️ Admin Controls</Text>
+        <Text className="text-xl font-semibold text-gray-800 mb-3 font-lato">⚙️ Admin Controls</Text>
         <View className="flex flex-row flex-wrap justify-between">
           {actions.map((action, index) => (
             <TouchableOpacity
@@ -102,7 +167,7 @@ export default function Admin() {
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text className="text-white text-center font-semibold">{action.title}</Text>
+                <Text className="text-white text-center font-semibold font-lato">{action.title}</Text>
               )}
             </TouchableOpacity>
           ))}

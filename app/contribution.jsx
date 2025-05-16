@@ -80,10 +80,10 @@ export default function Contributions() {
     <SafeAreaView className="flex-1 bg-white pt-10">
       <ScrollView className="px-4">
         <View className="bg-white rounded-2xl shadow-md p-6 mb-6 mt-4">
-          <Text className="text-center text-xl font-semibold text-gray-800 mb-1 font-serif">
+          <Text className="text-center text-xl font-semibold text-gray-800 mb-1 font-lato">
             Contribution Amount
           </Text>
-          <Text className="text-center text-yellow-600 font-bold text-2xl mb-4 font-serif">
+          <Text className="text-center text-yellow-600 font-bold text-2xl mb-4 font-lato">
             KES {display || "0"}
           </Text>
 
@@ -92,7 +92,7 @@ export default function Contributions() {
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="border border-yellow-500 text-gray-900 bg-white p-4 rounded-sm text-lg font-serif mb-6"
+            className="border border-yellow-500 text-gray-900 bg-white p-4 rounded-lg text-lg font-lato mb-6"
           />
 
           {/* Payment Method Switcher */}
@@ -106,7 +106,7 @@ export default function Contributions() {
               }`}
             >
               <Text
-                className={`text-center text-base font-semibold font-serif ${
+                className={`text-center text-base font-semibold font-lato ${
                   selectedPaymentMethod === "card"
                     ? "text-white"
                     : "text-gray-800"
@@ -125,7 +125,7 @@ export default function Contributions() {
               }`}
             >
               <Text
-                className={`text-center text-base font-semibold font-serif ${
+                className={`text-center text-base font-semibold font-lato ${
                   selectedPaymentMethod === "mobile_money"
                     ? "text-white"
                     : "text-gray-800"
@@ -144,7 +144,7 @@ export default function Contributions() {
             {isLoading ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg font-serif">
+              <Text className="text-white text-center font-semibold text-lg font-lato">
                 Proceed to Payment
               </Text>
             )}

@@ -67,14 +67,14 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
     <View className="w-80 p-4 mb-4 bg-white rounded-2xl shadow-md border border-gray-200">
       {/* Top Info Section */}
       <View className="flex-row justify-between items-center mb-3">
-        <Text className="text-sm text-gray-700 font-semibold">Loanee: {loonee_id}</Text>
-        <Text className="text-base font-bold text-green-600">KES {loan}</Text>
+        <Text className="text-sm text-gray-700 font-semibold font-lato">Loanee: {loonee_id}</Text>
+        <Text className="text-base font-bold text-green-600 font-lato">KES {loan}</Text>
       </View>
 
       {/* Loan Metadata */}
-      <Text className="text-sm text-gray-500 mb-1">Applied on: {date}</Text>
-      <Text className="text-sm text-gray-600 mb-1">Credit Score: 90</Text>
-      <Text className="text-sm text-gray-600 mb-3">Type: {loanType}</Text>
+      <Text className="text-sm text-gray-500 mb-1 font-lato">Applied on: {date}</Text>
+      <Text className="text-sm text-gray-600 mb-1 font-lato">Credit Score: 90</Text>
+      <Text className="text-sm text-gray-600 mb-3 font-lato">Type: {loanType}</Text>
 
       {/* Action Buttons */}
       <View className="flex-row justify-between mt-3">
@@ -85,7 +85,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
           {loadingLoanId === loan_id ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text className="text-white font-semibold">Approve</Text>
+            <Text className="text-white font-semibold font-lato">Approve</Text>
           )}
         </TouchableOpacity>
 
@@ -96,7 +96,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
           {loadingLoanId === loan_id ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text className="text-white font-semibold">Decline</Text>
+            <Text className="text-white font-semibold font-lato">Decline</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -111,7 +111,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
   const Alert = () => {
     return (
       <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold font-serif">You have 0 applied loans</Text>
+        <Text className="text-white font-bold font-lato">You have 0 applied loans</Text>
       </View>
     );
   };
@@ -120,7 +120,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
         return (
             <View className="flex-1 justify-center items-center">
                 <ActivityIndicator size="large" color="#FFA500" />
-                <Text className="text-gray-600 font-serif">Loading loans...</Text>
+                <Text className="text-gray-600 font-lato">Loading loans...</Text>
             </View>
         )
     }

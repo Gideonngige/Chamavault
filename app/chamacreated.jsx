@@ -16,10 +16,10 @@ export default function Createchama(){
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
               <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
               <Text className="text-3xl font-bold text-gray-800 mb-6 font-serif">ChamaVault</Text>
-              <Text className="text-lg font-bold font-serif">{chama} created Successfully</Text>
+              <Text className="text-lg font-bold font-lato">{chama} created Successfully</Text>
               
               <TouchableOpacity className="w-full bg-yellow-600 p-4 rounded-lg" onPress={handleInviteMembers}>
-                <Text className="text-white text-center font-semibold text-lg font-serif">Invite members</Text>
+                <Text className="text-white text-center font-semibold text-lg font-lato">Invite members</Text>
               </TouchableOpacity>
               <StatusBar
       barStyle="dark-content" // or "light-content" depending on your background

@@ -60,10 +60,10 @@ export default function ContributionDate(){
         <SafeAreaView className="flex-1 bg-white">
         <ScrollView nestedScrollEnabled={true} className="p-4">
     <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-    <Text className="w-full text-lg font-serif">Click below to set contribution date</Text>
+    <Text className="w-full text-lg font-lato">Click below to set contribution date</Text>
       <View className='w-full'>
       <TouchableOpacity onPress={showDatePicker} className=" bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
-      <Text className="w-full text-lg text-white font-serif">Contribution Date: {contributionDate.toLocaleDateString()}</Text>
+      <Text className="w-full text-lg text-white font-lato">Contribution Date: {contributionDate.toLocaleDateString()}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -76,7 +76,7 @@ export default function ContributionDate(){
       )}
     </View>
     <TouchableOpacity className="w-full bg-green-600 p-4 rounded-sm" onPress={handleSchedule}>
-    {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Schedule</Text> }
+    {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-lato">Schedule</Text> }
                         
     </TouchableOpacity>
     <Toast/>

@@ -91,7 +91,7 @@ export default function ActivePolls() {
   if (!poll) {
     return (
       <View className="flex-1 justify-center items-center p-4">
-        <Text>No active poll available.</Text>
+        <Text className="font-lato">No active poll available.</Text>
       </View>
     );
   }
@@ -100,7 +100,7 @@ export default function ActivePolls() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="bg-yellow-500 p-5 rounded-2xl shadow-lg mb-4">
-          <Text className="text-white text-lg font-semibold mb-4">{poll.question}</Text>
+          <Text className="text-white text-lg font-semibold mb-4 font-lato">{poll.question}</Text>
 
           {poll.choices.map((choice) => (
             <TouchableOpacity
@@ -110,7 +110,7 @@ export default function ActivePolls() {
                 selectedOption === choice.id ? "border-yellow-600 bg-yellow-50" : "border-gray-300"
               }`}
             >
-              <Text className="text-base font-medium">{choice.choice_text}</Text>
+              <Text className="text-base font-medium font-lato">{choice.choice_text}</Text>
               {selectedOption === choice.id && (
                 <Ionicons name="checkmark-circle" size={24} color="#eab308" />
               )}
@@ -123,14 +123,14 @@ export default function ActivePolls() {
             disabled={!selectedOption}
           >
             {isSending ? <ActivityIndicator size="large" color="#FFA500" /> : 
-            <Text className="text-white font-bold text-center">Submit Vote</Text>
+            <Text className="text-white font-bold text-center font-lato">Submit Vote</Text>
             }
           </TouchableOpacity>
         </View>
 
       {/* Poll Results Section */}
 <View className="mt-8 bg-white p-4 rounded-2xl shadow-md">
-  <Text className="text-xl font-bold mb-4 text-gray-800">Poll Results</Text>
+  <Text className="text-xl font-bold mb-4 text-gray-800 font-lato">Poll Results</Text>
 
   {poll.choices.map((choice) => {
     const totalVotes = poll.choices.reduce((sum, c) => sum + c.votes, 0);
@@ -140,8 +140,8 @@ export default function ActivePolls() {
       <View key={choice.id} className="mb-4">
         {/* Choice text and percentage */}
         <View className="flex-row justify-between mb-1">
-          <Text className="text-base text-gray-800 font-medium">{choice.choice_text}</Text>
-          <Text className="text-base text-gray-600">{percentage}%</Text>
+          <Text className="text-base text-gray-800 font-medium font-lato">{choice.choice_text}</Text>
+          <Text className="text-base text-gray-600 font-lato">{percentage}%</Text>
         </View>
 
         {/* Progress Bar */}

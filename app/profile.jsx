@@ -70,13 +70,13 @@ export default function Profile() {
         style={{width: 150, height: 150, borderRadius: 75, borderWidth: 3,borderColor: '#fff',resizeMode: 'cover',
         }}
       />
-    <Text className="text-lg font-bold text-gray-800 mb-1 font-serif">{name}</Text>
-    <Text className="text-gray-800 font-bold font-serif">{email}</Text>
+    <Text className="text-lg font-bold text-gray-800 mb-1 font-lato">{name}</Text>
+    <Text className="text-gray-800 font-bold font-lato">{email}</Text>
     </View>
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
         <TouchableOpacity className='flex-row items-center justify-between w-full p-1' onPress={handleUpdateProfile}>
             <MaterialIcons name="account-circle" size={30} color="white" className='mr-4' />
-            <Text className="text-base font-bold p-2 text-gray-900 font-serif">Update Profile</Text>
+            <Text className="text-base font-bold p-2 text-gray-900 font-lato">Update Profile</Text>
             <Ionicons name="chevron-forward-outline" size={30} color="white" />
         </TouchableOpacity>
     </View>
@@ -84,7 +84,7 @@ export default function Profile() {
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
         <TouchableOpacity className='flex-row items-center justify-between w-full p-1' onPress={handleShareApp}>
              <Ionicons name="share-social" size={30} color="white" />
-            <Text className="text-base font-bold p-2 text-gray-900 font-serif">Share App</Text>
+            <Text className="text-base font-bold p-2 text-gray-900 font-lato">Share App</Text>
             <Ionicons name="chevron-forward-outline" size={30} color="white" />
         </TouchableOpacity>
     </View>
@@ -92,7 +92,7 @@ export default function Profile() {
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
         <TouchableOpacity className='flex-row items-center justify-between w-full p-1' onPress={handleHelp}>
             <MaterialCommunityIcons name="help-circle" size={30} color="white" />
-            <Text className="text-base font-bold p-2 text-gray-900 font-serif">Help</Text>
+            <Text className="text-base font-bold p-2 text-gray-900 font-lato">Help</Text>
             <Ionicons name="chevron-forward-outline" size={30} color="white" />
         </TouchableOpacity>
     </View>
@@ -100,7 +100,7 @@ export default function Profile() {
     <View className='w-full flex-row items-center bg-yellow-600 rounded-lg mb-5'>
         <TouchableOpacity className='flex-row items-center justify-between w-full p-1' onPress={handleLogOut}>
         <MaterialIcons name="logout" size={30} color="white" />
-            <Text className="text-base font-bold p-2 text-gray-900 font-serif">Logout</Text>
+            <Text className="text-base font-bold p-2 text-gray-900 font-lato">Logout</Text>
             <Ionicons name="chevron-forward-outline" size={30} color="white" />
         </TouchableOpacity>
     </View>

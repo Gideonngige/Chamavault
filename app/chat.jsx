@@ -68,19 +68,20 @@ const ChatScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white mb-24">
+    <SafeAreaView className="flex-1 bg-white ">
       <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
 
       <KeyboardAvoidingView
-        className="flex-1"
+        className="flex-1 mb-20"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={80}
       >
         {isLoading ? (
          <View className="flex-1 justify-center items-center">
               <ActivityIndicator size="large" color="#FFA500" />
-              <Text className="text-gray-600 font-serif">Loading chats...</Text>
+              <Text className="text-gray-600 font-lato">Loading chats...</Text>
           </View>
+          
         ) : (
           <FlatList
             data={messages}
@@ -96,11 +97,11 @@ const ChatScreen = () => {
                     source={{ uri: item.profile_image }}
                     className="w-5 h-5 rounded-full"
                   />
-                  <Text className="ml-2 font-bold font-serif text-gray-900 dark:text-black">
+                  <Text className="ml-2 font-bold font-lato text-gray-900 dark:text-black">
                     {item.sender == name ? 'You' : item.sender}
                   </Text>
                 </View>
-                <Text className="text-black dark:text-black font-serif mt-1">{item.text}</Text>
+                <Text className="text-black dark:text-black font-lato mt-1">{item.text}</Text>
                 <Text className="text-xs text-black mt-1 font-serif">
                   {new Date(item.timestamp).toLocaleTimeString()}
                 </Text>
@@ -110,18 +111,18 @@ const ChatScreen = () => {
           />
         )}
 
-        <View className="flex-row items-center p-3 border-t border-gray-200 bg-white mb-5">
+        <View className="flex-row items-center mb-8 p-3 border-t border-gray-200 bg-white">
           <TextInput
             value={newMessage}
             onChangeText={setNewMessage}
             placeholder="Type a message..."
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2 bg-white font-serif"
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2 bg-white font-lato"
           />
           <TouchableOpacity
             onPress={sendMessage}
             className="bg-yellow-600 px-5 py-2 rounded-full"
           >
-            <Text className="text-white font-bold font-serif">
+            <Text className="text-white font-bold font-lato">
               {isSending ? 'Sending...' : 'Send'}
             </Text>
           </TouchableOpacity>

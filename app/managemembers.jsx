@@ -155,11 +155,11 @@ import {
           <View className="flex-1 justify-center items-center p-5">
             
             {/* Page Title */}
-            <Text className="w-full text-xl font-bold mb-3 font-serif">Manage Members</Text>
+            <Text className="w-full text-xl font-bold mb-3 font-lato">Manage Members</Text>
   
             {/* Member Selection */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2 font-serif">Select a Member</Text>
+              <Text className="text-lg font-semibold mb-2 font-lato">Select a Member</Text>
               <DropDownPicker
                 open={open}
                 value={value}
@@ -175,9 +175,9 @@ import {
   
             {/* Message Input Field */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2 font-serif">Write a Message</Text>
+              <Text className="text-lg font-semibold mb-2 font-lato">Write a Message</Text>
               <TextInput
-                className="w-full bg-white font-serif p-4 rounded-lg shadow-md border border-gray-300 h-40"
+                className="w-full bg-white font-lato p-4 rounded-lg shadow-md border border-gray-300 h-40"
                 placeholder="Type your message here..."
                 multiline
                 numberOfLines={4}
@@ -196,7 +196,7 @@ import {
     {isLoading 
       ? <ActivityIndicator size="small" color="#fff" /> 
       : (
-        <Text className="text-white font-semibold text-lg font-serif text-center">
+        <Text className="text-white font-semibold text-lg font-lato text-center">
           DELETE
         </Text>
       )
@@ -210,7 +210,7 @@ import {
     {isLoading2 
       ? <ActivityIndicator size="small" color="#fff" /> 
       : (
-        <Text className="text-white font-semibold text-lg font-serif text-center">
+        <Text className="text-white font-semibold text-lg font-lato text-center">
           SEND MESSAGE
         </Text>
       )

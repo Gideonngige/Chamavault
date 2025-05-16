@@ -58,9 +58,9 @@ export default function Members() {
           className="rounded-full"
         />
         <View className="flex-1">
-          <Text className="text-lg font-bold text-gray-900 font-serif">{name}</Text>
-          <Text className="text-sm text-gray-900">{email}</Text>
-          <Text className="text-xs text-yellow-600 mt-1 font-serif">Joined: {joined_date}</Text>
+          <Text className="text-lg font-bold text-gray-900 font-lato">{name}</Text>
+          <Text className="text-sm text-gray-900 font-lato">{email}</Text>
+          <Text className="text-xs text-yellow-600 mt-1 font-lato">Joined: {joined_date}</Text>
         </View>
       </View>
     </View>
@@ -70,7 +70,7 @@ export default function Members() {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#FFA500" />
-        <Text className="text-gray-600 mt-4 font-serif">Loading members...</Text>
+        <Text className="text-gray-600 mt-4 font-lato">Loading members...</Text>
       </View>
     );
   }
@@ -87,7 +87,7 @@ export default function Members() {
             value={search}
             onChangeText={(text) => setSearch(text)}
             placeholder="Search member here..."
-            className="flex-1 ml-2 text-gray-800 text-base font-serif"
+            className="flex-1 ml-2 text-gray-800 text-base font-lato"
           />
         </View>
       </View>

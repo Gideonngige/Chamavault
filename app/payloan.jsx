@@ -100,12 +100,12 @@ export default function PayLoan() {
       <ScrollView className="p-4">
         <View className="flex-1 justify-center items-center space-y-6">
           <Text className="text-lg font-bold text-gray-800 w-full">
-            My Loan: <Text className="text-yellow-600 font-serif">KES.{loan}</Text>
+            My Loan: <Text className="text-yellow-600 font-lato">KES.{loan}</Text>
           </Text>
 
           <View className="w-full space-y-1">
-            <Text className="text-gray-700 text-base font-serif">Repayment Amount</Text>
-            <Text className="text-yellow-600 font-bold text-2xl font-serif">KES.{display}</Text>
+            <Text className="text-gray-700 text-base font-lato">Repayment Amount</Text>
+            <Text className="text-yellow-600 font-bold text-2xl font-lato">KES.{display}</Text>
           </View>
 
           <Image source={require('../assets/images2/payloan.png')} className="w-full h-56 mb-0" style={{ resizeMode:"contain", height:300}}/>
@@ -115,7 +115,7 @@ export default function PayLoan() {
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="w-full p-4 rounded-sm bg-white border border-yellow-500 text-gray-800 text-lg font-serif"
+            className="w-full p-4 rounded-sm bg-white border border-yellow-500 text-gray-800 text-lg font-lato"
           />
 
           <View className="w-full flex-row justify-between mt-2">
@@ -125,7 +125,7 @@ export default function PayLoan() {
                 selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-300"
               }`}
             >
-              <Text className="text-white text-center font-semibold font-serif">Pay with Card</Text>
+              <Text className="text-white text-center font-semibold font-lato">Pay with Card</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -134,7 +134,7 @@ export default function PayLoan() {
                 selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-300"
               }`}
             >
-              <Text className="text-white text-center font-semibold font-serif">Pay with M-Pesa</Text>
+              <Text className="text-white text-center font-semibold font-lato">Pay with M-Pesa</Text>
             </TouchableOpacity>
           </View>
 
@@ -145,7 +145,7 @@ export default function PayLoan() {
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-bold text-lg font-serif">Proceed to Payment</Text>
+              <Text className="text-white text-center font-bold text-lg font-lato">Proceed to Payment</Text>
             )}
           </TouchableOpacity>
 

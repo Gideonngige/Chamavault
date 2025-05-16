@@ -7,7 +7,7 @@ export default function RootLayout() {
   return(
     <SafeAreaProvider>
       <Stack screenOptions={{headerShown:true}}>
-        <Stack.Screen name="index"options={{title:"Welcome"}}  />
+        <Stack.Screen name="index"options={{title:""}}  />
         <Stack.Screen name="login"options={{title:"Login"}}  />
         <Stack.Screen name="home"options={{title:"ChamaVault",  headerRight: () => <NotificationIcon/>}}  />
         <Stack.Screen name="verify"options={{title:"Verify"}}  />

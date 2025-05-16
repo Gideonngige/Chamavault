@@ -38,7 +38,7 @@ export default function Schedule() {
         setIsLoading(true);
         try {
           const formattedDate = new Date(date).toISOString();
-          const chama_id = await AsyncStorage.getItem("chama");
+          const chama_id = await AsyncStorage.getItem("chama_id");
           const member_id = await AsyncStorage.getItem("member_id");
           const url = `https://backend1-1cc6.onrender.com/schedulemeeting/`;
           const data = {
@@ -76,10 +76,10 @@ export default function Schedule() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className="w-full text-lg font-bold font-serif">Meeting date</Text>
+          <Text className="w-full text-lg font-bold font-lato">Meeting date</Text>
       <View className='w-full'>
       <TouchableOpacity onPress={showDatePicker} className=" bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
-      <Text className="w-full text-lg font-bold font-serif">Meeting Date: {date.toLocaleDateString()}</Text>
+      <Text className="w-full text-lg font-bold font-lato">Meeting Date: {date.toLocaleDateString()}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -93,9 +93,9 @@ export default function Schedule() {
     </View>
                 {/* Message Input Field */}
             <View className="w-full mb-4">
-              <Text className="text-lg font-semibold mb-2 font-serif">Write a Message</Text>
+              <Text className="text-lg font-semibold mb-2 font-lato">Write a Message</Text>
               <TextInput
-                className="w-full font-serif bg-white p-4 h-40 rounded-lg shadow-md border border-gray-300"
+                className="w-full font-lato bg-white p-4 h-40 rounded-lg shadow-md border border-gray-300"
                 placeholder="Type your message here..."
                 multiline
                 numberOfLines={4}
@@ -104,7 +104,7 @@ export default function Schedule() {
               />
             </View>
                 <TouchableOpacity className="w-full bg-green-600 p-4 rounded-sm" onPress={handleSchedule}>
-                {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-serif">Schedule</Text> }
+                {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-semibold text-lg font-lato">Schedule</Text> }
                         
                 </TouchableOpacity>
                 <Toast/>

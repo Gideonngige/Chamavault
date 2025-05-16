@@ -91,14 +91,14 @@ export default function Createchama(){
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
               <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
               <Text className="text-3xl font-bold text-gray-800 mb-6 font-serif">ChamaVault</Text>
-              <Text className="text-lg font-bold font-serif">Enter name of chama</Text>
+              <Text className="text-lg font-bold font-lato">Enter name of chama</Text>
               <TextInput 
               placeholder="Enter name of chama"
               value={chama}
               onChangeText={setChama}
-              className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+              className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
               />
-              <Text className="text-lg font-bold font-serif">Enter chama description</Text>
+              <Text className="text-lg font-bold font-lato">Enter chama description</Text>
               <TextInput 
               placeholder="chama description..."
               value={description}
@@ -106,11 +106,11 @@ export default function Createchama(){
               multiline
               numberOfLines={4}
               textAlignVertical="top"
-              className="w-full h-40 p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
+              className="w-full h-40 p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-lato"
               />
               
               <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleCreateChama}>
-                {isLoading ? <ActivityIndicator size="large" color="#fff"/> : <Text className="text-white text-center font-semibold text-lg font-serif">Create Chama</Text>}
+                {isLoading ? <ActivityIndicator size="large" color="#fff"/> : <Text className="text-white text-center font-semibold text-lg font-lato">Create Chama</Text>}
               </TouchableOpacity>
               <Toast/>
               
