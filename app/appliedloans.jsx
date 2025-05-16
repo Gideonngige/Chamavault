@@ -15,8 +15,9 @@ export default function Chama(){
         // Fetch data from the API
         const fetchLoans = async () => {
             const role = await AsyncStorage.getItem('role');
+            const chama_id = await AsyncStorage.getItem('chama_id');
             // alert(role)
-            axios.get(`https://backend1-1cc6.onrender.com/getAllLoans/${role}/`)
+            axios.get(`https://backend1-1cc6.onrender.com/getAllLoans/${role}/${chama_id}/`)
           .then((response) => {
             setAppliedLoans(response.data);
             setLoading(false);
@@ -110,7 +111,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
   const Alert = () => {
     return (
       <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold font-serif">You have 0 notifications</Text>
+        <Text className="text-white font-bold font-serif">You have 0 applied loans</Text>
       </View>
     );
   };

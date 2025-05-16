@@ -32,6 +32,7 @@ export default function Loans() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
   const [totalSTL, setTotalSTL] = useState(0);
   const [totalLTL, setTotalLTL] = useState(0);
   const [totalSTLRepayment, setTotalSTLRepayment] = useState(0);
@@ -45,13 +46,15 @@ export default function Loans() {
     const getLoans = async () => {
       const email = await AsyncStorage.getItem('email');
       const name = await AsyncStorage.getItem('name');
-      const chama = await AsyncStorage.getItem('chama');
+      const chama = await AsyncStorage.getItem('chama_id');
       const member_id = await AsyncStorage.getItem('member_id');
       const selected_chama = await AsyncStorage.getItem('selected_chama');
 
       setName(name);
       setEmail(email);
       setIsLoadingData(true);
+      // setIsDisabled(true);
+      // setIsDisabled2(true);
 
       try {
         const response = await axios.get(`https://backend1-1cc6.onrender.com/getLoans/${chama}/${email}/`);
@@ -61,7 +64,8 @@ export default function Loans() {
           const total_stl_new = response.data.total_stl_loan - response2.data.total_stl_repayment;
           const total_ltl_new = response.data.total_ltl_loan - response2.data.total_ltl_repayment;
 
-          if (total_stl_new > 0) setIsDisabled(true);
+          if (total_stl_new > 0) {setIsDisabled(true)} else{setIsDisabled(false)};
+          if (total_ltl_new > 0) {setIsDisabled2(true)} else(setIsDisabled2(false));
 
           setLoan(response.data.total_loan);
           setLoanInterest(response.data.interest);
@@ -88,7 +92,7 @@ export default function Loans() {
     const fetchTransactions = async () => {
       setIsLoadingTransactions(true);
       const email = await AsyncStorage.getItem('email');
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
 
       axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
         .then((response) => setTransactions(response.data))
@@ -110,17 +114,16 @@ export default function Loans() {
     router.push('payloan');
   };
 
-  const Activity = ({ transactionType, chama, amount, transactionTime }) => (
-    <View className="bg-yellow-100 p-4 rounded-xl mb-3">
+  const Activity = ({ transactionType, amount, transactionTime }) => (
+    <View className="bg-yellow-100 p-4 rounded-xl mb-5">
       <Text className="text-lg font-bold text-gray-800 font-serif">{transactionType}</Text>
-      <Text className="text-gray-700 font-serif">Chama: {chama}</Text>
       <Text className="text-gray-700 font-serif">Amount: KES.{amount}</Text>
       <Text className="text-sm text-gray-600 font-serif">Date: {transactionTime}</Text>
     </View>
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white mb-20">
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
       <ScrollView className="p-4">
         <View className="mb-6">
@@ -149,7 +152,8 @@ export default function Loans() {
   payable: totalSTLRepayment,
   date: stlDate,
   due: stlDueDate,
-  loanType: "STL"
+  loanType: "STL",
+  status: isDisabled
 }, {
   title: "Long-Term Loan",
   total: totalLTL,
@@ -157,7 +161,8 @@ export default function Loans() {
   payable: totalLTLRepayment,
   date: ltlDate,
   due: ltlDueDate,
-  loanType: "LTL"
+  loanType: "LTL",
+  status: isDisabled2
 }].map((loanItem, index) => (
   <View key={index} className="bg-yellow-600 p-5 rounded-2xl mb-6 shadow-lg">
     <Text className="text-xl font-bold text-white mb-4 font-serif">{loanItem.title}</Text>
@@ -190,7 +195,7 @@ export default function Loans() {
       <TouchableOpacity
         className="bg-white py-3 w-full rounded-xl items-center mb-4"
         onPress={() => handleTerms(loanItem.loanType)}
-        disabled={isDisabled}
+        disabled={loanItem.status}
       >
         <FontAwesome6 name="plus" size={20} color="black" />
         <Text className="text-black font-medium mt-1 font-serif">Take Loan</Text>
@@ -208,7 +213,7 @@ export default function Loans() {
 ))}
 
         {/* Activity Section */}
-        <View className="mt-4">
+        <View className="mt-4 mb-10">
           <Text className="text-xl font-bold mb-2 font-serif">My Activities</Text>
           {isLoadingTransactions ? (
             <ActivityIndicator size="large" color="#facc15" />
@@ -219,7 +224,6 @@ export default function Loans() {
               renderItem={({ item }) => (
                 <Activity
                   transactionType={item.transaction_type}
-                  chama={item.chama}
                   amount={item.amount}
                   transactionTime={item.transaction_date.split("T")[0]}
                 />

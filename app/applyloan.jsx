@@ -123,7 +123,7 @@ useEffect(() => {
       value={loanAmount}
       onChangeText={setLoanAmount}
       keyboardType="numeric"
-      className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+      className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
 
       <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleApplyLoan}>

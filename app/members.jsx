@@ -23,7 +23,7 @@ export default function Members() {
   useEffect(() => {
     const getData = async () => {
       const email = await AsyncStorage.getItem('email');
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
       axios.get(`https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`)
         .then((response) => {
           setMembers(response.data);
@@ -50,7 +50,7 @@ export default function Members() {
   }, [search, members]);
 
   const ProfileCard = ({ name, email, joined_date, profile_image }) => (
-    <View className="bg-yellow-600 mb-4 p-4 rounded-2xl mx-4 shadow-lg">
+    <View className="bg-white mb-4 p-4 rounded-2xl mx-4 shadow-lg">
       <View className="flex-row items-center space-x-4">
         <Image
           source={{ uri: profile_image }}
@@ -60,7 +60,7 @@ export default function Members() {
         <View className="flex-1">
           <Text className="text-lg font-bold text-gray-900 font-serif">{name}</Text>
           <Text className="text-sm text-gray-900">{email}</Text>
-          <Text className="text-xs text-gray-100 mt-1 font-serif">Joined: {joined_date}</Text>
+          <Text className="text-xs text-yellow-600 mt-1 font-serif">Joined: {joined_date}</Text>
         </View>
       </View>
     </View>

@@ -7,12 +7,11 @@ import { Paystack } from "react-native-paystack-webview";
 import axios from "axios";
 
 export default function Contributions() {
-  const route = useRoute();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState(0);
   const [showPaystack, setShowPaystack] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card"); // Default payment method
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
 
   const publicKey = "pk_test_6633ec1991d6ba92490835f6cbc1b7934876a55f";
   const [email, setEmail] = useState("");
@@ -25,7 +24,7 @@ export default function Contributions() {
       const storedEmail = await AsyncStorage.getItem("email");
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
-      const storedChama_id = await AsyncStorage.getItem("chama");
+      const storedChama_id = await AsyncStorage.getItem("chama_id");
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
@@ -37,44 +36,35 @@ export default function Contributions() {
   }, []);
 
   const amountValue = parseInt(amount);
+  useEffect(() => setDisplay(amount), [amount]);
 
-  useEffect(() => {
-    setDisplay(amount);
-  }, [amount]);
-
-
-//   function to save transactions
-const saveTransaction = async (transactionRef, amount, email) => {
+  const saveTransaction = async (transactionRef, amount, email) => {
     try {
-
       const url = "https://backend1-1cc6.onrender.com/contributions/";
-          const data = {
-            email: email,
-            amount: amount, // Convert back to KES
-            phonenumber: phonenumber,
-            chama_id: chama_id,
-            transactionRef: transactionRef,
-          };
-  
-          console.log("Sending data:", data);  // Log request data
-  
-          const response = await axios.post(url, data, {
-              headers: { "Content-Type": "application/json" },
-          });
+      const data = {
+        email,
+        amount,
+        phonenumber,
+        chama_id,
+        transactionRef,
+      };
 
+      const response = await axios.post(url, data, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (response.status === 200) {
         Toast.show({
-          type: "success", // Can be "success", "error", "info"
+          type: "success",
           text1: "Transaction Successful",
-          text2: "Transaction Ref: " + transactionRef,
+          text2: `Ref: ${transactionRef}`,
         });
         setAmount("");
       } else {
         Toast.show({
           type: "error",
           text1: "Transaction Failed",
-          text2: response.data.message,
+          text2: "No contribution date has been set!",
         });
       }
     } catch (error) {
@@ -83,113 +73,116 @@ const saveTransaction = async (transactionRef, amount, email) => {
         text1: "Transaction Error",
         text2: error.message,
       });
-      console.error("Error saving transaction:", error);
     }
   };
-  
-// end of function to save transaction 
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="p-4">
-        <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-          <Text className="text-gray-950 text-lg font-serif">Contribution amount</Text>
-          <Text className="text-yellow-600 font-bold text-xl font-serif">KES.{display}</Text>
+    <SafeAreaView className="flex-1 bg-white pt-10">
+      <ScrollView className="px-4">
+        <View className="bg-white rounded-2xl shadow-md p-6 mb-6 mt-4">
+          <Text className="text-center text-xl font-semibold text-gray-800 mb-1 font-serif">
+            Contribution Amount
+          </Text>
+          <Text className="text-center text-yellow-600 font-bold text-2xl mb-4 font-serif">
+            KES {display || "0"}
+          </Text>
 
           <TextInput
-            placeholder="Enter contribution amount"
+            placeholder="Enter amount in KES"
             value={amount}
             onChangeText={setAmount}
             keyboardType="numeric"
-            className="w-full p-4 bg-white rounded-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
+            className="border border-yellow-500 text-gray-900 bg-white p-4 rounded-sm text-lg font-serif mb-6"
           />
 
-          {/* Payment Method Selection */}
-          {/* Payment Method Selection */}
-<View className="w-full flex-row justify-center mb-4">
-  <TouchableOpacity
-    onPress={() => setSelectedPaymentMethod("card")}
-    className={`p-6 mr-1 rounded-sm ${
-      selectedPaymentMethod === "card" ? "bg-yellow-600" : "bg-gray-200"
-    }`}
-  >
-    <Text
-      className={`text-center font-serif font-medium ${
-        selectedPaymentMethod === "card" ? "text-white" : "text-gray-800"
-      }`}
-    >
-      Pay with Card
-    </Text>
-  </TouchableOpacity>
+          {/* Payment Method Switcher */}
+          <View className="flex-row justify-between mb-6">
+            <TouchableOpacity
+              onPress={() => setSelectedPaymentMethod("card")}
+              className={`flex-1 p-4 mx-1 rounded-xl ${
+                selectedPaymentMethod === "card"
+                  ? "bg-yellow-600"
+                  : "bg-gray-200"
+              }`}
+            >
+              <Text
+                className={`text-center text-base font-semibold font-serif ${
+                  selectedPaymentMethod === "card"
+                    ? "text-white"
+                    : "text-gray-800"
+                }`}
+              >
+                Pay with Card
+              </Text>
+            </TouchableOpacity>
 
-  <TouchableOpacity
-    onPress={() => setSelectedPaymentMethod("mobile_money")}
-    className={`p-6 rounded-sm ml-1 ${
-      selectedPaymentMethod === "mobile_money" ? "bg-yellow-600" : "bg-gray-200"
-    }`}
-  >
-    <Text
-      className={`text-center font-medium font-serif ${
-        selectedPaymentMethod === "mobile_money" ? "text-white" : "text-gray-800"
-      }`}
-    >
-      Pay with M-Pesa
-    </Text>
-  </TouchableOpacity>
-</View>
-
+            <TouchableOpacity
+              onPress={() => setSelectedPaymentMethod("mobile_money")}
+              className={`flex-1 p-4 mx-1 rounded-xl ${
+                selectedPaymentMethod === "mobile_money"
+                  ? "bg-yellow-600"
+                  : "bg-gray-200"
+              }`}
+            >
+              <Text
+                className={`text-center text-base font-semibold font-serif ${
+                  selectedPaymentMethod === "mobile_money"
+                    ? "text-white"
+                    : "text-gray-800"
+                }`}
+              >
+                Pay with M-Pesa
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
-            className="w-full bg-green-600 p-4 rounded-sm"
+            className="bg-green-600 rounded-xl p-4"
             onPress={() => setShowPaystack(true)}
+            disabled={!amount}
           >
             {isLoading ? (
-              <ActivityIndicator size="large" color="#fff" />
+              <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg font-serif">Proceed to Payment</Text>
+              <Text className="text-white text-center font-semibold text-lg font-serif">
+                Proceed to Payment
+              </Text>
             )}
           </TouchableOpacity>
-
-          {/* Paystack WebView Modal */}
-          <Modal visible={showPaystack} animationType="slide" transparent={false}>
-            <Paystack
-              paystackKey={publicKey}
-              amount={amountValue}
-              billingEmail={email}
-              billingName={name}
-              billingMobile={phonenumber}
-              currency="KES"
-              channels={selectedPaymentMethod === "mobile_money" ? ["mobile_money"] : ["card"]}
-              onSuccess={(res) => {
-                const transactionRef = res.transactionRef.reference;
-                saveTransaction(transactionRef, amountValue, email);
-
-                setShowPaystack(false);
-                Toast.show({
-                  type: "success",
-                  text1: "Payment Successful",
-                  text2: `Transaction Ref: ${res.transactionRef.reference}`,
-                });
-              }}
-              onCancel={() => {
-                setShowPaystack(false);
-                Toast.show({
-                  type: "error",
-                  text1: "Payment Cancelled",
-                });
-              }}
-              autoStart={true}
-            />
-          </Modal>
-
-          <Toast />
         </View>
       </ScrollView>
-       <StatusBar
-                barStyle="dark-content" // or "light-content" depending on your background
-                backgroundColor="transparent"
-                translucent={true}
-                />
+
+      {/* Payment Modal */}
+      <Modal visible={showPaystack} animationType="slide">
+        <Paystack
+          paystackKey={publicKey}
+          amount={amountValue}
+          billingEmail={email}
+          billingName={name}
+          billingMobile={phonenumber}
+          currency="KES"
+          channels={
+            selectedPaymentMethod === "mobile_money"
+              ? ["mobile_money"]
+              : ["card"]
+          }
+          onSuccess={(res) => {
+            saveTransaction(res.transactionRef.reference, amountValue, email);
+            setShowPaystack(false);
+          }}
+          onCancel={() => {
+            setShowPaystack(false);
+            Toast.show({
+              type: "error",
+              text1: "Payment Cancelled",
+            });
+          }}
+          autoStart
+        />
+      </Modal>
+
+      <Toast />
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
     </SafeAreaView>
   );
 }

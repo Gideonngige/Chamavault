@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Toast from "react-native-toast-message";
 import { Paystack } from "react-native-paystack-webview";
+import { useLocalSearchParams } from 'expo-router';
 
 export default function Schedule() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +28,7 @@ export default function Schedule() {
   const [name, setName] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [chama_id, setChama_id] = useState();
+  const { id, min_amount } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,19 +52,62 @@ export default function Schedule() {
     setDisplay(amount);
   }, [amount]);
 
+  // function to check investment amount
+  const checkAmount = async() => {
+  const member_id = await AsyncStorage.getItem('member_id');
+  const enteredAmount = parseFloat(amount);
+  const min = parseFloat(min_amount);
+
+  if (enteredAmount >= min) {
+    setIsLoading(true);
+    try{
+      const response = await axios.get(
+          `https://backend1-1cc6.onrender.com/checkmemberinvested/${id}/${member_id}/`
+      );
+      if(response.data.status == "ok"){
+        setShowPaystack(true);
+      }
+      else{
+        Toast.show({
+          type: "info",
+          text1: "Already Invested",
+          text2: "You have already invested in this investment",
+        });
+        setShowPaystack(false);
+
+      }
+
+    }
+    catch(error){
+      alert(error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+    
+  } else {
+    Toast.show({
+      type: "error",
+      text1: "Amount too low",
+      text2: `Minimum allowed is KES ${min}`,
+    });
+    setShowPaystack(false);
+  }
+};
+
+  // end of function to check investment amount
+
   // function to save top up investment transaction
-  const saveTransaction = async (transactionRef, amount, email) => {
+  const saveTransaction = async (transactionRef, amount) => {
+    const member_id = await AsyncStorage.getItem('member_id');
     try {
 
-      const url = "https://backend1-1cc6.onrender.com/investment/";
+      const url = "https://backend1-1cc6.onrender.com/member_investment/";
           const data = {
-            email: email,
+            investment_id: id,
+            member_id: member_id,
             amount: amount, // Convert back to KES
-            phonenumber: phonenumber,
-            chama_id: chama_id,
             transactionRef: transactionRef,
-            investment_type: value,
-            investment_duration: duration,
           };
   
           console.log("Sending data:", data);  // Log request data
@@ -73,11 +118,26 @@ export default function Schedule() {
 
 
       if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: "Successfully",
+          text2: response.message,
+        });
         console.log("Transaction saved successfully:", data);
       } else {
+        Toast.show({
+          type: "error",
+          text1: "An error occurred",
+          text2: response.message,
+        });
         console.error("Failed to save transaction:", data);
       }
     } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error,
+      });
       console.error("Error saving transaction:", error);
     }
   };
@@ -86,19 +146,8 @@ export default function Schedule() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
-               <Text className="w-full text-lg font-bold">Area of investment</Text>
-               <DropDownPicker
-               open={open}
-               value={value}
-               items={items}
-               setOpen={setOpen}
-               setValue={setValue}
-               setItems={setItems}
-               placeholder="Select area of investment"
-               style={{borderColor: '#ca8a04',borderWidth: 2,  
-               }}
-               listMode="SCROLLVIEW"
-               />
+          <Text className='text-lg font-bold'>Amount: {display}</Text>
+              
 
                <Text className="w-full text-lg mt-4 font-bold">Amount to invest</Text>
                <TextInput 
@@ -106,13 +155,7 @@ export default function Schedule() {
                value={amount}
                onChangeText={setAmount}
                className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
-                />
-                <Text className="w-full text-lg font-bold">Duration of investment</Text>
-               <TextInput 
-               placeholder="duration of investment"
-               value={duration}
-               onChangeText={setDuration}
-               className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg"
+               keyboardType='numeric'
                 />
 
                 {/* selection methods */}
@@ -150,7 +193,7 @@ export default function Schedule() {
                 
                 <TouchableOpacity
                 className="w-full bg-yellow-600 p-4 rounded-lg"
-                  onPress={() => setShowPaystack(true)}
+                  onPress={checkAmount}
                 >
                   {isLoading ? (
                  <ActivityIndicator size="large" color="#fff" />
@@ -171,7 +214,7 @@ export default function Schedule() {
                   channels={selectedPaymentMethod === "mobile_money" ? ["mobile_money"] : ["card"]}
                   onSuccess={(res) => {
                   const transactionRef = res.transactionRef.reference;
-                  saveTransaction(transactionRef, amountValue, email);
+                  saveTransaction(transactionRef, amountValue);
                 
                   setShowPaystack(false);
                   Toast.show({

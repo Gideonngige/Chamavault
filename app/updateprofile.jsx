@@ -119,7 +119,7 @@ export default function UpdateProfile() {
             placeholder="e.g John Doe"
             value={fullname}
             onChangeText={setFullname}
-            className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+            className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
           />
 
           <Text className="w-full text-lg font-bold font-serif">Your phonenumber</Text>

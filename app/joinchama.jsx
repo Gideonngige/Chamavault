@@ -60,7 +60,6 @@ export default function Register(){
             });
         }
         else{
-          alert(response.data.message);
           Toast.show({
             type: "info", // Can be "success", "error", "info"
             text1: "Failed to join",

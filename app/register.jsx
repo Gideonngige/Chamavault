@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { Asset } from 'expo-asset';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 export default function Register() {
@@ -17,6 +18,8 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [image, setImage] = useState(null);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
     useEffect(() => {
     const loadDefaultImage = async () => {
@@ -170,23 +173,51 @@ export default function Register() {
                         className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
                     />
 
-                    <Text className="w-full text-lg font-bold font-serif">Enter your password</Text>
-                    <TextInput
-                        placeholder="Enter your password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
-                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
-                    />
+                    <View className="w-full">
+      {/* Password Field */}
+      <Text className="w-full text-lg font-bold font-serif mb-2">Enter your password</Text>
+      <View className="relative mb-6">
+        <TextInput
+          placeholder="Enter your password"
+          secureTextEntry={!isPasswordVisible}
+          value={password}
+          onChangeText={setPassword}
+          className="w-full p-4 pr-12 bg-white rounded-sm shadow-sm border border-yellow-600 text-gray-800 text-lg font-serif"
+        />
+        <TouchableOpacity
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          className="absolute right-4 top-4"
+        >
+          <Ionicons
+            name={isPasswordVisible ? "eye" : "eye-off"}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
 
-                    <Text className="w-full text-lg font-bold font-serif">Confirm your password</Text>
-                    <TextInput
-                        placeholder="Confirm your password"
-                        secureTextEntry
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        className="w-full p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
-                    />
+      {/* Confirm Password Field */}
+      <Text className="w-full text-lg font-bold font-serif mb-2">Confirm your password</Text>
+      <View className="relative mb-6">
+        <TextInput
+          placeholder="Confirm your password"
+          secureTextEntry={!isConfirmVisible}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          className="w-full p-4 pr-12 bg-white rounded-sm shadow-sm border border-yellow-600 text-gray-800 text-lg font-serif"
+        />
+        <TouchableOpacity
+          onPress={() => setIsConfirmVisible(!isConfirmVisible)}
+          className="absolute right-4 top-4"
+        >
+          <Ionicons
+            name={isConfirmVisible ? "eye" : "eye-off"}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
 
                     <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleRegister}>
                         {isLoading ? <ActivityIndicator size="large" color="#fff" /> : <Text className="text-white text-center font-serif font-semibold text-lg">Register</Text>}

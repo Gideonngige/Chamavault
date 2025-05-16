@@ -40,7 +40,7 @@ export default function Saving() {
     const getSavings = async () => {
       const storedEmail = await AsyncStorage.getItem('email');
       const storedName = await AsyncStorage.getItem('name');
-      const storedChama = await AsyncStorage.getItem('chama');
+      const storedChama = await AsyncStorage.getItem('chama_id');
 
       setName(storedName);
       setEmail(storedEmail);
@@ -76,7 +76,8 @@ export default function Saving() {
   useEffect(() => {
     const checkDefaulter = async () => {
       const member_id = await AsyncStorage.getItem('member_id');
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
+      alert(chama_id);
 
       try {
         const url = `https://backend1-1cc6.onrender.com/defaulters/${member_id}/${chama_id}/`;
@@ -97,7 +98,7 @@ export default function Saving() {
   useEffect(() => {
     const fetchTransactions = async () => {
       const storedEmail = await AsyncStorage.getItem('email');
-      const storedChama = await AsyncStorage.getItem('chama');
+      const storedChama = await AsyncStorage.getItem('chama_id');
 
       setIsLoadingTransactions(true);
 
@@ -139,7 +140,7 @@ export default function Saving() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white mb-40">
       <ScrollView className="p-4">
         <View className="w-full p-4 bg-white">
           {/* Header */}

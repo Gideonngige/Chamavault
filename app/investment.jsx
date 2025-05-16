@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, StatusBar, SafeAreaView, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Investment() {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,6 +12,7 @@ export default function Investment() {
   const [minAmount, setMinAmount] = useState('');
   const [interestRate, setInterestRate] = useState('');
   const [duration, setDuration] = useState('');
+  
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -22,6 +25,67 @@ export default function Investment() {
       setInvestmentImage(result.assets[0].uri);
     }
   };
+
+  // start of function to send investment
+  const postInvestment = async () => {
+    const BACKEND_URL = "https://backend1-1cc6.onrender.com/new_investment/";
+    const chama_id = await AsyncStorage.getItem('chama');
+  if (!name || !description || !minAmount || !interestRate || !duration) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  const formData = new FormData();
+
+  formData.append("chama_id", chama_id); // Replace with actual chama_id or dynamic one
+  formData.append("investment_name", name);
+  formData.append("description", description);
+  formData.append("min_amount", minAmount);
+  formData.append("interest_rate", interestRate);
+  formData.append("duration_months", duration);
+
+  if (investmentImage) {
+    const fileName = investmentImage.split("/").pop();
+    const fileType = fileName.split(".").pop();
+
+    formData.append("image", {
+      uri: investmentImage,
+      name: fileName,
+      type: `image/${fileType}`,
+    });
+  }
+  
+  setIsLoading(true);
+  try {
+    const response = await fetch(BACKEND_URL, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Investment created successfully!");
+      // Reset form
+      setName("");
+      setDescription("");
+      setMinAmount("");
+      setInterestRate("");
+      setDuration("");
+      setInvestmentImage(null);
+    } else {
+      alert("Error: " + data.message);
+    }
+  } catch (error) {
+    alert("Failed to create investment: " + error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  // end of function to send investment
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -90,13 +154,12 @@ export default function Investment() {
 
         {/* Submit Button */}
         <TouchableOpacity
-          className="bg-yellow-600 p-4 rounded-lg items-center"
-          onPress={() => {
-            // Handle investment creation logic
-            console.log({ name, description, minAmount, interestRate, duration, investmentImage });
-          }}
+        className="bg-yellow-600 p-4 rounded-lg items-center"
+        onPress={postInvestment}
         >
-          <Text className="text-white font-bold font-serif">Create Investment</Text>
+        <Text className="text-white font-bold font-serif">
+        {isLoading ? "Submitting..." : "Create Investment"}
+        </Text>
         </TouchableOpacity>
       </ScrollView>
 

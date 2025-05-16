@@ -181,6 +181,7 @@ import {
                 placeholder="Type your message here..."
                 multiline
                 numberOfLines={4}
+                textAlignVertical="top"
                 value={message}
                 onChangeText={setMessage}
               />

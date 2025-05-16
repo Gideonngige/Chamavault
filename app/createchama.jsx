@@ -96,7 +96,7 @@ export default function Createchama(){
               placeholder="Enter name of chama"
               value={chama}
               onChangeText={setChama}
-              className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
+              className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
               />
               <Text className="text-lg font-bold font-serif">Enter chama description</Text>
               <TextInput 
@@ -105,7 +105,8 @@ export default function Createchama(){
               onChangeText={setDescription} 
               multiline
               numberOfLines={4}
-              className="w-full p-4 bg-white rounded-lg shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
+              textAlignVertical="top"
+              className="w-full h-40 p-4 bg-white rounded-sm shadow-sm mb-6 border border-yellow-600 text-gray-400 text-lg font-serif"
               />
               
               <TouchableOpacity className="w-full bg-green-600 p-4 rounded-lg" onPress={handleCreateChama}>

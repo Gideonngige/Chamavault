@@ -30,7 +30,7 @@ const ChatScreen = () => {
   const fetchMessages = async () => {
     setIsLoading(true);
     try {
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
       const name = await AsyncStorage.getItem('name');
       setName(name);
       const API_URL2 = `https://backend1-1cc6.onrender.com/getmessages/${chama_id}`;
@@ -88,12 +88,12 @@ const ChatScreen = () => {
             renderItem={({ item }) => (
               <View
                 className={`p-3 rounded-lg my-1 max-w-[80%] ${
-                  item.sender === name ? 'bg-white self-end mr-1 shadow-lg' : 'shadow-lg bg-gray-200 self-start'
+                  item.sender === name ? 'bg-white self-end mr-1 shadow-lg' : 'shadow-lg bg-white self-start'
                 }`}
               >
                 <View className="flex-row items-center">
                   <Image
-                    source={require('../assets/images2/profile3.png')}
+                    source={{ uri: item.profile_image }}
                     className="w-5 h-5 rounded-full"
                   />
                   <Text className="ml-2 font-bold font-serif text-gray-900 dark:text-black">
@@ -101,7 +101,7 @@ const ChatScreen = () => {
                   </Text>
                 </View>
                 <Text className="text-black dark:text-black font-serif mt-1">{item.text}</Text>
-                <Text className="text-xs text-white mt-1 font-serif">
+                <Text className="text-xs text-black mt-1 font-serif">
                   {new Date(item.timestamp).toLocaleTimeString()}
                 </Text>
               </View>

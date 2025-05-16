@@ -144,12 +144,13 @@ export default function Home() {
         const email = await AsyncStorage.getItem('email');
         const profile_image = await AsyncStorage.getItem('profile_image');
         const selected_chama = await AsyncStorage.getItem('selected_chama');
+        const chama_id = await AsyncStorage.getItem('chama_id');
         setChamaName(selected_chama);
         setProfileImg(profile_image);
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
-        const url2 = `https://backend1-1cc6.onrender.com/send_reminder_message/2/`;
+        const url2 = `https://backend1-1cc6.onrender.com/send_reminder_message/${chama_id}/`;
         const response2 = await axios.get(url2);
         await AsyncStorage.setItem('email',email);
         
@@ -167,7 +168,7 @@ export default function Home() {
           setEmail(email);
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phone_number);
-          await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
+          // await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
           // await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
           
           
@@ -291,7 +292,7 @@ const renderItem = ({ item }) => (
         </TouchableOpacity>
 
   <View className="w-full mt-6 px-2">
-  <View className="flex-row justify-between items-center space-x-2">
+  <View className="flex-row justify-between items-center space-x-2 mb-6">
     
     {/* Create Chama */}
     <TouchableOpacity 

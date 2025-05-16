@@ -113,7 +113,7 @@ export default function Poll() {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
         <View className="flex-1 bg-white p-2">
-          <Text className="text-lg font-bold mb-2">Poll Question</Text>
+          <Text className="text-lg font-bold mb-2 font-serif">Poll Question</Text>
           <TextInput
             placeholder="Type your poll question"
             value={question}
@@ -121,7 +121,7 @@ export default function Poll() {
             className="p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-700 text-base"
           />
 
-          <Text className="text-lg font-bold mb-2">Choices</Text>
+          <Text className="text-lg font-bold mb-2 font-serif">Choices</Text>
           {choices.map((choice, index) => (
             <View key={index} className="flex-row items-center mb-3">
               <TextInput
@@ -149,9 +149,9 @@ export default function Poll() {
           </TouchableOpacity>
 
     <View>
-    <Text className="w-full text-lg font-bold">Select stop date</Text>
+    <Text className="w-full text-lg font-bold font-serif">Select stop date</Text>
       <TouchableOpacity onPress={showDatePicker} className="bg-yellow-600 p-4 rounded-lg mt-1 mb-4">
-      <Text className="w-full text-lg font-bold">Stop Date: {date.toLocaleDateString()}</Text>
+      <Text className="w-full text-lg font-bold font-serif">Stop Date: {date.toLocaleDateString()}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -166,13 +166,13 @@ export default function Poll() {
 
 
           <TouchableOpacity
-            className="bg-yellow-600 p-4 rounded-lg mt-4"
+            className="bg-green-600 p-4 rounded-lg mt-4"
             onPress={handleSubmitPoll}
           >
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />
             ) : (
-              <Text className="text-white text-center font-semibold text-lg">
+              <Text className="text-white text-center font-semibold text-lg font-serif">
                 Submit Poll
               </Text>
             )}

@@ -19,6 +19,7 @@ export default function Index() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
   const handleLogin = async () => {
@@ -37,9 +38,12 @@ export default function Index() {
       const response = await axios.get(url);
       const url2 = `https://backend1-1cc6.onrender.com/getMember/${email}/${value}/`;
       const response2 = await axios.get(url2);
+      const url3 =  `https://backend1-1cc6.onrender.com/totalchamamembers/${value}/`;
+      const response3 = await axios.get(url3);
+     
       
       if (response.status === 200 && response2.status === 200) {
-        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary" || response2.data.role == "member" ){
+        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary" || response3.data.total_members <= 5){
           
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
@@ -59,6 +63,8 @@ export default function Index() {
           await AsyncStorage.setItem('email', email);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
+          await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
+          await AsyncStorage.setItem('name', response2.data.name);
           // alert(response2.data.member_id);
           // router.push("/home");
           navigation.navigate('home', {
@@ -89,7 +95,7 @@ export default function Index() {
       console.log(error?.message)
       Toast.show({
         type: "error", // Can be "success", "error", "info"
-        text1: "Login failed catched",
+        text1: "Login failed",
         text2: error?.message || "Unknown error",
       });
       return null;
@@ -145,14 +151,30 @@ export default function Index() {
       onChangeText={setEmail}
       className="w-full p-4 bg-white rounded-sm shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-serif"
       />
-      <Text className="w-full text-lg font-bold font-serif">Enter your password</Text>
-      <TextInput 
-      placeholder="Enter your password"
-      secureTextEntry
-      value={password}
-      onChangeText={setPassword} 
-      className="w-full p-4 bg-white rounded-sm mb-2 border border-yellow-600 text-gray-400 text-lg font-serif"
-      />
+      
+
+      <View className="w-full mb-4">
+      <Text className="text-lg font-bold font-serif mb-2">Enter your password</Text>
+      <View className="relative">
+        <TextInput
+          placeholder="Enter your password"
+          secureTextEntry={!isPasswordVisible}
+          value={password}
+          onChangeText={setPassword}
+          className="w-full p-4 pr-12 bg-white rounded-sm border border-yellow-600 text-gray-800 text-lg font-serif mb-2"
+        />
+        <TouchableOpacity
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          className="absolute right-4 top-4"
+        >
+          <Ionicons
+            name={isPasswordVisible ? "eye" : "eye-off"}
+            size={24}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
 
      <View className="w-full">
         <Text className="text-lg font-bold">Select Chama</Text>

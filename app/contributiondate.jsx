@@ -27,7 +27,7 @@ export default function ContributionDate(){
             setIsLoading(true);
             try {
               const formattedDate = new Date(contributionDate).toISOString();
-              const chama_id = await AsyncStorage.getItem("chama");
+              const chama_id = await AsyncStorage.getItem("chama_id");
               const url = `https://backend1-1cc6.onrender.com/contributiondate/`;
               const data = {
                 date: formattedDate,

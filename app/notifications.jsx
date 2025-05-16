@@ -21,7 +21,7 @@ export default function Notifications() {
   useEffect(() => {
     const fetchNotifications = async () => {
       const email = await AsyncStorage.getItem('email');
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
       try {
         const response = await axios.get(`https://backend1-1cc6.onrender.com/get_notifications/${email}/${chama_id}/`);
         setNotifications(response.data);
