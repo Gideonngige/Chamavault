@@ -95,6 +95,26 @@ export default function PayLoan() {
     }
   };
 
+  // function to check amount
+  const checkAmount =()=>{
+    if(amountValue > loan){
+      alert("Amount exceed your loan");
+      setShowPaystack(false);
+    }
+    else if(amountValue <= 0){
+      alert("Amount too low");
+      setShowPaystack(false);
+    }
+    else if(loan == 0){
+      alert("No loan taken");
+      setShowPaystack(false);
+    }
+    else{
+      setShowPaystack(true);
+    }
+    
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
@@ -140,7 +160,7 @@ export default function PayLoan() {
 
           <TouchableOpacity
             className="w-full bg-green-600 p-4 rounded-sm mt-4"
-            onPress={() => setShowPaystack(true)}
+            onPress={checkAmount}
           >
             {isLoading ? (
               <ActivityIndicator size="large" color="#fff" />

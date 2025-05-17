@@ -48,7 +48,7 @@ const ChatScreen = () => {
 
     setIsSending(true);
     try {
-      const chama_id = await AsyncStorage.getItem('chama');
+      const chama_id = await AsyncStorage.getItem('chama_id');
       const name = await AsyncStorage.getItem('name');
       const member_id = await AsyncStorage.getItem('member_id');
       await axios.post(API_URL, {

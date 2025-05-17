@@ -34,6 +34,7 @@ export default function Saving() {
 
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
+  const [checkingDate, setCheckingDate] = useState(false);
 
   // Fetch savings data
   useEffect(() => {
@@ -124,6 +125,36 @@ export default function Saving() {
     router.push('/contribution');
   };
 
+    // function to check if there is date set
+    const checkContributionDate=async()=>{
+      const chama_id = await AsyncStorage.getItem('chama_id');
+      setCheckingDate(true);
+      try{
+        const url = `https://backend1-1cc6.onrender.com/checkcontributiondate/${chama_id}/`;
+        const response = await axios.get(url);
+        if(response.data.message === "ok"){
+          router.push('/contribution');
+
+        }
+        else if(response.data.message === "not ok"){
+          alert("No date for contribution have been set");
+  
+        }
+        else{
+          alert("An error occurred, try again")
+        }
+  
+      }
+      catch(error){
+        alert(error);
+      }
+      finally{
+        setCheckingDate(false);
+      }
+  
+    }
+    // end check date set
+
   // Activity card component
   const Activity = ({ transactionType, chama, amount, transactionTime }) => (
     <View className="bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around rounded-lg">
@@ -170,10 +201,10 @@ export default function Saving() {
           <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
             <TouchableOpacity
               className="bg-white py-3 px-5 rounded-xl items-center"
-              onPress={handleTopUp}
+              onPress={checkContributionDate}
             >
               <FontAwesome6 name="add" size={24} color="black" />
-              <Text className="text-gray-900 font-medium mt-1 font-lato">Top up</Text>
+              <Text className="text-gray-900 font-medium mt-1 font-lato">{checkingDate ? "checking date..." : "Top up"}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

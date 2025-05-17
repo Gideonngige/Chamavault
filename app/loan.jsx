@@ -109,7 +109,7 @@ export default function Loans() {
   };
 
   const handlePayLoan = async (repayment_amount, loan_type) => {
-    await AsyncStorage.setItem('repayment_amount', JSON.stringify(repayment_amount));
+    await AsyncStorage.setItem('repayment_amount', repayment_amount);
     await AsyncStorage.setItem('loan_type', loan_type);
     router.push('payloan');
   };
