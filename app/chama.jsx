@@ -13,9 +13,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 import Toast from 'react-native-toast-message';
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
 
 export default function Chama() {
   const [chama, setChama] = useState("");
@@ -28,6 +28,8 @@ export default function Chama() {
   const [rentExpense, setRentExpense] = useState(0);
   const [travelExpense, setTravelExpense] = useState(0);
   const [businessExpense, setBusinessExpense] = useState(0);
+  let [name, setName] = useState("Suzzana");
+  const [chamaName, setChamaName] = useState("");
   const router = useRouter();
 
   // Fetch core chama data
@@ -37,7 +39,11 @@ export default function Chama() {
       try {
         const chama = await AsyncStorage.getItem('selected_chama');
         const chama_id = await AsyncStorage.getItem('chama_id');
+        const username = await AsyncStorage.getItem('name');
+        const chamaname = await AsyncStorage.getItem('selected_chama');
         setChama(chama);
+        setName(username);
+        setChamaName(chamaname);
 
         const [membersRes, savingsRes, loansRes, expensesRes] = await Promise.all([
           axios.get(`https://backend1-1cc6.onrender.com/totalchamamembers/${chama}/`),
@@ -83,45 +89,99 @@ export default function Chama() {
   }, []);
 
   // function to print contributors
-  const downloadContributors = async () => {
-    const chama_id = await AsyncStorage.getItem('chama_id');
+const response = {
+  contributors: [
+    {
+      name: "Juliana Njeri",
+      email: "ushindigideon01@gmail.com",
+      amount: "800.00"
+    },
+    {
+      name: "John Doe",
+      email: "john@example.com",
+      amount: "500.00"
+    },
+    // More contributors...
+  ],
+  total_contributed: 1300.0
+};
+
+const getContributors = async () => {
   try {
-    const response = await axios.get(`https://backend1-1cc6.onrender.com/contributors/${chama_id}/`);
-    const contributors = response.data;
-
-    if (!contributors.length) {
-      Toast.show({ type: 'info', text1: 'No contributions found' });
-      return;
-    }
-
-    let total = 0;
-    const formattedList = contributors.map((c, i) => {
-      total += parseFloat(c.amount); // assuming c.amount is a number or string
-      return `${i + 1}. ${c.name} - ${c.email} - KES ${c.amount}`;
-    });
-
-    // Add total at the end
-    formattedList.push('\n');
-    formattedList.push(`Total Contributed: KES ${total}`);
-
-    const finalText = formattedList.join('\n');
-
-    const fileUri = FileSystem.documentDirectory + 'contributors.txt';
-    await FileSystem.writeAsStringAsync(fileUri, finalText, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
-
-    await Sharing.shareAsync(fileUri);
-    Toast.show({ type: 'success', text1: 'Contributors list downloaded!' });
-
+    const chama_id = await AsyncStorage.getItem('chama_id');
+    const url = `https://backend1-1cc6.onrender.com/contributors/${chama_id}/`; // adjust endpoint
+    const response = await axios.get(url);
+    return response.data; // should include contributors and total_contributed
   } catch (error) {
-    console.error("Download error:", error);
-    Toast.show({
-      type: 'error',
-      text1: 'Failed to download',
-      text2: error.message,
-    });
+    alert("Failed to fetch contributors");
+    return null;
   }
+};
+
+
+const generateTableHTML = (contributors) => {
+  const rows = contributors.map(
+    (contributor, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${contributor.name}</td>
+        <td>${contributor.email}</td>
+        <td>${contributor.contribution_date.split('T')[0]}</td>
+        <td>${contributor.amount}</td>
+      </tr>
+    `
+  ).join("");
+
+  return `
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background-color:#f2f2f2;">
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Date</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  `;
+};
+
+    // const html = `
+    // <html>
+    // <body>
+    // <h1>Hi, ${name}</h1>
+    // <p style="color:red">Hello,Bonjour. Hello Again</p>
+    // </body>
+    // </html>`;
+  const downloadContributors = async () => {
+    const data = await getContributors();
+  if (!data) return;
+
+  const contributors = data.contributors;
+  const total = data.total_contributed;
+
+  const tableHTML = generateTableHTML(contributors);
+
+  const html = `
+    <html>
+      <body>
+        <h1 style="text-align:center; margin-top:20px;">${chamaName}</h1>
+        <h2 style="text-align:center; margin-top:10px;">Contribution Report</h2><hr>
+        <p style="color:black">Generated by: ${name}</p>
+        ${tableHTML}
+        <h3>Total Contributed: ${total}</h3>
+      </body>
+    </html>
+  `;
+     const file = await printToFileAsync({
+      html: html,
+      base64: false
+     });
+     await shareAsync(file.uri);
 };
   // end of function print contributors
 

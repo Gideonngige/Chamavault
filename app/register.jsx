@@ -169,7 +169,7 @@ export default function Register() {
                         className="w-full p-4 bg-white rounded-lg shadow-sm mb-4 border border-yellow-600 text-gray-400 text-lg font-lato"
                     />
 
-                    <Text className="w-full text-lg font-bold font-lato">Enter your phonenumber</Text>
+                    <Text className="w-full text-lg font-bold font-lato">Enter your phone number</Text>
                     <TextInput
                         placeholder="e.g 0712345678"
                         value={phonenumber}

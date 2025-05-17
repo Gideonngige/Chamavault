@@ -41,7 +41,7 @@ export default function Defaulters() {
 const Alert = () => {
     return (
       <View className="flex flex-row items-center justify-center w-full bg-yellow-600 p-3 rounded-lg">
-        <Text className="text-white font-bold font-serif">Chama has no defaulter</Text>
+        <Text className="text-white font-bold font-lato">Chama has no defaulter</Text>
       </View>
     );
   };
