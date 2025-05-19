@@ -209,10 +209,10 @@ export default function Saving() {
 
             <TouchableOpacity
               className="bg-white py-3 px-5 rounded-xl items-center"
-              onPress={() => alert('Coming soon!')}
+              onPress={() => router.push('/creditscore')}
             >
-              <FontAwesome6 name="money-bills" size={24} color="black" />
-              <Text className="text-gray-900 font-medium mt-1 font-lato">Withdraw</Text>
+              <FontAwesome6 name="coins" size={24} color="black" />
+              <Text className="text-gray-900 font-medium mt-1 font-lato">Credit Score</Text>
             </TouchableOpacity>
           </View>
 

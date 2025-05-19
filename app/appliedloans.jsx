@@ -7,12 +7,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Chama(){
     const [appliedLoans, setAppliedLoans] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [loadingLoanId, setLoadingLoanId] = useState(null);
 
     useEffect(() => {
         // Fetch data from the API
+        setLoading(true);
         const fetchLoans = async () => {
             const role = await AsyncStorage.getItem('role');
             const chama_id = await AsyncStorage.getItem('chama_id');
@@ -20,14 +21,15 @@ export default function Chama(){
             axios.get(`https://backend1-1cc6.onrender.com/getAllLoans/${role}/${chama_id}/`)
           .then((response) => {
             setAppliedLoans(response.data);
-            setLoading(false);
           })
           .catch((error) => {
             console.error(error);
+          }).finally(() => {
+            setLoading(false);
           });
         }
         fetchLoans();
-    })
+    },[]);
 
     const handleConfirm = async(loan_id, loonee_id, approval, chama_id) => {
         try {
@@ -62,7 +64,7 @@ export default function Chama(){
 
 
 // start of applied loans component
-const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) => {
+const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, credit_score, loanType }) => {
   return (
     <View className="w-80 p-4 mb-4 bg-white rounded-2xl shadow-md border border-gray-200">
       {/* Top Info Section */}
@@ -73,7 +75,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
 
       {/* Loan Metadata */}
       <Text className="text-sm text-gray-500 mb-1 font-lato">Applied on: {date}</Text>
-      <Text className="text-sm text-gray-600 mb-1 font-lato">Credit Score: 90</Text>
+      <Text className="text-sm text-gray-600 mb-1 font-lato">Credit Score: {credit_score}</Text>
       <Text className="text-sm text-gray-600 mb-3 font-lato">Type: {loanType}</Text>
 
       {/* Action Buttons */}
@@ -133,7 +135,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, loanType }) =>
             <FlatList
                 data={appliedLoans} // Array of data
                 keyExtractor={(item) => item.loan_id.toString()} // Unique key for each item
-                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loonee_id={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} chama_id={item.chama} loanType={item.loan_type} />} // How each item is displayed
+                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loonee_id={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} chama_id={item.chama} credit_score={item.credit_score} loanType={item.loan_type} />} // How each item is displayed
                 showsVerticalScrollIndicator={false} // Hides the scrollbar
                 listMode="SCROLLVIEW"
             />)}

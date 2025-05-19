@@ -62,11 +62,11 @@ export default function Manageroles() {
   const handleChangeRoles = async() => {
     const chama_id = await AsyncStorage.getItem('chama_id');
     if(!value && !value2 && !value3){
-      alert("Empty");
       Toast.show({
           type: "error",
           text1: "Empty fields",
           text2: "Select atleast one role",
+          position:"bottom",
       });
     }
     else{

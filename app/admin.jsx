@@ -20,13 +20,14 @@ export default function Admin() {
       try {
         const name = await AsyncStorage.getItem('name');
         const chama = await AsyncStorage.getItem('selected_chama');
+        const chama_id = await AsyncStorage.getItem('chama_id');
         setName(name);
         setChama(chama);
 
         const [resMembers, resSavings, resLoans] = await Promise.all([
           axios.get(`https://backend1-1cc6.onrender.com/totalchamamembers/${chama}/`),
-          axios.get(`https://backend1-1cc6.onrender.com/totalchamasavings/${chama}/`),
-          axios.get(`https://backend1-1cc6.onrender.com/totalchamaloans/${chama}/`)
+          axios.get(`https://backend1-1cc6.onrender.com/totalchamasavings/${chama_id}/`),
+          axios.get(`https://backend1-1cc6.onrender.com/totalchamaloans/${chama_id}/`)
         ]);
 
         setTotalmembers(resMembers.data.total_members);
@@ -106,6 +107,15 @@ export default function Admin() {
       router.push('investment/')
     }
   }
+
+  const Expenses=async()=>{
+    if(chama == "No Chama"){
+      alert("You must join a chama first\nClick Go to Home");
+    }
+    else{
+      router.push('chamaexpenses/')
+    }
+  }
   // end
 
   const actions = [
@@ -117,6 +127,7 @@ export default function Admin() {
     { title: 'Go To Home', onPress: () => router.push('home/') },
     { title: 'Contribution Date', onPress: contributionDate },
     { title: 'Investment', onPress: Investment },
+    { title: 'Expenses', onPress: Expenses },
   ];
 
   return (

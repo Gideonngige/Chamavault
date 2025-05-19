@@ -112,6 +112,29 @@ export default function Home() {
   }, []);
   // end of get location function
 
+    // fetch member chamas
+   useEffect(() => {
+    const updatecreditscore = async () => {
+      try{
+        const chama_id = await AsyncStorage.getItem('chama_id');
+        const member_id = await AsyncStorage.getItem('member_id');
+        const url = `https://backend1-1cc6.onrender.com/creditscoreapi/${member_id}/${chama_id}/`;
+        const response = await axios.get(url);
+        if(response.status === 200){
+          console.log("creditscore updated");
+      
+        }
+      }
+      catch(error){
+        console.error("Error fetching chamas:", error);
+      }
+
+    }
+    updatecreditscore();
+  },[]);
+  // end of fetch member chamas
+
+
    // fetch member chamas
    useEffect(() => {
     const fetchMemberChamas = async () => {
