@@ -22,7 +22,7 @@ export default function ActivePolls() {
   useEffect(() => {
     const fetchPoll = async () => {
       try {
-        const chama_id = await AsyncStorage.getItem("chama");
+        const chama_id = await AsyncStorage.getItem("chama_id");
         const response = await axios.get(`https://backend1-1cc6.onrender.com/activepolls/${chama_id}/`);
         const pollData = response.data.polls[0]; // Assuming 1 active poll
         setPoll(pollData);
@@ -42,7 +42,7 @@ export default function ActivePolls() {
     setIsSending(true);
     try {
       const email = await AsyncStorage.getItem("email");
-      const chama_id = await AsyncStorage.getItem("chama");
+      const chama_id = await AsyncStorage.getItem("chama_id");
 
       const data = {
         poll_id: poll.id,

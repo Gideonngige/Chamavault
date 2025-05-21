@@ -21,6 +21,8 @@ export default function Chama() {
   const [chama, setChama] = useState("");
   const [isLoadingContribution, setIsLoadingContribution] = useState(false);
   const [isLoadingExpenses, setIsLoadingExpenses] = useState(false);
+  const [isGettingContributors, setIsGettingContributors] = useState(false);
+  const [isGettingLoanees, setIsGettingLoanees] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [data, setData] = useState([]);
   const [totalmembers, setTotalmembers] = useState(0);
@@ -112,6 +114,7 @@ export default function Chama() {
 
   // function to print contributors
 const getContributors = async () => {
+  setIsGettingContributors(true);
   try {
     const chama_id = await AsyncStorage.getItem('chama_id');
     const url = `https://backend1-1cc6.onrender.com/contributors/${chama_id}/`; // adjust endpoint
@@ -120,6 +123,9 @@ const getContributors = async () => {
   } catch (error) {
     alert("Failed to fetch contributors");
     return null;
+  }
+  finally{
+    setIsGettingContributors(false);
   }
 };
 const generateTableHTML = (contributors) => {
@@ -182,6 +188,7 @@ const generateTableHTML = (contributors) => {
   
 // function to print loanees
 const getLoanees = async () => {
+  setIsGettingLoanees(true);
   try {
     const chama_id = await AsyncStorage.getItem('chama_id');
     const url = `https://backend1-1cc6.onrender.com/loanees/${chama_id}/`; // adjust endpoint
@@ -190,6 +197,9 @@ const getLoanees = async () => {
   } catch (error) {
     alert("Failed to fetch contributors");
     return null;
+  }
+  finally{
+    setIsGettingLoanees(false);
   }
 };
 const generateTableHTML2 = (loanees) => {
@@ -335,13 +345,13 @@ const generateTableHTML2 = (loanees) => {
           <View className="flex-row justify-between">
             <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow mr-2" onPress={downloadContributors}>
               <View className="flex-row justify-between items-center">
-                <Text className="font-semibold">Print Savings</Text>
+              {isGettingContributors ? <Text>...</Text> : <Text className="font-semibold">Print Savings</Text>}
                 <Entypo name="print" size={22} color="black" />
               </View>
             </TouchableOpacity>
             <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow ml-2" onPress={downloadLoanees}>
               <View className="flex-row justify-between items-center">
-                <Text className="font-semibold">Print Loans</Text>
+                {isGettingLoanees ? <Text>...</Text> : <Text className="font-semibold">Print Loans</Text>}
                 <Entypo name="print" size={22} color="black" />
               </View>
             </TouchableOpacity>

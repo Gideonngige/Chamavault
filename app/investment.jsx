@@ -29,7 +29,7 @@ export default function Investment() {
   // start of function to send investment
   const postInvestment = async () => {
     const BACKEND_URL = "https://backend1-1cc6.onrender.com/new_investment/";
-    const chama_id = await AsyncStorage.getItem('chama');
+    const chama_id = await AsyncStorage.getItem('chama_id');
   if (!name || !description || !minAmount || !interestRate || !duration) {
     alert("Please fill in all fields.");
     return;
@@ -154,7 +154,7 @@ export default function Investment() {
 
         {/* Submit Button */}
         <TouchableOpacity
-        className="bg-yellow-600 p-4 rounded-lg items-center"
+        className="bg-yellow-600 p-4 rounded-lg items-center mb-20"
         onPress={postInvestment}
         >
         <Text className="text-white font-bold font-lato">

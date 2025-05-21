@@ -38,7 +38,7 @@ export default function PayLoan() {
       const storedEmail = await AsyncStorage.getItem("email");
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
-      const storedChama_id = await AsyncStorage.getItem("chama");
+      const storedChama_id = await AsyncStorage.getItem("chama_id");
       const loan2 = await AsyncStorage.getItem("repayment_amount");
       const loan_type = await AsyncStorage.getItem("loan_type");
       setLoan(parseFloat(loan2));

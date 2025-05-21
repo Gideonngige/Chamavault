@@ -76,7 +76,7 @@ export default function Members() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white mb-20">
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent={true} />
 
       {/* Search Bar */}

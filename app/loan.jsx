@@ -61,18 +61,18 @@ export default function Loans() {
         const response2 = await axios.get(`https://backend1-1cc6.onrender.com/getloanrepayment/${selected_chama}/${member_id}/`);
 
         if (response.status === 200 && response2.status === 200) {
-          const total_stl_new = response.data.total_stl_loan - response2.data.total_stl_repayment;
-          const total_ltl_new = response.data.total_ltl_loan - response2.data.total_ltl_repayment;
+          const total_stl_new = response.data.total_stl_loan;
+          const total_ltl_new = response.data.total_ltl_loan - response2.data.LTL.repaid_amount;
 
-          if (total_stl_new > 0) {setIsDisabled(true)} else{setIsDisabled(false)};
-          if (total_ltl_new > 0) {setIsDisabled2(true)} else(setIsDisabled2(false));
+          if (total_stl_new > 0 || total_ltl_new > 0 ) {setIsDisabled(true)} else{setIsDisabled(false)};
+          // if (total_ltl_new > 0) {setIsDisabled2(true)} else(setIsDisabled2(false));
 
           setLoan(response.data.total_loan);
           setLoanInterest(response.data.interest);
           setTotalSTL(total_stl_new);
           setTotalLTL(total_ltl_new);
           setTotalSTLRepayment(response.data.total_stl_repayment);
-          setTotalLTLRepayment(response.data.total_ltl_repayment);
+          setTotalLTLRepayment(response.data.total_ltl_repayment );
           setStlDate(response.data.stl_loan_date[0]?.loan_date || "N/A");
           setLtlDate(response.data.ltl_loan_date[0]?.loan_date || "N/A");
           setStlDueDate(response.data.stl_loan_deadline[0]?.loan_deadline || "N/A");
@@ -109,9 +109,15 @@ export default function Loans() {
   };
 
   const handlePayLoan = async (repayment_amount, loan_type) => {
-    await AsyncStorage.setItem('repayment_amount', repayment_amount);
-    await AsyncStorage.setItem('loan_type', loan_type);
-    router.push('payloan');
+    if(repayment_amount == 0){
+      alert("You have not taken any loan");
+    }
+    else{
+      await AsyncStorage.setItem('repayment_amount', JSON.stringify(repayment_amount));
+      await AsyncStorage.setItem('loan_type', loan_type);
+      router.push('payloan');
+    }
+    
   };
 
   const Activity = ({ transactionType, amount, transactionTime }) => (
@@ -162,7 +168,7 @@ export default function Loans() {
   date: ltlDate,
   due: ltlDueDate,
   loanType: "LTL",
-  status: isDisabled2
+  status: isDisabled
 }].map((loanItem, index) => (
   <View key={index} className="bg-yellow-600 p-5 rounded-2xl mb-6 shadow-lg">
     <Text className="text-xl font-bold text-white mb-4 font-lato">{loanItem.title}</Text>

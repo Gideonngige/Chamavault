@@ -31,11 +31,11 @@ export default function Chama(){
         fetchLoans();
     },[]);
 
-    const handleConfirm = async(loan_id, loonee_id, approval, chama_id) => {
+    const handleConfirm = async(loan_id, loanee_id, approval, chama_id) => {
         try {
             setLoadingLoanId(loan_id); // Set currently loading loan
             const approverEmail = await AsyncStorage.getItem('email');
-            const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loonee_id}/${approverEmail}/${approval}/${chama_id}/`;
+            const url = `https://backend1-1cc6.onrender.com/confirm_loan/${loan_id}/${loanee_id}/${approverEmail}/${approval}/${chama_id}/`;
             const response = await axios.get(url);
     
             if(response.status === 200){
@@ -64,12 +64,13 @@ export default function Chama(){
 
 
 // start of applied loans component
-const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, credit_score, loanType }) => {
+const AppliedLoans = ({ loan_id, loanee_id, name, loan, date, chama_id, credit_score, loanType }) => {
   return (
     <View className="w-80 p-4 mb-4 bg-white rounded-2xl shadow-md border border-gray-200">
       {/* Top Info Section */}
       <View className="flex-row justify-between items-center mb-3">
-        <Text className="text-sm text-gray-700 font-semibold font-lato">Loanee: {loonee_id}</Text>
+        <Text className="text-sm text-gray-700 font-semibold font-lato">{name}</Text>
+        <Text className="text-sm text-gray-700 font-semibold font-lato">#{loanee_id}</Text>
         <Text className="text-base font-bold text-green-600 font-lato">KES {loan}</Text>
       </View>
 
@@ -81,7 +82,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, credit_score, 
       {/* Action Buttons */}
       <View className="flex-row justify-between mt-3">
         <TouchableOpacity
-          onPress={() => handleConfirm(loan_id, loonee_id, "approved", chama_id)}
+          onPress={() => handleConfirm(loan_id, loanee_id, "approved", chama_id)}
           className="bg-green-600 px-4 py-2 rounded-lg"
         >
           {loadingLoanId === loan_id ? (
@@ -92,7 +93,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, credit_score, 
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleConfirm(loan_id, loonee_id, "declined", chama_id)}
+          onPress={() => handleConfirm(loan_id, loanee_id, "declined", chama_id)}
           className="bg-red-600 px-4 py-2 rounded-lg"
         >
           {loadingLoanId === loan_id ? (
@@ -135,7 +136,7 @@ const AppliedLoans = ({ loan_id, loonee_id, loan, date, chama_id, credit_score, 
             <FlatList
                 data={appliedLoans} // Array of data
                 keyExtractor={(item) => item.loan_id.toString()} // Unique key for each item
-                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loonee_id={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} chama_id={item.chama} credit_score={item.credit_score} loanType={item.loan_type} />} // How each item is displayed
+                renderItem={({ item }) => <AppliedLoans loan_id={item.loan_id} loanee_id={item.loanee_id} name={item.name} loan={item.amount} date={item.loan_date.split("T")[0]} chama_id={item.chama} credit_score={item.credit_score} loanType={item.loan_type} />} // How each item is displayed
                 showsVerticalScrollIndicator={false} // Hides the scrollbar
                 listMode="SCROLLVIEW"
             />)}

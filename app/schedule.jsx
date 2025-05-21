@@ -100,6 +100,7 @@ export default function Schedule() {
                 multiline
                 numberOfLines={4}
                 value={message}
+                textAlignVertical="top"
                 onChangeText={setMessage}
               />
             </View>
