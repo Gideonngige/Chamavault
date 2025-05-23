@@ -35,7 +35,7 @@ export default function Manageroles() {
       const chama_id = await AsyncStorage.getItem('chama_id');
       const email = await AsyncStorage.getItem('email');
       try{
-        const url = `https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`;
+        const url = `https://backend1-1cc6.onrender.com/members/${chama_id}/`;
         const response = await axios.get(url);
         if(response.status === 200){
           const formattedItems = response.data.map((member) => ({

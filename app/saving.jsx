@@ -26,6 +26,8 @@ export default function Saving() {
   const [transactions, setTransactions] = useState([]);
   const [chama, setChama] = useState('0');
   const [saving, setSaving] = useState(0);
+  const [educationSavings, setEducationSavings] = useState(0);
+  const [ordinarySavings, setOrdinarySavings] = useState(0);
   const [interest, setInterest] = useState(0);
   const [penalty, setPenalty] = useState(0);
   const [savingDate, setSavingDate] = useState('N/A');
@@ -42,6 +44,7 @@ export default function Saving() {
       const storedEmail = await AsyncStorage.getItem('email');
       const storedName = await AsyncStorage.getItem('name');
       const storedChama = await AsyncStorage.getItem('chama_id');
+      const member_id = await AsyncStorage.getItem('member_id');
 
       setName(storedName);
       setEmail(storedEmail);
@@ -49,19 +52,12 @@ export default function Saving() {
       setIsLoadingData(true);
 
       try {
-        const url = `https://backend1-1cc6.onrender.com/getContributions/${storedChama}/${storedEmail}/`;
+        const url = `https://backend1-1cc6.onrender.com/getContributions/${storedChama}/${member_id}/`;
         const response = await axios.get(url);
 
         if (response.status === 200) {
-          setSaving(response.data.total_contributions);
-          setInterest(response.data.interest);
-          setPenalty(response.data.penalty);
-
-          if (response.data.saving_date.length === 0) {
-            setSavingDate('N/A');
-          } else {
-            setSavingDate(response.data.saving_date[0].contribution_date);
-          }
+          setEducationSavings(response.data.total_edu_contributions)
+          setOrdinarySavings(response.data.total_ord_contributions)
         }
       } catch (error) {
         console.error('Error fetching savings:', error);
@@ -71,6 +67,9 @@ export default function Saving() {
     };
 
     getSavings();
+    setInterval(() => {
+      getSavings();
+    }, 3000);
   }, [email]);
 
   // Check if user is a defaulter
@@ -121,46 +120,17 @@ export default function Saving() {
   }, []);
 
   // Navigate to top-up screen
-  const handleTopUp = () => {
+  const handleTopUp = async(saving_type) => {
+    await AsyncStorage.setItem('saving_type', saving_type);
     router.push('/contribution');
   };
-
-    // function to check if there is date set
-    const checkContributionDate=async()=>{
-      const chama_id = await AsyncStorage.getItem('chama_id');
-      setCheckingDate(true);
-      try{
-        const url = `https://backend1-1cc6.onrender.com/checkcontributiondate/${chama_id}/`;
-        const response = await axios.get(url);
-        if(response.data.message === "ok"){
-          router.push('/contribution');
-
-        }
-        else if(response.data.message === "not ok"){
-          alert("No date for contribution have been set");
-  
-        }
-        else{
-          alert("An error occurred, try again")
-        }
-  
-      }
-      catch(error){
-        alert(error);
-      }
-      finally{
-        setCheckingDate(false);
-      }
-  
-    }
-    // end check date set
 
   // Activity card component
   const Activity = ({ transactionType, chama, amount, transactionTime }) => (
     <View className="bg-yellow-600 p-2 mt-0 mb-2 flex flex-row justify-around rounded-lg">
       <View>
         <Text className="font-lato">{transactionType}</Text>
-        <Text className='font-lato'>Chama {chama}</Text>
+        <Text className='font-lato'>{chama}</Text>
       </View>
       <View>
         <Text className="font-bold font-lato">KES. {amount}</Text>
@@ -170,9 +140,9 @@ export default function Saving() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white mb-20">
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="p-4">
-        <View className="w-full p-4 bg-white">
+        <View className="w-full p-4 bg-white mb-40">
           {/* Header */}
           <Text className="text-3xl font-bold text-gray-800 font-lato">
             Welcome back, {name}
@@ -181,63 +151,37 @@ export default function Saving() {
             Time to save your money
           </Text>
 
-          {/* Balance Display */}
-          <ImageBackground
-            source={require('../assets/images2/invest.png')}
-            className="w-full h-48 rounded-lg overflow-hidden mt-4"
-            style={{ resizeMode: 'contain' }}
-          >
-            <View className="p-5">
-              <Text className="text-xl font-bold text-gray-900 font-lato">
-                Total Balance
-              </Text>
-              <Text className="text-2xl font-bold text-gray-800 font-lato">
-                {isLoadingData ? 'Loading...' : `KES. ${saving}`}
-              </Text>
-            </View>
-          </ImageBackground>
 
           {/* Top-up & Withdraw Buttons */}
-          <View className="bg-yellow-600 p-4 rounded-lg mt-5 flex flex-row justify-around">
-            <TouchableOpacity
-              className="bg-white py-3 px-5 rounded-xl items-center"
-              onPress={checkContributionDate}
-            >
-              <FontAwesome6 name="add" size={24} color="black" />
-              <Text className="text-gray-900 font-medium mt-1 font-lato">{checkingDate ? "checking date..." : "Top up"}</Text>
-            </TouchableOpacity>
+  <View className="space-y-5 mt-5">
+  {[
+    { title: 'Ordinary Savings', amount: ordinarySavings, saving_type:"ordinary" },
+    { title: 'Education Booster Funds', amount: educationSavings, saving_type:"education" },
+  ].map((item, index) => (
+    <View
+      key={index}
+      className="bg-yellow-500 p-5 rounded-2xl shadow-md mb-5"
+    >
+      <Text className="text-white text-lg font-semibold mb-1">
+        {item.title}
+      </Text>
+      <Text className="text-white text-base mb-4">
+        Amount: <Text className="font-bold">KES.{item.amount}</Text>
+      </Text>
 
-            <TouchableOpacity
-              className="bg-white py-3 px-5 rounded-xl items-center"
-              onPress={() => router.push('/creditscore')}
-            >
-              <FontAwesome6 name="coins" size={24} color="black" />
-              <Text className="text-gray-900 font-medium mt-1 font-lato">Credit Score</Text>
-            </TouchableOpacity>
-          </View>
+      <TouchableOpacity
+        onPress={()=>handleTopUp(item.saving_type)}
+        className="flex-row items-center w-full bg-white px-4 py-3 rounded-xl self-start"
+      >
+        <FontAwesome6 name="plus" size={18} color="black" />
+        <Text className="ml-2 text-black font-semibold text-base font-lato">
+          Top Up
+        </Text>
+      </TouchableOpacity>
+    </View>
+  ))}
+</View>
 
-          {/* Savings Summary */}
-          <Text className="font-bold mt-5 text-lg font-lato">My savings</Text>
-          <View className="bg-yellow-600 rounded-lg p-3 mt-2">
-            <View className="flex flex-row justify-between mb-2">
-              <Text className="font-lato">Your savings</Text>
-              <Text className="font-bold font-lato">
-                {isLoadingData ? 'Loading...' : `KES. ${saving}`}
-              </Text>
-            </View>
-            <View className="flex flex-row justify-between mb-2">
-              <Text className="font-lato">Annual rate</Text>
-              <Text className="font-bold font-lato">
-                {isLoadingData ? 'Loading...' : `${interest}%`}
-              </Text>
-            </View>
-            <View className="flex flex-row justify-between">
-              <Text className="font-lato">Penalty</Text>
-              <Text className="font-bold font-lato">
-                {isLoadingData ? 'Loading...' : `KES. ${penalty}`}
-              </Text>
-            </View>
-          </View>
 
           {/* Activity Section */}
           <Text className="ml-1 font-bold mt-6 text-lg font-lato">My activities</Text>
@@ -251,7 +195,7 @@ export default function Saving() {
               renderItem={({ item }) => (
                 <Activity
                   transactionType={item.transaction_type}
-                  chama={item.chama}
+                  chama={item.transactionRef}
                   amount={item.amount}
                   transactionTime={item.transaction_date.split('T')[0]}
                 />

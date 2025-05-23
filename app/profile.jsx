@@ -18,15 +18,21 @@ export default function Profile() {
   const[email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [profileImg, setProfileImg] = useState("");
+  const [chamaName, setChamaName] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() =>{
     const handleGetDaya = async() =>{
       const email = await AsyncStorage.getItem('email');
       const name = await AsyncStorage.getItem('name');
       const profile_image = await AsyncStorage.getItem('profile_image');
+      const selected_chama = await AsyncStorage.getItem('selected_chama');
+      const role = await AsyncStorage.getItem('role');
       setEmail(email);
       setName(name);
       setProfileImg(profile_image);
+      setChamaName(selected_chama);
+      setRole(role);
 
     }
     handleGetDaya();
@@ -58,6 +64,16 @@ export default function Profile() {
     });
    }
   // end of dunction to update profile
+
+  const goToChama =()=>{
+  if(chamaName == "No Chama"){
+    alert("You must join a chama first");
+  }
+  else{
+    router.push('/chama')
+
+  }
+}
 
 
   return (
@@ -104,6 +120,13 @@ export default function Profile() {
             <Ionicons name="chevron-forward-outline" size={30} color="white" />
         </TouchableOpacity>
     </View>
+
+    {role === "member" ? "" : (
+      <TouchableOpacity className='bg-yellow-600 w-full h-10 flex-row justify-between items-center px-4 rounded-lg shadow-md' onPress={goToChama}>
+        <Text className='font-lato text-black font-bold'>Go To {chamaName} Profile</Text>
+        <Ionicons name="chevron-forward" size={24} color="white" />
+    </TouchableOpacity>
+    )}
         </View>
       </ScrollView>
       <StatusBar

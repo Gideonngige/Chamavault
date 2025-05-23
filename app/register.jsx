@@ -7,6 +7,7 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { Asset } from 'expo-asset';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Register() {
@@ -117,15 +118,32 @@ export default function Register() {
                 },
             });
 
-            Toast.show({
-                type: "success",
-                text1: "Success",
-                text2: "Registration successful!",
-                position: "center",
-            });
+            // Toast.show({
+            //     type: "success",
+            //     text1: "Success",
+            //     text2: "Registration successful!",
+            //     position: "center",
+            // });
 
             if (response.data.message === "Successfully registered") {
-                router.push("login/");
+                try{
+                    const value = "null"
+                    const url2 = `https://backend1-1cc6.onrender.com/getMember/${email}/${value}/`;
+                    const response2 = await axios.get(url2);
+                    if (response2.status === 200) {
+                        await AsyncStorage.setItem('profile_image', response2.data.profile_image);
+                        await AsyncStorage.setItem('email', email);
+                        await AsyncStorage.setItem('role', response2.data.role);
+                        await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
+                        await AsyncStorage.setItem('name', response2.data.name);
+                        await AsyncStorage.setItem('selected_chama', value == "null" ? "No Chama" : value);
+                        router.push("/home");
+                    }
+
+                }
+                catch(error){
+                    console.log(error);
+                }
             } else {
                 Toast.show({
                     type: "error",

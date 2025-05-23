@@ -5,12 +5,14 @@ import "../global.css";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from "expo-router";
 
 export default function Register(){
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([]);
+    const router = useRouter();
 
     // fetch chamas
     useEffect(() => {
@@ -58,6 +60,9 @@ export default function Register(){
             text1: "Succesfully joined chama",
             text2: response.data.message,
             });
+            setTimeout(() => {
+              router.push("/login");
+            }, 3000);
         }
         else{
           Toast.show({

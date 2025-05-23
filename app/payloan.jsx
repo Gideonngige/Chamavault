@@ -32,6 +32,7 @@ export default function PayLoan() {
   const [phonenumber, setPhonenumber] = useState("");
   const [chama_id, setChama_id] = useState();
   const [loan_type, setLoanType] = useState(null);
+  const [loanId, setLoanId] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,8 +42,10 @@ export default function PayLoan() {
       const storedChama_id = await AsyncStorage.getItem("chama_id");
       const loan2 = await AsyncStorage.getItem("repayment_amount");
       const loan_type = await AsyncStorage.getItem("loan_type");
+      const loan_id = await AsyncStorage.getItem("loan_id");
       setLoan(parseFloat(loan2));
       setLoanType(loan_type);
+      setLoanId(loan_id);
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
@@ -53,7 +56,8 @@ export default function PayLoan() {
     fetchData();
   }, []);
 
-  const amountValue = parseInt(amount);
+  const amountValue = parseFloat(amount);
+  const loan_id = parseInt(loanId)
 
   useEffect(() => {
     setDisplay(amount);
@@ -77,6 +81,7 @@ export default function PayLoan() {
         phonenumber: phonenumber,
         chama_id: chama_id,
         transactionRef: transactionRef,
+        loanId: loan_id,
       };
 
       console.log("Sending data:", data);
@@ -91,8 +96,12 @@ export default function PayLoan() {
         console.error("Failed to save transaction:", data);
       }
     } catch (error) {
-      console.error("Error saving transaction:", error);
-    }
+  if (error.response) {
+    console.error("Server responded with error:", error.response.data);
+  } else {
+    console.error("Error saving transaction:", error.message);
+  }
+}
   };
 
   // function to check amount

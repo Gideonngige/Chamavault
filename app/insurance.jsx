@@ -6,7 +6,7 @@ import Toast from "react-native-toast-message";
 import { Paystack } from "react-native-paystack-webview";
 import axios from "axios";
 
-export default function Contributions() {
+export default function Insurance() {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState(0);
@@ -18,8 +18,7 @@ export default function Contributions() {
   const [name, setName] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [chama_id, setChama_id] = useState();
-  const [savingType, setSavingType] = useState("");
-  const [memberId, setMemberId] = useState(0);
+  const [totalInsurance, setTotalInsurance] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,15 +26,11 @@ export default function Contributions() {
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
       const storedChama_id = await AsyncStorage.getItem("chama_id");
-      const storedSavingType = await AsyncStorage.getItem("saving_type");
-      const storedMember_id = await AsyncStorage.getItem("member_id");
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
       if (storedPhone) setPhonenumber(storedPhone);
       if (storedChama_id) setChama_id(storedChama_id);
-      if (storedSavingType) setSavingType(storedSavingType);
-      if (storedMember_id) setMemberId(storedMember_id);
     };
 
     fetchData();
@@ -44,16 +39,45 @@ export default function Contributions() {
   const amountValue = parseInt(amount);
   useEffect(() => setDisplay(amount), [amount]);
 
-  const saveTransaction = async (transactionRef, amount) => {
+
+  useEffect(() => {
+    const fetchInsurance = async () => {
+      const chama_id = await AsyncStorage.getItem("chama_id");
+      const member_id = await AsyncStorage.getItem("member_id");
+      try{
+        const url = `https://backend1-1cc6.onrender.com/get_total_insurance/${member_id}/${chama_id}/`;
+      const response = await axios.get(url);
+      if(response.status === 200){
+        setTotalInsurance(response.data.total_insurance);
+
+      }
+      else{
+        alert(response.data.message);
+      }
+      }
+      catch(error){
+        alert("An error occurred:" + error);
+      }
+    };
+
+    fetchInsurance();
+    setInterval(() => {
+      fetchInsurance();
+    }, 3000); // Refresh every 60 seconds
+  }, []);
+
+
+
+
+  const saveTransaction = async (transactionRef, amount, email) => {
     try {
-      const url = "https://backend1-1cc6.onrender.com/contributions/";
+      const url = "https://backend1-1cc6.onrender.com/insurance/";
       const data = {
-        member_id:memberId,
+        email,
         amount,
         phonenumber,
         chama_id,
         transactionRef,
-        savingType,
       };
 
       const response = await axios.post(url, data, {
@@ -87,8 +111,11 @@ export default function Contributions() {
     <SafeAreaView className="flex-1 bg-white pt-10">
       <ScrollView className="px-4">
         <View className="bg-white rounded-2xl shadow-md p-6 mb-6 mt-4">
+            <Text className="font-lato text-lg">Total Insurance: KES.{totalInsurance}</Text>
+        </View>
+        <View className="bg-white rounded-2xl shadow-md p-6 mb-6 mt-4">
           <Text className="text-center text-xl font-semibold text-gray-800 mb-1 font-lato">
-            Contribution Amount
+            Insurance Amount
           </Text>
           <Text className="text-center text-yellow-600 font-bold text-2xl mb-4 font-lato">
             KES {display || "0"}

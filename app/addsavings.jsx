@@ -5,8 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { Paystack } from "react-native-paystack-webview";
 import axios from "axios";
+import DropDownPicker from 'react-native-dropdown-picker';
 
-export default function Contributions() {
+export default function AddSavings() {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState(0);
@@ -18,7 +19,13 @@ export default function Contributions() {
   const [name, setName] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [chama_id, setChama_id] = useState();
-  const [savingType, setSavingType] = useState("");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+     { label: 'Ordinary Savings', value: 'ordinary' },
+     { label: 'Education booster', value: 'education' },
+    
+  ]);
   const [memberId, setMemberId] = useState(0);
 
   useEffect(() => {
@@ -27,14 +34,12 @@ export default function Contributions() {
       const storedName = await AsyncStorage.getItem("name");
       const storedPhone = await AsyncStorage.getItem("phonenumber");
       const storedChama_id = await AsyncStorage.getItem("chama_id");
-      const storedSavingType = await AsyncStorage.getItem("saving_type");
       const storedMember_id = await AsyncStorage.getItem("member_id");
 
       if (storedEmail) setEmail(storedEmail);
       if (storedName) setName(storedName);
       if (storedPhone) setPhonenumber(storedPhone);
       if (storedChama_id) setChama_id(storedChama_id);
-      if (storedSavingType) setSavingType(storedSavingType);
       if (storedMember_id) setMemberId(storedMember_id);
     };
 
@@ -49,11 +54,11 @@ export default function Contributions() {
       const url = "https://backend1-1cc6.onrender.com/contributions/";
       const data = {
         member_id:memberId,
-        amount,
-        phonenumber,
-        chama_id,
-        transactionRef,
-        savingType,
+        amount:amount,
+        phonenumber:phonenumber,
+        chama_id:chama_id,
+        transactionRef:transactionRef,
+        savingType:value
       };
 
       const response = await axios.post(url, data, {
@@ -93,7 +98,29 @@ export default function Contributions() {
           <Text className="text-center text-yellow-600 font-bold text-2xl mb-4 font-lato">
             KES {display || "0"}
           </Text>
-
+  <View style={{ zIndex: 3000 }}>
+  <Text className="text-lg font-bold mt-4 font-lato">Select type of saving</Text>
+  <DropDownPicker
+    open={open}
+    value={value}
+    items={items}
+    setOpen={setOpen}
+    setValue={setValue}
+    setItems={setItems}
+    placeholder="Select member"
+    style={{
+      borderColor: '#ca8a04',
+      borderWidth: 1,
+      borderRadius: 5,
+      height: 50,
+      fontFamily: 'sans-serif',
+      marginBottom:15,
+    }}
+    listMode="SCROLLVIEW"
+    dropDownContainerStyle={{ zIndex: 3000 }}
+  />
+</View>
+<Text className="text-lg font-bold mt-4 font-lato">Amount(ksh)</Text>
           <TextInput
             placeholder="Enter amount in KES"
             value={amount}
@@ -174,7 +201,7 @@ export default function Contributions() {
               : ["card"]
           }
           onSuccess={(res) => {
-            saveTransaction(res.transactionRef.reference, amountValue, email);
+            saveTransaction(res.transactionRef.reference, amountValue);
             setShowPaystack(false);
           }}
           onCancel={() => {

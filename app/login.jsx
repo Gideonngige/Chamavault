@@ -38,21 +38,16 @@ export default function Index() {
       const response = await axios.get(url);
       const url2 = `https://backend1-1cc6.onrender.com/getMember/${email}/${value}/`;
       const response2 = await axios.get(url2);
-      const url3 =  `https://backend1-1cc6.onrender.com/totalchamamembers/${value}/`;
-      const response3 = await axios.get(url3);
      
       if (response.status === 200 && response2.status === 200) {
-        if(response2.data.role == "chairperson" || response2.data.role == "treasurer" || response2.data.role == "secretary" || response3.data.total_members <= 5){
+        if(response2.data.role == "admin"){
           
           await AsyncStorage.setItem('email', email);
-          await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('role', response2.data.role);
           await AsyncStorage.setItem('name', response2.data.name);
           await AsyncStorage.setItem('profile_image', response2.data.profile_image);
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
-          await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
-          // alert(response2.data.member_id);
-          router.push('/admin');
+          router.push('/availablechamas');
 
         }
       else{
@@ -60,15 +55,12 @@ export default function Index() {
         if(message == "Successfully logged in"){
           await AsyncStorage.setItem('profile_image', response2.data.profile_image);
           await AsyncStorage.setItem('email', email);
+          await AsyncStorage.setItem('role', response2.data.role);
           await AsyncStorage.setItem('selected_chama', value ? value : "No Chama");
           await AsyncStorage.setItem('member_id', JSON.stringify(response2.data.member_id));
           await AsyncStorage.setItem('chama_id', JSON.stringify(response2.data.chama));
           await AsyncStorage.setItem('name', response2.data.name);
-          // alert(response2.data.member_id);
-          // router.push("/home");
-          navigation.navigate('home', {
-            email,
-          });
+          router.push("/home");
       
         }
         else{

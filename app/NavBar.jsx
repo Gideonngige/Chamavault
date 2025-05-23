@@ -31,16 +31,6 @@ export default function BottomNavBar() {
     
   };
 
-  const handleChat = async() => {
-    const selected_chama = await AsyncStorage.getItem('selected_chama');
-    if(selected_chama == "No Chama"){alert("You must join a chama first")}
-    else{
-      setActiveRoute('chat');
-      navigation.navigate('chat');
-
-    }
-  };
-
   const handleHome = () => {
     setActiveRoute('home');
     navigation.navigate('home'); // You can replace this with your actual home navigation logic
@@ -59,15 +49,6 @@ export default function BottomNavBar() {
           <Text className={`text-xs mt-1 ${activeRoute === 'home' ? 'text-black font-bold' : 'text-white'}`}>Home</Text>
         </TouchableOpacity>
 
-        {/* Chat */}
-        <TouchableOpacity onPress={handleChat} className="items-center flex-1">
-          <Ionicons
-            name={activeRoute === 'chat' ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
-            size={26}
-            color={activeRoute === 'chat' ? 'black' : 'white'}
-          />
-          <Text className={`text-xs mt-1 ${activeRoute === 'chat' ? 'text-black font-bold' : 'text-white'}`}>Chat</Text>
-        </TouchableOpacity>
 
         {/* Notifications */}
         <TouchableOpacity onPress={handleNotifications} className="items-center flex-1">

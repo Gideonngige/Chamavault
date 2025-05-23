@@ -22,9 +22,9 @@ export default function Members() {
 
   useEffect(() => {
     const getData = async () => {
-      const email = await AsyncStorage.getItem('email');
+      // const email = await AsyncStorage.getItem('email');
       const chama_id = await AsyncStorage.getItem('chama_id');
-      axios.get(`https://backend1-1cc6.onrender.com/members/${email}/${chama_id}/`)
+      axios.get(`https://backend1-1cc6.onrender.com/members/${chama_id}/`)
         .then((response) => {
           setMembers(response.data);
           setFilteredMembers(response.data);

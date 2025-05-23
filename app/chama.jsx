@@ -57,7 +57,7 @@ export default function Chama() {
 
         setTotalmembers(membersRes.data.total_members);
         setTotalSavings(savingsRes.data.total_savings);
-        setTotalLoans(loansRes.data.total_loans);
+        setTotalLoans(loansRes.data.total_loan);
       } catch (error) {
         console.error(error);
       } finally {
@@ -302,27 +302,6 @@ const generateTableHTML2 = (loanees) => {
             </View>
           </View>
 
-          {/* Expenses section */}
-          <Text className="text-lg font-bold text-gray-800">Expenses</Text>
-          <View className="flex-row justify-between">
-            <View className="flex-1 bg-white p-4 rounded-lg shadow mr-2">
-              <Text className="text-lg font-bold text-yellow-700">{`KES ${rentExpense}`}</Text>
-              <Text className="text-gray-600">Rent</Text>
-            </View>
-            <View className="flex-1 bg-white p-4 rounded-lg shadow ml-2">
-              <Text className="text-lg font-bold text-yellow-700">{`KES ${travelExpense}`}</Text>
-              <Text className="text-gray-600">Travel</Text>
-            </View>
-          </View>
-          <View className="bg-white p-4 mt-5 rounded-lg shadow">
-            <Text className="text-lg font-bold text-yellow-700">{`KES ${businessExpense}`}</Text>
-            <Text className="text-gray-600">Business</Text>
-          </View>
-          <View className="bg-white p-4 mt-5 rounded-lg shadow">
-            <Text className="text-lg font-bold text-yellow-700">{`KES ${othersExpense}`}</Text>
-            <Text className="text-gray-600">Others</Text>
-          </View>
-
           {/* Members Button */}
           <TouchableOpacity
             className="bg-yellow-600 mt-5 mb-5 w-full h-12 flex-row justify-between items-center px-4 rounded-lg"
@@ -331,43 +310,7 @@ const generateTableHTML2 = (loanees) => {
             <Text className="font-bold text-white text-base">Members ({totalmembers})</Text>
             <Ionicons name="chevron-forward" size={24} color="white" />
           </TouchableOpacity>
-          {/* poll button */}
-          <TouchableOpacity
-            className="bg-yellow-600 mt-5 mb-5 w-full h-12 flex-row justify-between items-center px-4 rounded-lg"
-            onPress={() => router.push("activepolls/")}
-          >
-            <Text className="font-bold text-white text-base">Active Polls</Text>
-            <Ionicons name="chevron-forward" size={24} color="white" />
-          </TouchableOpacity>
 
-          {/* Print & Reports */}
-          <Text className="text-lg font-bold text-gray-800">Reports</Text>
-          <View className="flex-row justify-between">
-            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow mr-2" onPress={downloadContributors}>
-              <View className="flex-row justify-between items-center">
-              {isGettingContributors ? <Text>...</Text> : <Text className="font-semibold">Print Savings</Text>}
-                <Entypo name="print" size={22} color="black" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow ml-2" onPress={downloadLoanees}>
-              <View className="flex-row justify-between items-center">
-                {isGettingLoanees ? <Text>...</Text> : <Text className="font-semibold">Print Loans</Text>}
-                <Entypo name="print" size={22} color="black" />
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Defaulters Section */}
-          <Text className="text-lg font-bold mt-5 text-gray-800">Defaulters</Text>
-          <View className="flex-row justify-between">
-            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow mr-2" onPress={() => router.push("defaulters/")}>
-              <Text className="font-semibold text-center text-gray-700">View Defaulters</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-1 bg-white p-4 rounded-lg shadow ml-2" onPress={() => router.push("location/")}>
-              <Text className="font-semibold text-center text-gray-700">View Locations</Text>
-            </TouchableOpacity>
-          </View>
-          <Toast/>
 
           {/* Contributions List */}
           <View className='mb-40'>

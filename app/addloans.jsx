@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ApplyLoan(){
+export default function AddLoans(){
   const route = useRoute();
   const router = useRouter();
   const {email} = route.params;
@@ -16,6 +16,13 @@ export default function ApplyLoan(){
     const [isLoading, setIsLoading] = useState(false);
     const bounceValue = useRef(new Animated.Value(0)).current;
     const [loanType, setLoanType] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+         { label: 'Short Term Loan', value: 'STL' },
+         { label: 'Long Term Loan', value: 'LTL' },
+        
+      ]);
 
     const startBounce = () => {
       bounceValue.setValue(0); // reset
@@ -37,20 +44,9 @@ export default function ApplyLoan(){
       return () => clearInterval(interval); // cleanup
     }, []);
 
-useEffect(() => {
-  const fetchLoanType = async () => {
-    const loan_type = await AsyncStorage.getItem('loan_type');
-    if (loan_type) {
-      setLoanType(loan_type);
-      // alert(loan_type);
-    }
-  };
-  fetchLoanType();
-
-})
-
 
     const handleApplyLoan = async() => {
+      const loan_type = value;
       if(loanAmount === ""){
         Toast.show({
             type: "error",
@@ -65,7 +61,9 @@ useEffect(() => {
         try{
           const chama = JSON.parse(await AsyncStorage.getItem('chama_id'));
           const member_id = await AsyncStorage.getItem('member_id');
-          const url = `https://backend1-1cc6.onrender.com/loans/${member_id}/${chama}/${loanAmount}/${loanType}`;
+          const member_id2 = parseInt(member_id)
+          alert(member_id2);
+          const url = `https://backend1-1cc6.onrender.com/loans/${member_id2}/${chama}/${loanAmount}/${loan_type}`;
           const response = await axios.get(url);
           if(response.data.status === 200) {
             Toast.show({
@@ -116,8 +114,30 @@ useEffect(() => {
         ]}
       />
     </View>
-
-      <Text className="w-full mt-4 text-lg font-bold font-lato">Enter loan amount</Text>
+      
+  <View style={{ zIndex: 3000 }}>
+  <Text className="text-lg font-bold mt-4 font-lato">Select type of loan</Text>
+  <DropDownPicker
+    open={open}
+    value={value}
+    items={items}
+    setOpen={setOpen}
+    setValue={setValue}
+    setItems={setItems}
+    placeholder="Select member"
+    style={{
+      borderColor: '#ca8a04',
+      borderWidth: 1,
+      borderRadius: 5,
+      height: 50,
+      fontFamily: 'sans-serif',
+      marginBottom:15,
+    }}
+    listMode="SCROLLVIEW"
+    dropDownContainerStyle={{ zIndex: 3000 }}
+  />
+</View>
+      <Text className="w-full mt-4 text-lg font-bold font-lato">Enter loan amount(ksh)</Text>
       <TextInput 
       placeholder="Enter loan amount"
       value={loanAmount}

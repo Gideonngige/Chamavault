@@ -41,6 +41,8 @@ export default function Loans() {
   const [ltlDate, setLtlDate] = useState("N/A");
   const [stlDueDate, setStlDueDate] = useState("N/A");
   const [ltlDueDate, setLtlDueDate] = useState("N/A");
+  const [stlId, setStlId] = useState(0);
+  const [ltlId, setLtlId] = useState(0);
 
   useEffect(() => {
     const getLoans = async () => {
@@ -52,7 +54,7 @@ export default function Loans() {
 
       setName(name);
       setEmail(email);
-      setIsLoadingData(true);
+      // setIsLoadingData(true);
       // setIsDisabled(true);
       // setIsDisabled2(true);
 
@@ -62,45 +64,52 @@ export default function Loans() {
 
         if (response.status === 200 && response2.status === 200) {
           const total_stl_new = response.data.total_stl_loan;
-          const total_ltl_new = response.data.total_ltl_loan - response2.data.LTL.repaid_amount;
+          const total_ltl_new = response.data.total_ltl_loan;
 
           if (total_stl_new > 0 || total_ltl_new > 0 ) {setIsDisabled(true)} else{setIsDisabled(false)};
           // if (total_ltl_new > 0) {setIsDisabled2(true)} else(setIsDisabled2(false));
 
           setLoan(response.data.total_loan);
-          setLoanInterest(response.data.interest);
           setTotalSTL(total_stl_new);
           setTotalLTL(total_ltl_new);
-          setTotalSTLRepayment(response.data.total_stl_repayment);
-          setTotalLTLRepayment(response.data.total_ltl_repayment );
+          setTotalSTLRepayment(response.data.total_stl_repayment - response2.data.STL.repaid_amount);
+          setTotalLTLRepayment(response.data.total_ltl_repayment -response2.data.LTL.repaid_amount );
           setStlDate(response.data.stl_loan_date[0]?.loan_date || "N/A");
           setLtlDate(response.data.ltl_loan_date[0]?.loan_date || "N/A");
           setStlDueDate(response.data.stl_loan_deadline[0]?.loan_deadline || "N/A");
           setLtlDueDate(response.data.ltl_loan_deadline[0]?.loan_deadline || "N/A");
+          setStlId(response.data.stl_id);
+          setLtlId(response.data.ltl_id);
         }
       } catch (error) {
-        console.error("Error fetching loan data:", error);
+        // console.error("Error fetching loan data:", error);
       } finally {
-        setIsLoadingData(false);
+        // setIsLoadingData(false);
       }
     };
 
     getLoans();
+    setInterval(() => {
+      getLoans();
+    }, 3000); // Refresh every 3 seconds
   }, []);
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      setIsLoadingTransactions(true);
+      // setIsLoadingTransactions(true);
       const email = await AsyncStorage.getItem('email');
       const chama_id = await AsyncStorage.getItem('chama_id');
 
       axios.get(`https://backend1-1cc6.onrender.com/transactions/Loan/${email}/${chama_id}/`)
         .then((response) => setTransactions(response.data))
         .catch((error) => console.error("Error fetching transactions:", error))
-        .finally(() => setIsLoadingTransactions(false));
+        // .finally(() => setIsLoadingTransactions(false));
     };
 
     fetchTransactions();
+    setInterval(() => {
+      fetchTransactions();
+    }, 3000); // Refresh every 3 seconds
   }, []);
 
   const handleTerms = async (loan_type) => {
@@ -108,13 +117,14 @@ export default function Loans() {
     router.push('terms');
   };
 
-  const handlePayLoan = async (repayment_amount, loan_type) => {
+  const handlePayLoan = async (repayment_amount, loan_type, loan_id) => {
     if(repayment_amount == 0){
       alert("You have not taken any loan");
     }
     else{
       await AsyncStorage.setItem('repayment_amount', JSON.stringify(repayment_amount));
       await AsyncStorage.setItem('loan_type', loan_type);
+      await AsyncStorage.setItem('loan_id', JSON.stringify(loan_id));
       router.push('payloan');
     }
     
@@ -154,21 +164,23 @@ export default function Loans() {
        {[{
   title: "Short-Term Loan",
   total: totalSTL,
-  interest: "30%",
+  interest: "10%",
   payable: totalSTLRepayment,
   date: stlDate,
   due: stlDueDate,
   loanType: "STL",
-  status: isDisabled
+  status: isDisabled,
+  id:stlId,
 }, {
   title: "Long-Term Loan",
   total: totalLTL,
-  interest: "10%",
+  interest: "1%",
   payable: totalLTLRepayment,
   date: ltlDate,
   due: ltlDueDate,
   loanType: "LTL",
-  status: isDisabled
+  status: isDisabled,
+  id: ltlId,
 }].map((loanItem, index) => (
   <View key={index} className="bg-yellow-600 p-5 rounded-2xl mb-6 shadow-lg">
     <Text className="text-xl font-bold text-white mb-4 font-lato">{loanItem.title}</Text>
@@ -209,7 +221,7 @@ export default function Loans() {
       
       <TouchableOpacity
         className="bg-white py-3 w-full rounded-xl items-center"
-        onPress={() => handlePayLoan(loanItem.payable, loanItem.loanType)}
+        onPress={() => handlePayLoan(loanItem.payable, loanItem.loanType, loanItem.id)}
       >
         <FontAwesome6 name="money-bills" size={20} color="black" />
         <Text className="text-black font-medium mt-1 font-lato">Pay Loan</Text>

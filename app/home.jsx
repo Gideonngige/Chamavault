@@ -11,7 +11,6 @@ import { useRoute } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import NavBar from './NavBar';
-import BottomTabs from './BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Carousel from 'react-native-reanimated-carousel';
 import * as Location from 'expo-location';
@@ -35,7 +34,33 @@ const InfoCard = ({ title, icon, onPress }) => (
   >
     <View>
       <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333' }}>{title}</Text>
-      <Text style={{ fontSize: 14, color: '#777' }}>Interest rate: 10%-30%</Text>
+      <Text style={{ fontSize: 14, color: '#777' }}>Interest rate: 1-10%</Text>
+    </View>
+    <Ionicons name={icon} size={24} color="#fbbf24" />
+  </TouchableOpacity>
+);
+
+const InfoCard2 = ({ title, icon, onPress }) => (
+  <TouchableOpacity 
+    onPress={onPress} 
+    style={{
+      backgroundColor: '#fff',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 12,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+      elevation: 4,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    }}
+  >
+    <View>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333' }}>{title}</Text>
+      <Text style={{ fontSize: 14, color: '#777' }}>Cover your risks</Text>
     </View>
     <Ionicons name={icon} size={24} color="#fbbf24" />
   </TouchableOpacity>
@@ -71,95 +96,8 @@ export default function Home() {
   const route = useRoute();
   const router = useRouter();
 
-  // start of get location function
-  useEffect(() => {
-    const getLocation = async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          console.error('Permission to access location was denied');
-          return;
-        }
-  
-        const location = await Location.getCurrentPositionAsync({});
-        const { latitude, longitude } = location.coords;
-  
-        console.log(latitude, longitude);
-        // alert(latitude + " " + longitude); // Show latitude and longitude
-  
-        const member_id = await AsyncStorage.getItem('member_id');
-        const name = await AsyncStorage.getItem('name');
-  
-        const url = "https://backend1-1cc6.onrender.com/update_location/";
-        const data = {
-          member_id,
-          name,
-          latitude,
-          longitude,
-        };
-  
-        const response = await axios.post(url, data, {
-          headers: { "Content-Type": "application/json" },
-        });
-  
-        console.log('Location posted successfully:', response.data);
-      } catch (error) {
-        console.error('Error fetching location or data:', error);
-      }
-    };
-  
-    getLocation();
-  }, []);
-  // end of get location function
-
-    // fetch member chamas
-   useEffect(() => {
-    const updatecreditscore = async () => {
-      try{
-        const chama_id = await AsyncStorage.getItem('chama_id');
-        const member_id = await AsyncStorage.getItem('member_id');
-        const url = `https://backend1-1cc6.onrender.com/creditscoreapi/${member_id}/${chama_id}/`;
-        const response = await axios.get(url);
-        if(response.status === 200){
-          console.log("creditscore updated");
-      
-        }
-      }
-      catch(error){
-        console.error("Error fetching chamas:", error);
-      }
-
-    }
-    updatecreditscore();
-  },[]);
-  // end of fetch member chamas
 
 
-   // fetch member chamas
-   useEffect(() => {
-    const fetchMemberChamas = async () => {
-      try{
-        const email = await AsyncStorage.getItem('email');
-        const url = `https://backend1-1cc6.onrender.com/getChama/${email}`;
-        const response = await axios.get(url);
-        if(response.status === 200){
-          const formattedItems = response.data.chamas.map(chama => ({
-            label: chama,  // Display Name
-            value: chama   // Value to store
-          }));
-          setItems(formattedItems);
-        }
-        
-
-      }
-      catch(error){
-        console.error("Error fetching chamas:", error);
-      }
-
-    }
-    fetchMemberChamas();
-  },[]);
-  // end of fetch member chamas
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,8 +114,6 @@ export default function Home() {
         
         const url = `https://backend1-1cc6.onrender.com/getMember/${email}/${selected_chama}/`;
         const response = await axios.get(url);
-        const url2 = `https://backend1-1cc6.onrender.com/send_reminder_message/${chama_id}/`;
-        const response2 = await axios.get(url2);
         await AsyncStorage.setItem('email',email);
         
         if(response.status === 200){
@@ -194,8 +130,6 @@ export default function Home() {
           setEmail(email);
           await AsyncStorage.setItem('name', response.data.name);
           await AsyncStorage.setItem('phonenumber', response.data.phone_number);
-          // await AsyncStorage.setItem('chama', JSON.stringify(response.data.chama));
-          // await AsyncStorage.setItem('member_id', JSON.stringify(response.data.member_id));
           
           
         }
@@ -245,12 +179,12 @@ const goToLoans =()=>{
 // end
 
 // function to go to investment
-const goToInvest =()=>{
+const goToInsurance =()=>{
   if(chamaName == "No Chama"){
     alert("You must join a chama first");
   }
   else{
-    router.push('/invest')
+    router.push('/insurance')
 
   }
 }
@@ -323,7 +257,7 @@ const renderItem = ({ item }) => (
         <Text className="text-lg font-semibold text-gray-800 mb-2 font-lato">Quick Actions</Text>
         <InfoCard title="Savings" icon="wallet" onPress={goToSavings} />
         <InfoCard title="Loans" icon="cash" onPress={goToLoans} />
-        <InfoCard title="Investments" icon="trending-up" onPress={goToInvest} />
+        <InfoCard2 title="Insurance" icon="life-buoy" onPress={goToInsurance} />
       </View>
     {/* end of info cards */}
 

@@ -90,7 +90,7 @@ export default function Createchama(){
           <ScrollView nestedScrollEnabled={true} className="p-4 mb-20">
         <View className="flex-1 bg-white justify-center items-center p-5 font-sans">
               <Image source={require('../assets/images2/logo.png')} className="w-full h-56 mb-4" style={{ resizeMode:"contain", height:100}}/>
-              <Text className="text-3xl font-bold text-gray-800 mb-6 font-serif">ChamaVault</Text>
+              <Text className="text-3xl font-bold text-gray-800 mb-6 font-lato">ChamaVault</Text>
               <Text className="text-lg font-bold font-lato">Enter name of chama</Text>
               <TextInput 
               placeholder="Enter name of chama"
